@@ -1,0 +1,9 @@
+{
+  "name": "hexo-theme-pure",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "hexo-generator-json-content": "^4.1.3"
+  }
+}
