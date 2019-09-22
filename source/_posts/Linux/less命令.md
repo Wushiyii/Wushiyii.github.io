@@ -46,3 +46,4 @@ less (选项) (参数)
 ```shell
 sudo less /var/log/shadowsocks.log
 ```
+
