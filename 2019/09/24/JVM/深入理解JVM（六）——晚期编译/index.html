@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="晚期编译（运行期编译）即是编译器的后端编译，此时编译器会将早期编译（前端编译）生成的AST。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-25T10:29:56.641Z">
+<meta property="og:updated_time" content="2019-09-25T10:42:09.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM（六） --- 晚期编译（运行期编译）">
 <meta name="twitter:description" content="晚期编译（运行期编译）即是编译器的后端编译，此时编译器会将早期编译（前端编译）生成的AST。">
@@ -386,7 +386,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 527(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 587(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
@@ -417,6 +417,7 @@
 <li><p>基于计数器的热点探测（Counter Based Hot Spot Detection）：采用这种方法的虚拟机会为每个方法建立计数器，统计方法的执行次数，如果执行次数超过某个阈值则会标记这个方法为热点方法。</p>
 </li>
 </ul>
+<p>HotSpot虚拟机使用的是第二种方法，并为每个方法准备了两类计数器：方法调用计数器（Invocation Counter）和回边计数器（Back Edge Counter）。当计数器超过阈值则会触发JIT编译。</p>
 
       
     </div>
