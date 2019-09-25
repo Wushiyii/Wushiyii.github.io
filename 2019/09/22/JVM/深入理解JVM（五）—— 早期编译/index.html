@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>深入理解JVM（五） --- 早期编译 | Hexo</title>
+  <meta name="description" content="Java的编译包括前端编译、后端编译，前端编译器把*.java编译为*.class，而后端编译有运行期编译（JIT）、提前编译（AOT）等。在本篇中主要将前端编译（早期编译）。 Javac编译过程javac的编译过程，主要分为3个过程：  解析与填充符号表 插入式注解处理 语义分析与生成字节码   在openjdk中，java的编译入口为com.sun.tools.javac.main.Java">
+<meta name="keywords" content="JAVA,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解JVM（五） --- 早期编译">
+<meta property="og:url" content="https://wushiyii.github.io/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="Java的编译包括前端编译、后端编译，前端编译器把*.java编译为*.class，而后端编译有运行期编译（JIT）、提前编译（AOT）等。在本篇中主要将前端编译（早期编译）。 Javac编译过程javac的编译过程，主要分为3个过程：  解析与填充符号表 插入式注解处理 语义分析与生成字节码   在openjdk中，java的编译入口为com.sun.tools.javac.main.Java">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://wushiyii.github.io/Users/qudian/Library/Application%20Support/typora-user-images/image-20190922212854084.png">
+<meta property="og:updated_time" content="2019-09-24T09:51:24.522Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解JVM（五） --- 早期编译">
+<meta name="twitter:description" content="Java的编译包括前端编译、后端编译，前端编译器把*.java编译为*.class，而后端编译有运行期编译（JIT）、提前编译（AOT）等。在本篇中主要将前端编译（早期编译）。 Javac编译过程javac的编译过程，主要分为3个过程：  解析与填充符号表 插入式注解处理 语义分析与生成字节码   在openjdk中，java的编译入口为com.sun.tools.javac.main.Java">
+<meta name="twitter:image" content="https://wushiyii.github.io/Users/qudian/Library/Application%20Support/typora-user-images/image-20190922212854084.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://wushiyii.github.io/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Welcome</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.57px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" class="title">深入理解JVM（六） --- 晚期编译（运行期编译）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-24T09:52:31.000Z" itemprop="datePublished">2019-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="title">深入理解JVM（五） --- 早期编译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/02/Linux/less命令/" class="title">Less</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-02T09:15:14.000Z" itemprop="datePublished">2019-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JVM/深入理解JVM（五）—— 早期编译" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入理解JVM（五） --- 早期编译
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="article-date">
+	  <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JAVA/">JAVA</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/JAVA/">JAVA</a>, <a class="article-tag-link" href="/tags/JVM/">JVM</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,233(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <a id="more"></a>
+<p>Java的编译包括前端编译、后端编译，前端编译器把<code>*.java</code>编译为<code>*.class</code>，而后端编译有运行期编译（JIT）、提前编译（AOT）等。在本篇中主要将前端编译（早期编译）。</p>
+<h4 id="Javac编译过程"><a href="#Javac编译过程" class="headerlink" title="Javac编译过程"></a>Javac编译过程</h4><p>javac的编译过程，主要分为3个过程：</p>
+<ul>
+<li>解析与填充符号表</li>
+<li>插入式注解处理</li>
+<li>语义分析与生成字节码</li>
+</ul>
+<p><img src="/Users/qudian/Library/Application Support/typora-user-images/image-20190922212854084.png" alt="image-20190922212854084"></p>
+<p>在openjdk中，java的编译入口为<code>com.sun.tools.javac.main.JavaCompiler</code>类中的compile与compile2方法，代码如下：</p>
+<p>compile:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compile</span><span class="params">(List&lt;JavaFileObject&gt; sourceFileObjects,</span></span></span><br><span class="line"><span class="function"><span class="params">                        List&lt;String&gt; classnames,</span></span></span><br><span class="line"><span class="function"><span class="params">                        Iterable&lt;? extends Processor&gt; processors)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> IOException <span class="comment">// <span class="doctag">TODO:</span> temp, from JavacProcessingEnvironment</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (processors != <span class="keyword">null</span> &amp;&amp; processors.iterator().hasNext())</span><br><span class="line">            explicitAnnotationProcessingRequested = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// as a JavaCompiler can only be used once, throw an exception if</span></span><br><span class="line">        <span class="comment">// it has been used before.</span></span><br><span class="line">        <span class="keyword">if</span> (hasBeenUsed)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError(<span class="string">"attempt to reuse JavaCompiler"</span>);</span><br><span class="line">        hasBeenUsed = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        start_msec = now();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            initProcessAnnotations(processors);<span class="comment">//初始化注解处理器</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//必须以链式调用以避免内存溢出</span></span><br><span class="line">            delegateCompiler =</span><br><span class="line">                processAnnotations(<span class="comment">//2.执行注解处理</span></span><br><span class="line">                    enterTrees(<span class="comment">//1.2 输入到符号表</span></span><br><span class="line">                      stopIfError(CompileState.PARSE, </span><br><span class="line">                                  	parseFiles(sourceFileObjects)) <span class="comment">// 1.1 词法、语法分析</span></span><br><span class="line">                    							),classnames);</span><br><span class="line">						delegateCompiler.compile2();<span class="comment">//3.语义分析与生成字节码</span></span><br><span class="line">            delegateCompiler.close();</span><br><span class="line">            elapsed_msec = delegateCompiler.elapsed_msec;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Abort ex) &#123;</span><br><span class="line">            <span class="keyword">if</span> (devVerbose)</span><br><span class="line">                ex.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (procEnvImpl != <span class="keyword">null</span>)</span><br><span class="line">                procEnvImpl.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>compile2:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">compile2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            label44:</span><br><span class="line">            <span class="keyword">switch</span>(<span class="keyword">this</span>.compilePolicy) &#123;</span><br><span class="line">            <span class="keyword">case</span> ATTR_ONLY:</span><br><span class="line">                <span class="keyword">this</span>.attribute((Queue)<span class="keyword">this</span>.todo);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> CHECK_ONLY:</span><br><span class="line">                <span class="keyword">this</span>.flow(<span class="keyword">this</span>.attribute((Queue)<span class="keyword">this</span>.todo));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SIMPLE:</span><br><span class="line">                <span class="keyword">this</span>.generate(<span class="keyword">this</span>.desugar(<span class="keyword">this</span>.flow(<span class="keyword">this</span>.attribute((Queue)<span class="keyword">this</span>.todo))));</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> BY_FILE:</span><br><span class="line">                Queue var1 = <span class="keyword">this</span>.todo.groupByFile();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (var1.isEmpty() || <span class="keyword">this</span>.shouldStop(CompileState.ATTR)) &#123;</span><br><span class="line">                        <span class="keyword">break</span> label44;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">this</span>.generate(<span class="keyword">this</span>.desugar(<span class="keyword">this</span>.flow(<span class="keyword">this</span>.attribute((Queue)var1.remove()))));</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">case</span> BY_TODO:</span><br><span class="line">                <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.todo.isEmpty()) &#123;</span><br><span class="line">                        <span class="keyword">break</span> label44;</span><br><span class="line">                    &#125;</span><br><span class="line">										<span class="comment">//</span></span><br><span class="line">                    <span class="keyword">this</span>.generate(<span class="comment">//生成字节码</span></span><br><span class="line">                      <span class="keyword">this</span>.desugar(<span class="comment">//反语法糖</span></span><br><span class="line">                        <span class="keyword">this</span>.flow(<span class="comment">//数据流分析</span></span><br><span class="line">                          <span class="keyword">this</span>.attribute((Env)<span class="keyword">this</span>.todo.remove())<span class="comment">//3.1标注</span></span><br><span class="line">                        )</span><br><span class="line">                      )</span><br><span class="line">                    );</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                Assert.error(<span class="string">"unknown compile policy"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Abort var2) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.devVerbose) &#123;</span><br><span class="line">                var2.printStackTrace(System.err);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.verbose) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elapsed_msec = elapsed(<span class="keyword">this</span>.start_msec);</span><br><span class="line">            <span class="keyword">this</span>.log.printVerbose(<span class="string">"total"</span>, <span class="keyword">new</span> Object[]&#123;Long.toString(<span class="keyword">this</span>.elapsed_msec)&#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.reportDeferredDiagnostics();</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.log.hasDiagnosticListener()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.printCount(<span class="string">"error"</span>, <span class="keyword">this</span>.errorCount());</span><br><span class="line">            <span class="keyword">this</span>.printCount(<span class="string">"warn"</span>, <span class="keyword">this</span>.warningCount());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="1-解析与填充符号表"><a href="#1-解析与填充符号表" class="headerlink" title="1.解析与填充符号表"></a>1.解析与填充符号表</h4><ol>
+<li>词法分析、语法分析</li>
+</ol>
+<p>词法分析是将代码的字符流转换为Token集合，例如：int a = b + c，则int 、a、b、c都为一个token。</p>
+<p>语法分析则是根据Token集合构造抽象语法树（Abstract Syntax Tree, AST）的过程，语法树中的每一个节点都代表程序中的一个语法结构,最终产生一个JCTree对象，而经过词法、语法分析后，javac编译器就不会再对源码文件进行操作了。</p>
+<ol start="2">
+<li>填充符号表</li>
+</ol>
+<p>符号表是一组符号地址与符号信息构成的表格，类似与HashMap。填充符号表则是将每一个编译单元的抽象语法树根节点装入一个ToDoList列表中。在语义分析时，符号表会被用做语义检查与生成中间代码；在目标代码生成阶段进行符号名分配地址时，符号表将是地址分配的依据。</p>
+<h4 id="2-注解处理器"><a href="#2-注解处理器" class="headerlink" title="2. 注解处理器"></a>2. 注解处理器</h4><p>注解处理器首先在initProcessAnnotations方法中进行，执行过程在processAnnotations方法完成。</p>
+<h4 id="3-语义分析与字节码生成"><a href="#3-语义分析与字节码生成" class="headerlink" title="3.语义分析与字节码生成"></a>3.语义分析与字节码生成</h4><p>词法、语法分析后，编译器已经获得了代码的AST。而语义分析主要任务是对AST结构上进行上下文类的审查，语义分析过程主要分为标注检查、数据控制流分析以及解语法糖三个步骤。</p>
+<ol>
+<li>标注检查</li>
+</ol>
+<p>标注检查内容主要为检查变量使用前是否已被声明、变量类型是否正确、变量是否赋值等，此外还有一个重要的动作为<code>常量折叠</code>。比如一行代码：<code>int a = 1 + 2</code>，经过标注检查的常量折叠后，a的值会被折叠为3.</p>
+<ol start="2">
+<li>数据及控制流分析</li>
+</ol>
+<p>数据与控制流分析是对程序上下文逻辑的进一步验证，它可以检查出如局部变量是否赋值、方法的每个路径是否有返回值、受检异常是否有被处理等</p>
+<ol start="3">
+<li>解语法糖</li>
+</ol>
+<p>解语法糖主要将java中的语法糖语法如泛型、自动装箱/拆箱、可变参数等语法进行转换为基础java代码的过程</p>
+<p>字节码生成：</p>
+<p>字节码生成是javac编译过程等最后一个阶段，主要将前面各个步骤生成的信息转化成字节码到磁盘中，并且还有少量代码添加、转换工作。例如实例构造器<init>()方法和类构造器方法<cinit>()就是在这个阶段加入到语法树中的。在完成了语法树的遍历与调整后，就会把所有所需信息的符号表交给<code>ClassWriter</code>类，生成最终的Class文件。</cinit></init></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://wushiyii.github.io/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" title="深入理解JVM（五） --- 早期编译" target="_blank" rel="external">https://wushiyii.github.io/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" title="深入理解JVM（六） --- 晚期编译（运行期编译）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" title="深入理解JVM（四） --- 栈帧结构"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2019 Wushiyi
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '0aa72e1501a75fd11a4d',
+    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
+    repo: 'Wushiyii.github.io',
+    owner: 'Wushiyii',
+    admin: ['Wushiyii'],
+    id: md5(location.pathname),
+    distractionFreeMode: true
+  })
+  gitalk.render('comments')
+  </script>
+
+      
+
+
+
+
+
+
+
+</body>
+</html>

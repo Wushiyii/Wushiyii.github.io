@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Docker Get start(3)--Service | Hexo</title>
+  <meta name="description" content="Docker中的服务">
+<meta name="keywords" content="编程,容器,CI&#x2F;CD,Linux,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker Get start(3)--Service">
+<meta property="og:url" content="https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="Docker中的服务">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://docs.docker.com/get-started/images/app80-in-browser.png">
+<meta property="og:updated_time" content="2019-09-24T02:25:20.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Get start(3)--Service">
+<meta name="twitter:description" content="Docker中的服务">
+<meta name="twitter:image" content="https://docs.docker.com/get-started/images/app80-in-browser.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Welcome</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.57px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" class="title">深入理解JVM（六） --- 晚期编译（运行期编译）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-24T09:52:31.000Z" itemprop="datePublished">2019-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="title">深入理解JVM（五） --- 早期编译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/02/Linux/less命令/" class="title">Less</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-02T09:15:14.000Z" itemprop="datePublished">2019-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Docker/Docker-get-start(3)--service" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker Get start(3)--Service
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/11/20/Docker/Docker-get-start(3)--service/" class="article-date">
+	  <time datetime="2018-11-20T05:20:12.000Z" itemprop="datePublished">2018-11-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/CI-CD/">CI/CD</a>, <a class="article-tag-link" href="/tags/Docker/">Docker</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/容器/">容器</a>, <a class="article-tag-link" href="/tags/编程/">编程</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/11/20/Docker/Docker-get-start(3)--service/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,226(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>Docker中的服务<br><a id="more"></a></p>
+<h2 id="Docker-Get-start-3-–Service"><a href="#Docker-Get-start-3-–Service" class="headerlink" title="Docker Get start(3)–Service"></a>Docker Get start(3)–Service</h2><h4 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h4><p>在教程的第3部分中，我们将扩展教程第2部分中的应用程序，并启用负载平衡。 要做到这一点，我们必须在分布式应用程序的层次结构中向上提升一个层级: 服务。</p>
+<ul>
+<li>Stack : 堆栈</li>
+<li><strong>Service</strong> : 服务（本节内容）</li>
+<li>Container :容器</li>
+</ul>
+<h4 id="关于服务"><a href="#关于服务" class="headerlink" title="关于服务"></a>关于服务</h4><p>在分布式应用程序中，应用程序的不同部分被称为”服务”。 例如一个视频共享网站（Bilibili），它可能包括一个用于在数据库中存储用户数据的服务、一个用户上传某个内容后在后台进行视频转码的服务、一个用于前端的服务、CDN加速服务等等。</p>
+<p>服务实际上只是”生产中的容器” 服务只运行一个映像，但它规定了映像的运行方式——它应该使用哪些端口，容器应该运行多少个实例，以便服务确定所需的容量，等等。 扩展服务会改变运行该软件的容器实例的数量，从而为流程中的服务分配更多的计算资源。</p>
+<p>幸运的是，使用<code>Docker</code>平台定义、运行和扩展服务非常简单——只需编写一个<code>Docker-compose</code>的yml文件即可。</p>
+<h4 id="docker-compose-yml-文件"><a href="#docker-compose-yml-文件" class="headerlink" title="docker-compose.yml 文件"></a>docker-compose.yml 文件</h4><p><code>docker-compose.yml</code>是一个 <code>YAML</code>文件，它定义了 <code>Docker</code>容器在生产环境中的各种行为。</p>
+<h5 id="docker-compose-yml"><a href="#docker-compose-yml" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h5><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span></span><br><span class="line">    <span class="comment"># replace username/repo:tag with your name and image details</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">username/repo:tag</span></span><br><span class="line"><span class="attr">    deploy:</span></span><br><span class="line"><span class="attr">      replicas:</span> <span class="number">5</span></span><br><span class="line"><span class="attr">      resources:</span></span><br><span class="line"><span class="attr">        limits:</span></span><br><span class="line"><span class="attr">          cpus:</span> <span class="string">"0.1"</span></span><br><span class="line"><span class="attr">          memory:</span> <span class="number">50</span><span class="string">M</span></span><br><span class="line"><span class="attr">      restart_policy:</span></span><br><span class="line"><span class="attr">        condition:</span> <span class="string">on-failure</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"4000:80"</span></span><br><span class="line"><span class="attr">    networks:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">webnet</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line"><span class="attr">  webnet:</span></span><br></pre></td></tr></table></figure>
+<p><code>docker-compose.yml</code> 文件告诉 <code>Docker</code> 执行以下操作:</p>
+<ul>
+<li>从仓库中拉取出我们在教程2中上传的镜像。</li>
+<li>以 <code>web</code> 服务的形式运行该镜像的5个实例，限制每个实例最多只能使用10% 的 CPU (跨所有核心)和50MB 的 RAM。</li>
+<li>如果一个实例宕机，立即重新启动容器。</li>
+<li>将主机上的4000端口映射到 web 的80端口。</li>
+<li>控制 web 容器通过称为 <code>webnet</code> 的负载均衡网络共享80端口。 (在内部，容器自身发布到 web 的80端口，该端口位于一个短暂的端口。)</li>
+<li><p>用默认设置定义<code>webnet</code>网络(这是一个负载均衡的重叠网络)。</p>
+<h4 id="运行新的负载均衡应用"><a href="#运行新的负载均衡应用" class="headerlink" title="运行新的负载均衡应用"></a>运行新的负载均衡应用</h4><p>在使用<code>docker stack deploy</code> 命令之前，我们首先运行:</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker swarm init</span><br></pre></td></tr></table></figure>
+<p> <strong>注意</strong>: 我们将在第4部分介绍这个命令的含义。 如果不运行<code>docker swarm init</code>,会得到一个错误<code>this node is not a swarm manager</code></p>
+<p> 现在让我们来运行它。 你需要给你的应用一个名字。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure></p>
+<p>现在，我们的单个服务堆栈在一台主机上，运行镜像的5个实例。 让我们来观察一下：</p>
+<p>使用命令<code>docker service ls</code>,获取应用中一个服务的服务 ID:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker service ls</span><br><span class="line">ID                  NAME                MODE                REPLICAS            IMAGE                 PORTS</span><br><span class="line">nymusuaqwkgd        hellolab_web        replicated          5/5                 wushiyi/hello:part1   *:4000-&gt;80/tcp</span><br></pre></td></tr></table></figure></p>
+<p>如果你将服务命名为与本例中所示相同的名称，则该服务的名称为 <code>hellolab_web</code>。 还列出了服务 ID，以及实例的数量、映像名和暴露端口。</p>
+<p>在服务中运行的单个容器称为<code>任务(task)</code>。 任务的 id 从数值上递增，直到您在 <code>docker-compose</code> 中定义的副本的数量。 Yml列出你服务的任务:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker service ps hellolab_web</span><br></pre></td></tr></table></figure></p>
+<p>如果只列出系统上的所有容器，也会显示任务，但不会对服务进行过滤:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dockser container ls -q</span><br></pre></td></tr></table></figure></p>
+<p>此时，可以在GitBash连续运行 curl-4 http: / / localhost: 4000，或者在浏览器中转到该 URL 并刷新几次。<br><img src="https://docs.docker.com/get-started/images/app80-in-browser.png" alt="balanced"><br>无论采用哪种方式，容器 ID 都会发生变化，演示了负载均衡; 对于每个请求，都会以循环方式选择5个任务中的一个进行响应。 容器 id 与前面命令(docker container ls -q)的输出匹配。</p>
+<h4 id="扩展应用"><a href="#扩展应用" class="headerlink" title="扩展应用"></a>扩展应用</h4><p>您可以通过更改 <code>docker-compose</code> 中的 <code>replicas</code> 值来扩展应用的实例数量。 保存更改Yml 后，并重新运行命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure></p>
+<p><code>Docker</code> 会执行<code>in-place</code>更新，不需要先删除堆栈或者kill任何容器.<br>现在，重新运行<code>docker container ls -q</code>来查看已部署的实例的重新配置。 如果扩大实例的规模，就会启动更多的任务(task)，从而启动更多的容器。</p>
+<h4 id="关闭应用程序和集群"><a href="#关闭应用程序和集群" class="headerlink" title="关闭应用程序和集群"></a>关闭应用程序和集群</h4><ul>
+<li>用 docker 栈关闭应用程序: <code>docker stack rm hellolab</code></li>
+<li>关闭集群: <code>docker swarm leave --force</code></li>
+</ul>
+<p>通过 <code>Docker</code> 可以很容易地支持和扩展你的应用, 接下来将学习如何在 <code>Docker</code>机器集群上运行这个应用。</p>
+<blockquote>
+<p>全文教程翻译自Docker官方文档。    —— <a href="https://docs.docker.com/get-started/part3/" target="_blank" rel="noopener">Docker</a></p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/" title="Docker Get start(3)--Service" target="_blank" rel="external">https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/11/21/Docker/Docker-get-start(4)--swarm/" title="Docker Get start(4)--Swarm"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/11/19/Docker/Docker-get-start(2)--container/" title="Docker Get start(2)---Container"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2019 Wushiyi
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '0aa72e1501a75fd11a4d',
+    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
+    repo: 'Wushiyii.github.io',
+    owner: 'Wushiyii',
+    admin: ['Wushiyii'],
+    id: md5(location.pathname),
+    distractionFreeMode: true
+  })
+  gitalk.render('comments')
+  </script>
+
+      
+
+
+
+
+
+
+
+</body>
+</html>

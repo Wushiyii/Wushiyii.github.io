@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>ES6-箭头表达式 | Hexo</title>
+  <meta name="description" content="ES6-箭头表达式">
+<meta name="keywords" content="编程,语言,WEB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6-箭头表达式">
+<meta property="og:url" content="https://wushiyii.github.io/2019/02/25/Javascript/ES6-箭头函数/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="ES6-箭头表达式">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-09-24T02:25:20.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6-箭头表达式">
+<meta name="twitter:description" content="ES6-箭头表达式">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://wushiyii.github.io/2019/02/25/Javascript/ES6-箭头函数/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Welcome</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.57px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" class="title">深入理解JVM（六） --- 晚期编译（运行期编译）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-24T09:52:31.000Z" itemprop="datePublished">2019-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="title">深入理解JVM（五） --- 早期编译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/02/Linux/less命令/" class="title">Less</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-02T09:15:14.000Z" itemprop="datePublished">2019-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Javascript/ES6-箭头函数" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ES6-箭头表达式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/02/25/Javascript/ES6-箭头函数/" class="article-date">
+	  <time datetime="2019-02-25T01:12:15.000Z" itemprop="datePublished">2019-02-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/JS/">JS</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/WEB/">WEB</a>, <a class="article-tag-link" href="/tags/编程/">编程</a>, <a class="article-tag-link" href="/tags/语言/">语言</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/02/25/Javascript/ES6-箭头函数/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,470(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>ES6-箭头表达式</p>
+<a id="more"></a>
+<h1 id="ECMAScript6-箭头表达式"><a href="#ECMAScript6-箭头表达式" class="headerlink" title="ECMAScript6 - 箭头表达式"></a>ECMAScript6 - 箭头表达式</h1><p><strong>箭头函数表达式</strong>的语法比<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/function" target="_blank" rel="noopener">函数表达式</a>更简洁，并且没有自己的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">this</a>，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/arguments" target="_blank" rel="noopener">arguments</a>，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/super" target="_blank" rel="noopener">super</a>或 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new.target" target="_blank" rel="noopener">new.target</a>。这些函数表达式更适用于那些本来需要匿名函数的地方，并且它们不能用作构造函数。</p>
+<hr>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(param1, param2, …, paramN) =&gt; &#123; statements &#125; </span><br><span class="line">(param1, param2, …, paramN) =&gt; expression</span><br><span class="line"><span class="comment">//相当于：(参数1, 参数2, …, 参数N) =&gt;&#123; return 表达式; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当只有一个参数时，圆括号是可选的：</span></span><br><span class="line">(singleParam) =&gt; &#123; statements &#125;</span><br><span class="line">singleParam =&gt; &#123; statements &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没有参数的函数应该写成一对圆括号。</span></span><br><span class="line">() =&gt; &#123; statements &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="高级语法"><a href="#高级语法" class="headerlink" title="高级语法"></a>高级语法</h3><blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">//加括号的函数体返回对象字面表达式：</span></span><br><span class="line">&gt; 参数=&gt; (&#123;<span class="attr">foo</span>: bar&#125;)</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">//支持剩余参数和默认参数</span></span><br><span class="line">&gt; <span class="function">(<span class="params">参数<span class="number">1</span>, 参数<span class="number">2</span>, ...rest</span>) =&gt;</span> &#123;函数声明&#125;</span><br><span class="line">&gt; <span class="function">(<span class="params">参数<span class="number">1</span> = 默认值<span class="number">1</span>,参数<span class="number">2</span>, …, 参数N = 默认值N</span>) =&gt;</span> &#123;函数声明&#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">//同样支持参数列表解构</span></span><br><span class="line">&gt; <span class="keyword">let</span> f = <span class="function">(<span class="params">[a, b] = [<span class="number">1</span>, <span class="number">2</span>], &#123;x: c&#125; = &#123;x: a + b&#125;</span>) =&gt;</span> a + b + c;</span><br><span class="line">&gt; f();  <span class="comment">// 6</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<hr>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>参考 <a href="https://hacks.mozilla.org/2015/06/es6-in-depth-arrow-functions/" target="_blank" rel="noopener">“ES6 In Depth: Arrow functions” on hacks.mozilla.org</a>.</p>
+<p>引入箭头函数有两个方面的作用：更简短的函数并且不绑定<code>this</code>。</p>
+<h3 id="更短的函数"><a href="#更短的函数" class="headerlink" title="更短的函数"></a>更短的函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> elements = [</span><br><span class="line">  <span class="string">'Hydrogen'</span>,</span><br><span class="line">  <span class="string">'Helium'</span>,</span><br><span class="line">  <span class="string">'Lithium'</span>,</span><br><span class="line">  <span class="string">'Beryllium'</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">elements.map(<span class="function"><span class="keyword">function</span>(<span class="params">element</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">return</span> element.length; </span><br><span class="line">&#125;); <span class="comment">// 返回数组：[8, 6, 7, 9]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的普通函数可以改写成如下的箭头函数</span></span><br><span class="line">elements.map(<span class="function">(<span class="params">element</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> element.length;</span><br><span class="line">&#125;); <span class="comment">// [8, 6, 7, 9]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当箭头函数只有一个参数时，可以省略参数的圆括号</span></span><br><span class="line">elements.map(<span class="function"><span class="params">element</span> =&gt;</span> &#123;</span><br><span class="line"> <span class="keyword">return</span> element.length;</span><br><span class="line">&#125;); <span class="comment">// [8, 6, 7, 9]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 当箭头函数的函数体只有一个 `return` 语句时，可以省略 `return` 关键字和方法体的花括号</span></span><br><span class="line">elements.map(<span class="function"><span class="params">element</span> =&gt;</span> element.length); <span class="comment">// [8, 6, 7, 9]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在这个例子中，因为我们只需要 `length` 属性，所以可以使用参数解构</span></span><br><span class="line"><span class="comment">// 需要注意的是字符串 `"length"` 是我们想要获得的属性的名称，而 `lengthFooBArX` 则只是个变量名，</span></span><br><span class="line"><span class="comment">// 可以替换成任意合法的变量名</span></span><br><span class="line">elements.map(<span class="function">(<span class="params">&#123; <span class="string">"length"</span>: lengthFooBArX &#125;</span>) =&gt;</span> lengthFooBArX); <span class="comment">// [8, 6, 7, 9]</span></span><br></pre></td></tr></table></figure>
+<h3 id="不绑定this"><a href="#不绑定this" class="headerlink" title="不绑定this"></a>不绑定<code>this</code></h3><p>在箭头函数出现之前，每个新定义的函数都有它自己的 <code>this</code>值（在构造函数的情况下是一个新对象，在严格模式的函数调用中为 undefined，如果该函数被作为“对象方法”调用则为基础对象等）。<code>This</code>被证明是令人厌烦的面向对象风格的编程。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Person() 构造函数定义 `this`作为它自己的实例.</span></span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  setInterval(<span class="function"><span class="keyword">function</span> <span class="title">growUp</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 在非严格模式, growUp()函数定义 `this`作为全局对象, </span></span><br><span class="line">    <span class="comment">// 与在 Person()构造函数中定义的 `this`并不相同.</span></span><br><span class="line">    <span class="keyword">this</span>.age++;</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person();</span><br></pre></td></tr></table></figure>
+<p>在ECMAScript 3/5中，通过将<code>this</code>值分配给封闭的变量，可以解决<code>this</code>问题。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">  that.age = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  setInterval(<span class="function"><span class="keyword">function</span> <span class="title">growUp</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//  回调引用的是`that`变量, 其值是预期的对象. </span></span><br><span class="line">    that.age++;</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者，可以创建<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener">绑定函数</a>，以便将预先分配的<code>this</code>值传递到绑定的目标函数（上述示例中的<code>growUp()</code>函数）。</p>
+<p>箭头函数不会创建自己的<code>this,它只会从自己的作用域链的上一层继承this</code>。因此，在下面的代码中，传递给<code>setInterval</code>的函数内的<code>this</code>与封闭函数中的<code>this</code>值相同：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.age++; <span class="comment">// |this| 正确地指向 p 实例</span></span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person();</span><br></pre></td></tr></table></figure>
+<h4 id="与严格模式的关系"><a href="#与严格模式的关系" class="headerlink" title="与严格模式的关系"></a>与严格模式的关系</h4><p>鉴于 <code>this</code> 是词法层面上的，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode" target="_blank" rel="noopener">严格模式</a>中与 <code>this</code> 相关的规则都将被忽略。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> closure = <span class="string">"123"</span></span><br><span class="line">  setInterval(<span class="function"><span class="keyword">function</span> <span class="title">growUp</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age++;</span><br><span class="line">    <span class="built_in">console</span>.log(closure)</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PersonX</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span></span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> closure = <span class="string">"123"</span></span><br><span class="line">  setInterval(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age++;</span><br><span class="line">    <span class="built_in">console</span>.log(closure)</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> px = <span class="keyword">new</span> PersonX();</span><br></pre></td></tr></table></figure>
+<p>严格模式的其他规则依然不变.</p>
+<h4 id="通过-call-或-apply-调用"><a href="#通过-call-或-apply-调用" class="headerlink" title="通过 call 或 apply 调用"></a>通过 call 或 apply 调用</h4><p>由于 箭头函数没有自己的this指针，通过 <code>call()</code> <em>或</em> <code>apply()</code> 方法调用一个函数时，只能传递参数（不能绑定this—译者注），他们的第一个参数会被忽略。（这种现象对于bind方法同样成立—译者注）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> adder = &#123;</span><br><span class="line">  base : <span class="number">1</span>,</span><br><span class="line">    </span><br><span class="line">  add : <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="function"><span class="params">v</span> =&gt;</span> v + <span class="keyword">this</span>.base;</span><br><span class="line">    <span class="keyword">return</span> f(a);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  addThruCall: <span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="function"><span class="params">v</span> =&gt;</span> v + <span class="keyword">this</span>.base;</span><br><span class="line">    <span class="keyword">var</span> b = &#123;</span><br><span class="line">      base : <span class="number">2</span></span><br><span class="line">    &#125;;</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> f.call(b, a);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(adder.add(<span class="number">1</span>));         <span class="comment">// 输出 2</span></span><br><span class="line"><span class="built_in">console</span>.log(adder.addThruCall(<span class="number">1</span>)); <span class="comment">// 仍然输出 2（而不是3 ——译者注）</span></span><br></pre></td></tr></table></figure>
+<h3 id="不绑定arguments"><a href="#不绑定arguments" class="headerlink" title="不绑定arguments"></a>不绑定<code>arguments</code></h3><p>箭头函数不绑定<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/arguments" target="_blank" rel="noopener">Arguments 对象</a>。因此，在本示例中，<code>arguments</code>只是引用了封闭作用域内的arguments：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var arguments = [1, 2, 3];</span><br><span class="line">var arr = () =&gt; arguments[0];</span><br><span class="line"></span><br><span class="line">arr(); // 1</span><br><span class="line"></span><br><span class="line">function foo(n) &#123;</span><br><span class="line">  var f = () =&gt; arguments[0] + n; // 隐式绑定 foo 函数的 arguments 对象. arguments[0] 是 n</span><br><span class="line">  return f();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(1); // 2</span><br></pre></td></tr></table></figure>
+<p>在大多数情况下，使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Rest_parameters" target="_blank" rel="noopener">剩余参数</a>是相较使用<code>arguments</code>对象的更好选择。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">arg</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> f = <span class="function">(<span class="params">...args</span>) =&gt;</span> args[<span class="number">0</span>]; </span><br><span class="line">  <span class="keyword">return</span> f(arg); </span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">arg1,arg2</span>) </span>&#123; </span><br><span class="line">    <span class="keyword">var</span> f = <span class="function">(<span class="params">...args</span>) =&gt;</span> args[<span class="number">1</span>]; </span><br><span class="line">    <span class="keyword">return</span> f(arg1,arg2); </span><br><span class="line">&#125; </span><br><span class="line">foo(<span class="number">1</span>,<span class="number">2</span>);  <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<h3 id="像函数一样使用箭头函数"><a href="#像函数一样使用箭头函数" class="headerlink" title="像函数一样使用箭头函数"></a>像函数一样使用箭头函数</h3><p>如上所述，箭头函数表达式对非方法函数是最合适的。让我们看看当我们试着把它们作为方法时发生了什么。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  i: <span class="number">10</span>,</span><br><span class="line">  b: <span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="keyword">this</span>.i, <span class="keyword">this</span>),</span><br><span class="line">  c: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log( <span class="keyword">this</span>.i, <span class="keyword">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.b(); </span><br><span class="line"><span class="comment">// undefined</span></span><br><span class="line">obj.c(); </span><br><span class="line"><span class="comment">// 10, Object &#123;...&#125;</span></span><br></pre></td></tr></table></figure>
+<p>箭头函数没有定义this绑定。另一个涉及<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener"><code>Object.defineProperty()</code></a>的示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  a: <span class="number">10</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">"b"</span>, &#123;</span><br><span class="line">  <span class="keyword">get</span>: () =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.a, <span class="keyword">typeof</span> <span class="keyword">this</span>.a, <span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.a+<span class="number">10</span>; </span><br><span class="line">   <span class="comment">// 代表全局对象 'Window', 因此 'this.a' 返回 'undefined'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.b; <span class="comment">// undefined   "undefined"   Window &#123;postMessage: ƒ, blur: ƒ, focus: ƒ, close: ƒ, frames: Window, …&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-new-操作符"><a href="#使用-new-操作符" class="headerlink" title="使用 new 操作符"></a>使用 <code>new</code> 操作符</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Foo = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = <span class="keyword">new</span> Foo(); <span class="comment">// TypeError: Foo is not a constructor</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用prototype属性"><a href="#使用prototype属性" class="headerlink" title="使用prototype属性"></a>使用<code>prototype</code>属性</h3><p>箭头函数没有<code>prototype</code>属性。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Foo = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(Foo.prototype); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-yield-关键字"><a href="#使用-yield-关键字" class="headerlink" title="使用 yield 关键字"></a>使用 <code>yield</code> 关键字</h3><p> <code>yield</code> 关键字通常不能在箭头函数中使用（除非是嵌套在允许使用的函数内）。因此，箭头函数不能用作生成器。</p>
+<hr>
+<h2 id="函数体"><a href="#函数体" class="headerlink" title="函数体"></a>函数体</h2><p>箭头函数可以有一个“简写体”或常见的“块体”。</p>
+<p>在一个简写体中，只需要一个表达式，并附加一个隐式的返回值。在块体中，必须使用明确的<code>return</code>语句。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="params">x</span> =&gt;</span> x * x;                  </span><br><span class="line"><span class="comment">// 简写函数 省略return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = <span class="function">(<span class="params">x, y</span>) =&gt;</span> &#123; <span class="keyword">return</span> x + y; &#125;; </span><br><span class="line"><span class="comment">//常规编写 明确的返回值</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="返回对象字面量"><a href="#返回对象字面量" class="headerlink" title="返回对象字面量"></a>返回对象字面量</h2><p>记住用<code>params =&gt; {object:literal}</code>这种简单的语法返回对象字面量是行不通的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="attr">foo</span>: <span class="number">1</span> &#125;;               </span><br><span class="line"><span class="comment">// Calling func() returns undefined!</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="attr">foo</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125; &#125;;   </span><br><span class="line"><span class="comment">// SyntaxError: function statement requires a name</span></span><br></pre></td></tr></table></figure>
+<p>这是因为花括号（<code>{}</code> ）里面的代码被解析为一系列语句（即 <code>foo</code> 被认为是一个标签，而非对象字面量的组成部分）。</p>
+<p>所以，记得用圆括号把对象字面量包起来：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="params">()</span> =&gt;</span> (&#123;<span class="attr">foo</span>: <span class="number">1</span>&#125;);</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h2><p>箭头函数在参数和箭头之间不能换行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = ()</span><br><span class="line">           =&gt; <span class="number">1</span>; </span><br><span class="line"><span class="comment">// SyntaxError: expected expression, got '=&gt;'</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="解析顺序"><a href="#解析顺序" class="headerlink" title="解析顺序"></a>解析顺序</h2><p>虽然箭头函数中的箭头不是运算符，但箭头函数具有与常规函数不同的特殊<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence" target="_blank" rel="noopener">运算符优先级</a>解析规则。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> callback;</span><br><span class="line"></span><br><span class="line">callback = callback || <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;; <span class="comment">// ok</span></span><br><span class="line"></span><br><span class="line">callback = callback || <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;      </span><br><span class="line"><span class="comment">// SyntaxError: invalid arrow-function arguments</span></span><br><span class="line"></span><br><span class="line">callback = callback || <span class="function">(<span class="params">(</span>) =&gt;</span> &#123;&#125;);    <span class="comment">// ok</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="更多示例节"><a href="#更多示例节" class="headerlink" title="更多示例节"></a>更多示例<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions#%E6%9B%B4%E5%A4%9A%E7%A4%BA%E4%BE%8B" target="_blank" rel="noopener">节</a></h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 空的箭头函数返回 undefined</span></span><br><span class="line"><span class="keyword">let</span> empty = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="params">()</span> =&gt;</span> <span class="string">'foobar'</span>)(); </span><br><span class="line"><span class="comment">// Returns "foobar"</span></span><br><span class="line"><span class="comment">// (这是一个立即执行函数表达式,可参阅 'IIFE'术语表) </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> simple = <span class="function"><span class="params">a</span> =&gt;</span> a &gt; <span class="number">15</span> ? <span class="number">15</span> : a; </span><br><span class="line">simple(<span class="number">16</span>); <span class="comment">// 15</span></span><br><span class="line">simple(<span class="number">10</span>); <span class="comment">// 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> max = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a &gt; b ? a : b;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Easy array filtering, mapping, ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">5</span>, <span class="number">6</span>, <span class="number">13</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">18</span>, <span class="number">23</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> sum = arr.reduce(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b);  </span><br><span class="line"><span class="comment">// 66</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> even = arr.filter(<span class="function"><span class="params">v</span> =&gt;</span> v % <span class="number">2</span> == <span class="number">0</span>); </span><br><span class="line"><span class="comment">// [6, 0, 18]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> double = arr.map(<span class="function"><span class="params">v</span> =&gt;</span> v * <span class="number">2</span>);       </span><br><span class="line"><span class="comment">// [10, 12, 26, 0, 2, 36, 46]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 更简明的promise链</span></span><br><span class="line">promise.then(<span class="function"><span class="params">a</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;).then(<span class="function"><span class="params">b</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 无参数箭头函数在视觉上容易分析</span></span><br><span class="line">setTimeout( <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'I happen sooner'</span>);</span><br><span class="line">  setTimeout( <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// deeper code</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'I happen later'</span>);</span><br><span class="line">  &#125;, <span class="number">1</span>);</span><br><span class="line">&#125;, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="箭头函数也可以使用条件（三元）运算符："><a href="#箭头函数也可以使用条件（三元）运算符：" class="headerlink" title="箭头函数也可以使用条件（三元）运算符："></a>箭头函数也可以使用条件（三元）运算符：</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> simple = <span class="function"><span class="params">a</span> =&gt;</span> a &gt; <span class="number">15</span> ? <span class="number">15</span> : a;</span><br><span class="line">simple(<span class="number">16</span>); <span class="comment">// 15</span></span><br><span class="line">simple(<span class="number">10</span>); <span class="comment">// 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> max = <span class="function">(<span class="params">a, b</span>) =&gt;</span> a &gt; b ? a : b;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>箭头函数内定义的变量及其作用域</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 常规写法</span></span><br><span class="line"><span class="keyword">var</span> greeting = <span class="function"><span class="params">()</span> =&gt;</span> &#123;<span class="keyword">let</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="keyword">return</span> (<span class="string">"Good"</span> + ((now.getHours() &gt; <span class="number">17</span>) ? <span class="string">" evening."</span> : <span class="string">" day."</span>));&#125;</span><br><span class="line">greeting();          <span class="comment">//"Good day."</span></span><br><span class="line"><span class="built_in">console</span>.log(now);    <span class="comment">// ReferenceError: now is not defined 标准的let作用域</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数括号内定义的变量是局部变量（默认参数）</span></span><br><span class="line"><span class="keyword">var</span> greeting = <span class="function">(<span class="params">now=<span class="keyword">new</span> <span class="built_in">Date</span>(</span>)) =&gt;</span> <span class="string">"Good"</span> + (now.getHours() &gt; <span class="number">17</span> ? <span class="string">" evening."</span> : <span class="string">" day."</span>);</span><br><span class="line">greeting();          <span class="comment">//"Good day."</span></span><br><span class="line"><span class="built_in">console</span>.log(now);    <span class="comment">// ReferenceError: now is not defined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对比：函数体内&#123;&#125;不使用var定义的变量是全局变量</span></span><br><span class="line"><span class="keyword">var</span> greeting = <span class="function"><span class="params">()</span> =&gt;</span> &#123;now = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="keyword">return</span> (<span class="string">"Good"</span> + ((now.getHours() &gt; <span class="number">17</span>) ? <span class="string">" evening."</span> : <span class="string">" day."</span>));&#125;</span><br><span class="line">greeting();           <span class="comment">//"Good day."</span></span><br><span class="line"><span class="built_in">console</span>.log(now);     <span class="comment">// Fri Dec 22 2017 10:01:00 GMT+0800 (中国标准时间)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对比：函数体内&#123;&#125; 用var定义的变量是局部变量</span></span><br><span class="line"><span class="keyword">var</span> greeting = <span class="function"><span class="params">()</span> =&gt;</span> &#123;<span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="keyword">return</span> (<span class="string">"Good"</span> + ((now.getHours() &gt; <span class="number">17</span>) ? <span class="string">" evening."</span> : <span class="string">" day."</span>));&#125;</span><br><span class="line">greeting(); <span class="comment">//"Good day."</span></span><br><span class="line"><span class="built_in">console</span>.log(now);    <span class="comment">// ReferenceError: now is not defined</span></span><br></pre></td></tr></table></figure>
+<h4 id="箭头函数也可以使用闭包："><a href="#箭头函数也可以使用闭包：" class="headerlink" title="箭头函数也可以使用闭包："></a>箭头函数也可以使用闭包：</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 标准的闭包函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">var</span> i=<span class="number">0</span>;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">              <span class="keyword">return</span> (++i);</span><br><span class="line">      &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> v=A();</span><br><span class="line">v();    <span class="comment">//1</span></span><br><span class="line">v();    <span class="comment">//2</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//箭头函数体的闭包（ i=0 是默认参数）</span></span><br><span class="line"><span class="keyword">var</span> Add = <span class="function">(<span class="params">i=<span class="number">0</span></span>) =&gt;</span> &#123;<span class="keyword">return</span> <span class="function">(<span class="params">(</span>) =&gt;</span> (++i) )&#125;;</span><br><span class="line"><span class="keyword">var</span> v = Add();</span><br><span class="line">v();           <span class="comment">//1</span></span><br><span class="line">v();           <span class="comment">//2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//因为仅有一个返回，return 及括号（）也可以省略</span></span><br><span class="line"><span class="keyword">var</span> Add = <span class="function">(<span class="params">i=<span class="number">0</span></span>)=&gt;</span> <span class="function"><span class="params">()</span>=&gt;</span> (++i);</span><br></pre></td></tr></table></figure>
+<h4 id="箭头函数递归"><a href="#箭头函数递归" class="headerlink" title="箭头函数递归"></a>箭头函数递归</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fact = <span class="function">(<span class="params">x</span>) =&gt;</span> ( x==<span class="number">0</span> ?  <span class="number">1</span> : x*fact(x<span class="number">-1</span>) );</span><br><span class="line">fact(<span class="number">5</span>);       <span class="comment">// 120</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://wushiyii.github.io/2019/02/25/Javascript/ES6-箭头函数/" title="ES6-箭头表达式" target="_blank" rel="external">https://wushiyii.github.io/2019/02/25/Javascript/ES6-箭头函数/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/02/25/Javascript/ES6-Class/" title="ES6-Class"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/02/20/Javascript/A re-introduction to JavaScript (JS tutorial)/" title="A re-introduction to JavaScript (翻译)"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2019 Wushiyi
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '0aa72e1501a75fd11a4d',
+    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
+    repo: 'Wushiyii.github.io',
+    owner: 'Wushiyii',
+    admin: ['Wushiyii'],
+    id: md5(location.pathname),
+    distractionFreeMode: true
+  })
+  gitalk.render('comments')
+  </script>
+
+      
+
+
+
+
+
+
+
+</body>
+</html>

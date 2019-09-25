@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Docker Get start(4)--Swarm | Hexo</title>
+  <meta name="description" content="Docker get start系列第四节教程">
+<meta name="keywords" content="编程,容器,CI&#x2F;CD,Linux,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker Get start(4)--Swarm">
+<meta property="og:url" content="https://wushiyii.github.io/2018/11/21/Docker/Docker-get-start(4)--swarm/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="Docker get start系列第四节教程">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://docs.docker.com/get-started/images/app-in-browser-swarm.png">
+<meta property="og:image" content="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png">
+<meta property="og:updated_time" content="2019-09-24T02:25:20.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Get start(4)--Swarm">
+<meta name="twitter:description" content="Docker get start系列第四节教程">
+<meta name="twitter:image" content="https://docs.docker.com/get-started/images/app-in-browser-swarm.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://wushiyii.github.io/2018/11/21/Docker/Docker-get-start(4)--swarm/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Welcome</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.57px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" class="title">深入理解JVM（六） --- 晚期编译（运行期编译）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-24T09:52:31.000Z" itemprop="datePublished">2019-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="title">深入理解JVM（五） --- 早期编译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/02/Linux/less命令/" class="title">Less</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-02T09:15:14.000Z" itemprop="datePublished">2019-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Docker/Docker-get-start(4)--swarm" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Docker Get start(4)--Swarm
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/11/21/Docker/Docker-get-start(4)--swarm/" class="article-date">
+	  <time datetime="2018-11-21T07:08:11.000Z" itemprop="datePublished">2018-11-21</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/CI-CD/">CI/CD</a>, <a class="article-tag-link" href="/tags/Docker/">Docker</a>, <a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/容器/">容器</a>, <a class="article-tag-link" href="/tags/编程/">编程</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/11/21/Docker/Docker-get-start(4)--swarm/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,631(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p> Docker get start系列第四节教程<br> <a id="more"></a></p>
+<h2 id="Docker-Get-start-4-–Swarm"><a href="#Docker-Get-start-4-–Swarm" class="headerlink" title="Docker Get start(4)–Swarm"></a>Docker Get start(4)–Swarm</h2><h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在教程第3部分中，我们将一个应用转换为服务，来定义它在生产环境中应该如何运行，并且将其扩展到5倍实例的状态。<br>在第4部分中，我们将该应用部署到一个集群上，并在多台计算机上运行它。 多容器、多主机应用将可能通过将多台主机连接到一个称为<code>Dockerized</code>集群来实现，而这样的集群也称为<code>Swarm</code>集群。</p>
+<h3 id="理解Swarm集群"><a href="#理解Swarm集群" class="headerlink" title="理解Swarm集群"></a>理解Swarm集群</h3><p>一个<code>Swarm</code>就是一组服务器运行着<code>Docker</code>组成的集群。 在<code>Swarm</code>中，你可以和往常一样继续运行以前的 Docker 命令，但是现在它们将由一个被<code>swarm manage</code>管理的集群上执行。 <code>swarm</code>集群的主机可以是物理的，也可以是虚拟的。 这些主机在加入<code>swarm</code>集群后，它们被称为节点(node)。</p>
+<p><code>swarm manage</code>可以使用几种策略来运行容器，比如<code>emtiest node</code>——用容器填充最少的主机; 或者<code>global</code>，它确保每台计算机获得指定容器的一个实例。 你可以设置<code>swarm manage</code>在 <code>Compose</code> 文件中使用这些策略。</p>
+<p><code>swarm manage</code>是集群中唯一能够执行你的命令，或者授权其他主机作为<code>workers</code>加入集群。 <code>workers</code>在那里只是提供计算，并没有权力告诉任何其他主机能做什么和不能做什么。</p>
+<p>到目前为止，您一直在本地计算机上以单主机模式使用 <code>Docker</code>。 但是 <code>Docker</code>也可以切换到<code>swarm mode</code>(集群模式)，并且只有在此模式下才可以使用<code>swarm</code>系列的命令。 启用<code>swarm</code>集群模式可以使当前的主机成为群管理器。Docker 会在你管理的<code>swarm</code>集群上执行命令，而不仅仅是在当前机器上。</p>
+<h3 id="建立Swarm集群"><a href="#建立Swarm集群" class="headerlink" title="建立Swarm集群"></a>建立Swarm集群</h3><p>一个<code>swarm</code>集群由多个节点(<code>node</code>)组成，这些节点可以是物理主机，也可以是虚拟主机。 基本的概念非常简单: 运行 <code>docker swarm init</code>初始化集群，进入集群模式，使你当前的机器成为一个集群管理器，然后在其他主机运行 <code>docker swarm join</code>，让它们以<code>worker</code>身份加入集群。 我们使用Win10下的 VMs快速创建一个双机集群，并将其转化为一个群。</p>
+<h4 id="创建一个集群"><a href="#创建一个集群" class="headerlink" title="创建一个集群"></a>创建一个集群</h4><h5 id="本地计算机上的虚拟机-WINDOWS10"><a href="#本地计算机上的虚拟机-WINDOWS10" class="headerlink" title="本地计算机上的虚拟机(WINDOWS10)"></a>本地计算机上的虚拟机(WINDOWS10)</h5><p>首先，快速创建虚拟机(vm)共享的虚拟交换机，以便它们可以相互连接。</p>
+<ol>
+<li>启动 <code>Hyper-V 管理器</code></li>
+<li>单击右边菜单中的<code>虚拟交换机管理器</code></li>
+<li>单击创建<code>外部</code>类型的虚拟网络交换机</li>
+<li>设置名称<code>myswitch</code>，并选中<code>外部网络</code>选择框</li>
+</ol>
+<p>现在，使用我们的节点管理工具 <code>docker-machine</code> 创建几个虚拟主机:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> myvm1</span><br><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> myvm2</span><br></pre></td></tr></table></figure></p>
+<p>如果出现本地无法使用，不能识别版本号之类的，可以使用如下命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create --driver hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> --hyperv-boot2docker-url file://C:/Users/User_name/.docker/machine/machines/dev/boot2docker.iso myvm1</span><br></pre></td></tr></table></figure></p>
+<p>其中<code>boot2docker</code>的<a href="https://github.com/boot2docker/boot2docker/releases/download/v18.09.0/boot2docker.iso" target="_blank" rel="noopener">下载链接</a>.</p>
+<h5 id="列出虚拟机并获取它们的-IP-地址"><a href="#列出虚拟机并获取它们的-IP-地址" class="headerlink" title="列出虚拟机并获取它们的 IP 地址"></a>列出虚拟机并获取它们的 IP 地址</h5><p>现在已经创建了两个虚拟机，分别命名为<code>myvm1</code>和<code>myvm2</code>。<br>使用此命令列出机器并获取它们的 IP 地址。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL                         SWARM    DOCKER        ERRORS</span><br><span class="line">myvm1   -        virtualbox   Running   tcp://192.168.99.100:2376            v17.06.2-ce</span><br><span class="line">myvm2   -        virtualbox   Running   tcp://192.168.99.101:2376            v17.06.2-ce</span><br></pre></td></tr></table></figure></p>
+<h5 id="初始化集群并添加节点"><a href="#初始化集群并添加节点" class="headerlink" title="初始化集群并添加节点"></a>初始化集群并添加节点</h5><p>第一台主机扮演管理者的角色，执行管理命令并认证<code>worker</code>加入集群，第二台主机是<code>worker</code>。<br>可以使用<code>docker-machine ssh</code>将命令发送到你的虚拟机中。 命令<code>myvm1</code>成为一个带有 <code>docker swarm init</code>的 <code>swarm manager</code>，输出如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker swarm init --advertise-addr &lt;myvm1 ip&gt;&quot;</span><br><span class="line">Swarm initialized: current node &lt;node ID&gt; is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">  docker swarm join \</span><br><span class="line">  --token &lt;token&gt; \</span><br><span class="line">  &lt;myvm ip&gt;:&lt;port&gt;</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run &apos;docker swarm join-token manager&apos; and follow the instructions.</span><br></pre></td></tr></table></figure></p>
+<p>可以看见，<code>docker swarm init</code> 的响应包含一个预先配置的 <code>docker swarm join</code>命令，您可以在想要添加的任何节点上运行该命令。 复制这个命令，通过 <code>docker-machine ssh</code> 发送到 myvm2，让 myvm2作为一个<code>worker</code>加入你的 <code>swarm</code>集群:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm2 &quot;docker swarm join \</span><br><span class="line">--token &lt;token&gt; \</span><br><span class="line">&lt;ip&gt;:2377&quot;</span><br><span class="line"></span><br><span class="line">This node joined a swarm as a worker.</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意</strong> ： 此处加入的端口不能与leader端口号相同，否则会报错。</p>
+<p>在管理器上运行<code>docker node ls</code>来查看这个集群中的节点:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker node ls&quot;</span><br><span class="line">            ID               HOSTNAME   STATUS  AVAILABILITY   MANAGER STATUS</span><br><span class="line">brtu9urxwfd5j0zrmkubhpkbd     myvm2     Ready      Active</span><br><span class="line">rihwohkh3ph38fhillhhb84sk *   myvm1     Ready      Active         Leader</span><br></pre></td></tr></table></figure></p>
+<p>如果你想重新开始，你可以在每个节点运行<code>docker swarm leave</code></p>
+<h3 id="将应用部署到Swarm集群中"><a href="#将应用部署到Swarm集群中" class="headerlink" title="将应用部署到Swarm集群中"></a>将应用部署到Swarm集群中</h3><p>困难的部分已经过去了。 现在只需重复教程第3部分中使用的在新的集群上部署的过程，只要记住，只有像 <code>myvm1</code>这样的<code>swarm manager</code>群管理器才能执行 <code>Docker</code> 命令; <code>worker</code>只是为了满足运算能力。</p>
+<h4 id="为Swarm-manager-集群管理器-配置一个-docker-machine-shell"><a href="#为Swarm-manager-集群管理器-配置一个-docker-machine-shell" class="headerlink" title="为Swarm manager(集群管理器)配置一个 docker-machine shell"></a>为Swarm manager(集群管理器)配置一个 <code>docker-machine shell</code></h4><p>到目前为止，我们一直在<code>docker-machine ssh</code>中加入 <code>Docker</code> 命令来与虚拟机交流。 另一种方式是运行<code>docker-machine env &lt;machine&gt;</code>，获取并运行一个命令，该命令将当前 shell 配置为与虚拟机上的<code>Docker</code> 守护进程联通。 这种方法在之后的实践效果更好，因为它允许使用本地的<code>docker-compose. yml</code>文件通过远程部署应用程序，而无需在任何地方复制它。<br>输入 <code>docker-machine env myvm1</code>，然后终端输出的最后一行复制、粘贴并运行，以配置当前<code>shell</code> 与 <code>myvm1(swarm manager)</code>联通。</p>
+<h5 id="Windows10下配置"><a href="#Windows10下配置" class="headerlink" title="Windows10下配置"></a>Windows10下配置</h5><ol>
+<li><p>运行 <code>docker-machine env myvm1</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\sam\sandbox\get-started&gt; docker-machine env myvm1</span><br><span class="line">$Env:DOCKER_TLS_VERIFY = &quot;1&quot;</span><br><span class="line">$Env:DOCKER_HOST = &quot;tcp://192.168.203.207:2376&quot;</span><br><span class="line">$Env:DOCKER_CERT_PATH = &quot;C:\Users\sam\.docker\machine\machines\myvm1&quot;</span><br><span class="line">$Env:DOCKER_MACHINE_NAME = &quot;myvm1&quot;</span><br><span class="line">$Env:COMPOSE_CONVERT_WINDOWS_PATHS = &quot;true&quot;</span><br><span class="line"># Run this command to configure your shell:</span><br><span class="line"># &amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行 <code>docker-machine ls</code>，以验证 <code>myvm1</code>是激活的主机，如其旁边的星号所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:PATH&gt; docker-machine ls</span><br><span class="line">NAME  ACTIVE  DRIVER   STATE     URL                        SWARM   DOCKER       ERRORS</span><br><span class="line">myvm1 *       hyperv   Running   tcp://192.168.203.207:2376         v17.06.2-ce</span><br><span class="line">myvm2 -       hyperv   Running   tcp://192.168.200.181:2376         v17.06.2-ce</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="在Swarm-manager集群管理器上部署应用"><a href="#在Swarm-manager集群管理器上部署应用" class="headerlink" title="在Swarm manager集群管理器上部署应用"></a>在Swarm manager集群管理器上部署应用</h4><p>现在有了 <code>myvm1</code>虚拟主机，你可以使用swarm manager的权力来部署应用，部署的语法与教程第3部分中一样，也使用<code>docker stack deploy</code>命令，与之前不同，在此环境下，可以使用<code>docker-compose.yml</code>文件，而不用去拷贝。命令可能几秒钟就能完成，而部署则需要更多的时间来生效。 在一个集群管理器上使用 <code>docker service ps &lt;service_name&gt;</code> 命令来验证所有的服务都被重新部署了。<br>我们可以通过<code>docker-machine shell</code> 配置连接到<code>myvm1</code>，并且仍然可以访问本地主机上的文件。 请确保当前位于与教程第三部分相同的目录，其中包括<code>docker-compose.yml</code> 。<br>和之前一样，在 <code>myvm1</code>上运行以下命令来部署应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure></p>
+<p>现在我们可以使用在第3部分中使用的相同的 docker 命令。 只有这一次注意到服务(及相关容器)已经在 <code>myvm1</code>和 <code>myvm2</code>之间进行了分发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker stack ps hellolab</span><br><span class="line"></span><br><span class="line">ID              NAME              IMAGE                 NODE    DESIRED STATE   CURRENT STATE               ERROR         PORTS</span><br><span class="line">n8b0m9hd1c3i    hellolab_web.1    wushiyi/hello:part1   myvm1   Running      Running about a minute ago             </span><br><span class="line">vn3onk3495ql    hellolab_web.2    wushiyi/hello:part1   myvm2   Running       Running about a minute ago             </span><br><span class="line">d6qx2aimpq4d    hellolab_web.3    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">zmnsrjk2u2qf    hellolab_web.4    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">8q78o9yenzy3    hellolab_web.5    wushiyi/hello:part1   myvm2   Running       Running about a minute ago</span><br></pre></td></tr></table></figure></p>
+<h4 id="访问集群"><a href="#访问集群" class="headerlink" title="访问集群"></a>访问集群</h4><p>可以通过 <code>myvm1</code>或 <code>myvm2</code>的 IP 地址访问你的应用程序。<br>我们创建的网络在这两个虚拟机与负载均衡之间共享。 运行<code>docker-machine ls</code>获取虚拟主机的 IP 地址，在浏览器上访问其中一个 IP 地址，点击刷新可以看到不同的ID。<br><img src="https://docs.docker.com/get-started/images/app-in-browser-swarm.png" alt="swarm"><br>有五个可能的容器 id 随机循环，说明了负载均衡。<br>这两个 IP 地址工作的原因是一个群中的节点参与进入路由网格。 这样可以确保部署在您的<code>swarm</code>内个端口的服务始终保留该端口，而不管实际运行容器的是在哪个节点。 下面是一个在端口8080上发布的<code>my-web</code>服务的路由网状结构:<br><img src="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png" alt="three-node"></p>
+<h4 id="迭代与扩展你的应用"><a href="#迭代与扩展你的应用" class="headerlink" title="迭代与扩展你的应用"></a>迭代与扩展你的应用</h4><p>从这里你可以做你在第二部分和第三部分中所学的一切。</p>
+<ul>
+<li>通过更改<code>docker-compose.yml</code>来扩展应用程序;</li>
+<li>使用不同的应用，然后重新构建，并推送新的镜像。 (要做到这一点，按照之前构建应用程序和发布镜像的相同步骤进行操作)。</li>
+</ul>
+<p>在这两种情况下，只需再次运行 <code>docker stack deploy</code> 就可以部署这些更改。<br>可以使用与 <code>myvm2</code>上相同的<code>docker swarm join</code>命令，将物理的或虚拟的任何主机加入到这个群集中，并将容量添加到你的集群中。 只要运行<code>docker stack deploy</code> 就可以了，应用可以利用这些新资源。</p>
+<h4 id="清理和重启"><a href="#清理和重启" class="headerlink" title="清理和重启"></a>清理和重启</h4><h5 id="堆栈-Stack-与集群-Swarm"><a href="#堆栈-Stack-与集群-Swarm" class="headerlink" title="堆栈(Stack)与集群(Swarm)"></a>堆栈(Stack)与集群(Swarm)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack rm hellolab</span><br></pre></td></tr></table></figure>
+<p>运行<code>docker-machine ssh myvm2 &quot;docker swarm leave&quot;</code>使<code>myvm2</code>离开集群节点，运行<br><code>docker-machine ssh myvm1 &quot;docker swarm leave --force</code>使<code>swarm manager</code>关闭集群</p>
+<h5 id="取消设置docker-machine-shell"><a href="#取消设置docker-machine-shell" class="headerlink" title="取消设置docker-machine shell"></a>取消设置<code>docker-machine shell</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env -u | Invoke-Expression</span><br></pre></td></tr></table></figure>
+<p>这会断开<code>Docker</code>创建的虚拟机与<code>shell</code>的连接，并允许你继续在同一个 shell 中工作。</p>
+<h5 id="重启或删除-Docker上的主机"><a href="#重启或删除-Docker上的主机" class="headerlink" title="重启或删除 Docker上的主机"></a>重启或删除 <code>Docker</code>上的主机</h5><p>如果关闭了本地主机，<code>Docker</code> 主机将停止运行。 可以通过运行 <code>docker-machine ls</code> 来检查机器的状态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL   SWARM   DOCKER    ERRORS</span><br><span class="line">myvm1   -        virtualbox   Stopped                 Unknown</span><br><span class="line">myvm2   -        virtualbox   Stopped                 Unknown</span><br></pre></td></tr></table></figure></p>
+<p>要重新启动停止的主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine start &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
+<p>要删除主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine rm &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
+<p>要停止主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine stop &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://wushiyii.github.io/2018/11/21/Docker/Docker-get-start(4)--swarm/" title="Docker Get start(4)--Swarm" target="_blank" rel="external">https://wushiyii.github.io/2018/11/21/Docker/Docker-get-start(4)--swarm/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/11/22/Docker/Docker-get-start(5)--stack/" title="Docker Get start(5)--Stack"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/11/20/Docker/Docker-get-start(3)--service/" title="Docker Get start(3)--Service"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2019 Wushiyi
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '0aa72e1501a75fd11a4d',
+    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
+    repo: 'Wushiyii.github.io',
+    owner: 'Wushiyii',
+    admin: ['Wushiyii'],
+    id: md5(location.pathname),
+    distractionFreeMode: true
+  })
+  gitalk.render('comments')
+  </script>
+
+      
+
+
+
+
+
+
+
+</body>
+</html>

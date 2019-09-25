@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Rabbit tutorial-Six | Hexo</title>
+  <meta name="description" content="RabbitMQ入门教程系列—（6）">
+<meta name="keywords" content="编程,分布式,消息队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rabbit tutorial-Six">
+<meta property="og:url" content="https://wushiyii.github.io/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="RabbitMQ入门教程系列—（6）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/python-six.png">
+<meta property="og:updated_time" content="2019-09-24T02:25:20.295Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rabbit tutorial-Six">
+<meta name="twitter:description" content="RabbitMQ入门教程系列—（6）">
+<meta name="twitter:image" content="http://www.rabbitmq.com/img/tutorials/python-six.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://wushiyii.github.io/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
+  
+</head>
+
+
+<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>Welcome</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.57px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/24/JVM/深入理解JVM（六）——晚期编译/" class="title">深入理解JVM（六） --- 晚期编译（运行期编译）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-24T09:52:31.000Z" itemprop="datePublished">2019-09-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/22/JVM/深入理解JVM（五）—— 早期编译/" class="title">深入理解JVM（五） --- 早期编译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/JAVA/">JAVA</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Linux/">Linux</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/09/02/Linux/less命令/" class="title">Less</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-09-02T09:15:14.000Z" itemprop="datePublished">2019-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-RabbitMQ/RabbitMQ tutorial-six" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Rabbit tutorial-Six
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/" class="article-date">
+	  <time datetime="2018-12-04T03:29:48.000Z" itemprop="datePublished">2018-12-04</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link" href="/tags/分布式/">分布式</a>, <a class="article-tag-link" href="/tags/消息队列/">消息队列</a>, <a class="article-tag-link" href="/tags/编程/">编程</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2,389(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>RabbitMQ入门教程系列—（6）</p>
+  <a id="more"></a>
+<h1 id="RabbitMQ-tutorial-Six"><a href="#RabbitMQ-tutorial-Six" class="headerlink" title="RabbitMQ tutorial-Six"></a>RabbitMQ tutorial-Six</h1><p>在第二个教程中，我们学习了如何使用工作队列( <code>Work Queue</code> )在多个工作者之间分配耗时的任务。</p>
+<p>但是如果我们需要在远程计算机上运行一个函数并等待结果呢？ 那就另当别论了。这种模式通常称为远程过程调用(<code>Remote Procedure Call,RPC</code>)。</p>
+<p>在本节教程中，我们将使用<code>RabbitMQ</code>来构建<code>RPC</code>系统: 一个客户端和一个可扩展的<code>RPC</code>服务器。 因为我们没有任何耗时的任务，所以我们将创建一个虚拟的、返回斐波纳契数字的<code>RPC</code>服务。</p>
+<h4 id="客户端接口-Client-interface"><a href="#客户端接口-Client-interface" class="headerlink" title="客户端接口 (Client interface)"></a>客户端接口 (Client interface)</h4><p>为了说明如何使用<code>RPC</code>服务，我们将创建一个简单的客户端， 它将公开一个名为<code>call</code>的方法，该方法将发送一个<code>RPC</code>请求并阻塞( <code>block</code> )，直到收到回复:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FibonacciRpcClient fibonacciRpc = <span class="keyword">new</span> FibonacciRpcClient();</span><br><span class="line">String result = fibonacciRpc.call(<span class="string">"4"</span>);</span><br><span class="line">System.out.println( <span class="string">"fib(4) is "</span> + result);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>关于 <code>RPC</code> 的一个说明</p>
+<p>虽然<code>RPC</code>在系统中是一种很常见的模式，但它经常受到批评。当程序员不知道函数调用是一个本地的，还是缓慢的远程<code>RPC</code>调用，问题就出现了。 这样的混乱会导致不可预知的系统，增加调试的不必要的复杂性。 错误使用 RPC 将导致不可维护的意大利面条式代码，而不是简化软件。</p>
+<p>考虑到这一点，请考虑以下建议:</p>
+<ul>
+<li>确保哪个函数调用是本地的，哪个是远程的。</li>
+<li>记录你的系统, 明确组件之间的依赖关系。</li>
+<li>处理错误情况。 当 RPC 服务器长时间关闭时，客户机应该如何反应？</li>
+</ul>
+<p>当有疑问时，避免使用 <code>RPC</code> 。 如果可以的话，您应该使用异步管道( <code>asynchronous pipeline</code> )——而不是 <code>RPC</code> 式的阻塞。异步管道可以将结果推送到下一个计算的阶段，而不用一直阻塞等待回调。</p>
+</blockquote>
+<h4 id="回调队列-（Callback-Queue）"><a href="#回调队列-（Callback-Queue）" class="headerlink" title="回调队列 （Callback Queue）"></a>回调队列 （Callback Queue）</h4><p>一般来说，通过 <code>RabbitMQ</code> 执行 <code>RPC</code> 是很容易的, 客户端发送请求消息，服务器用响应消息应答。 为了接收响应，我们需要发送一个带有请求的”回调”队列地址。 我们可以使用默认队列。 让我们试一试:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.AMQP.BasicProperties;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">callbackQueueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line">BasicProperties props = <span class="keyword">new</span> BasicProperties</span><br><span class="line">                            .Builder()</span><br><span class="line">                            .replyTo(callbackQueueName)</span><br><span class="line">                            .build();</span><br><span class="line"></span><br><span class="line">channel.basicPublish(<span class="string">""</span>, <span class="string">"rpc_queue"</span>, props, message.getBytes());</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... then code to read a response message from the callback_queue ...</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>消息属性<br>Amqp 0-9-1协议预先定义了一组包含14个属性的消息。 除下列情况外，大多数属性很少使用:</p>
+<ul>
+<li>deliveryMode : 将消息标记为持久化</li>
+<li>contentType : 用于描述编码的<code>mime</code>类型。例如，对于经常使用的 <code>JSON</code> 编码，将此属性设置为:<code>application/json</code></li>
+<li>replyTo: 通常用于命名回调队列</li>
+<li>correlationId: 将 RPC 响应与请求联系起来</li>
+</ul>
+</blockquote>
+<h4 id="关联ID-（Correlation-Id）"><a href="#关联ID-（Correlation-Id）" class="headerlink" title="关联ID （Correlation Id）"></a>关联ID （Correlation Id）</h4><p>在上述方法中，我们为每个 <code>RPC</code> 请求创建一个回调队列,这非常低效，但幸运的是，有一种更好的方法—-让我们为每个客户机创建一个回调队列。</p>
+<p>这引发了一个新问题，因为在该队列中接收到了响应，所以不清楚响应属于哪个请求。 而要分辨属于哪个请求就得使用到 <code>correlationId</code> 。 我们将为每个请求设置一个惟一<code>correlationId</code>。 稍后，当我们在回调队列中收到一条消息时，我们将查看这个属性，并根据这个属性，我们将能够匹配一个响应和一个请求。如果我们看到一个未知的 <code>correlationId</code> 值，我们可以安全地丢弃消息——它不属于我们的请求。</p>
+<p>您可能会问，为什么我们直接忽略回调队列中的未知消息，而不是因为错误而返回一个失败信息？ 这是因为服务器端可能存在竞态条件。虽然不太可能，但是 RPC 服务器有可能在发送回复给我们之后死掉，但是<code>ack</code>并没有发送出来。 如果发生这种情况，重新启动的 RPC 服务器将再次处理请求，这就是为什么在客户机上我们必须优雅地处理重复响应，RPC 理想情况下应该是幂等的。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="http://www.rabbitmq.com/img/tutorials/python-six.png" alt="summary"></p>
+<p>我们的 RPC 是这样工作的:</p>
+<ul>
+<li>对于RPC请求，客户端( <code>Client</code> )会发送一个带有两个属性的消息:<ul>
+<li><code>replyTo</code> : 为请求而创建的匿名独占队列名称</li>
+<li><code>correlationId</code> : 为每一个请求设置的独一无二ID</li>
+</ul>
+</li>
+<li>请求会被送到<code>rpc_queue</code>中.</li>
+<li><code>RPC</code>持续等待队列中传过来的请求，当队列中消息传到时，<code>RPC</code>执行队列消息，并将消息通过<code>replyTo</code>中的队列返回</li>
+<li>客户端等待回复队列上的数据。 出现消息时，它会检查<code>correlationId</code>属性。 如果它与请求中的值匹配，则返回对应用程序的响应。</li>
+</ul>
+<h4 id="整合一遍"><a href="#整合一遍" class="headerlink" title="整合一遍"></a>整合一遍</h4><p>斐波那契数列:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> fib(n-<span class="number">1</span>) + fib(n-<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这是完整的<code>RPCServer.java</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Consumer;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.DefaultConsumer;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.AMQP;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Envelope;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RPCServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String RPC_QUEUE_NAME = <span class="string">"rpc_queue"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n ==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> fib(n-<span class="number">1</span>) + fib(n-<span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span> </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line"></span><br><span class="line">    Connection connection = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      connection      = factory.newConnection();</span><br><span class="line">      <span class="keyword">final</span> Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">      channel.queueDeclare(RPC_QUEUE_NAME, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">null</span>);</span><br><span class="line">      channel.queuePurge(RPC_QUEUE_NAME);</span><br><span class="line"></span><br><span class="line">      channel.basicQos(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">      System.out.println(<span class="string">" [x] Awaiting RPC requests"</span>);</span><br><span class="line"></span><br><span class="line">      Consumer consumer = <span class="keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDelivery</span><span class="params">(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, <span class="keyword">byte</span>[] body)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">          AMQP.BasicProperties replyProps = <span class="keyword">new</span> AMQP.BasicProperties</span><br><span class="line">                  .Builder()</span><br><span class="line">                  .correlationId(properties.getCorrelationId())</span><br><span class="line">                  .build();</span><br><span class="line"></span><br><span class="line">          String response = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            String message = <span class="keyword">new</span> String(body,<span class="string">"UTF-8"</span>);</span><br><span class="line">            <span class="keyword">int</span> n = Integer.parseInt(message);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">" [.] fib("</span> + message + <span class="string">")"</span>);</span><br><span class="line">            response += fib(n);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">catch</span> (RuntimeException e)&#123;</span><br><span class="line">            System.out.println(<span class="string">" [.] "</span> + e.toString());</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">finally</span> &#123;</span><br><span class="line">            channel.basicPublish( <span class="string">""</span>, properties.getReplyTo(), replyProps, response.getBytes(<span class="string">"UTF-8"</span>));</span><br><span class="line">            channel.basicAck(envelope.getDeliveryTag(), <span class="keyword">false</span>);</span><br><span class="line">            <span class="comment">// RabbitMq consumer worker thread notifies the RPC server owner thread </span></span><br><span class="line">            <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">            	<span class="keyword">this</span>.notify();</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      channel.basicConsume(RPC_QUEUE_NAME, <span class="keyword">false</span>, consumer);</span><br><span class="line">      <span class="comment">// Wait and be prepared to consume the message from RPC client.</span></span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">      	<span class="keyword">synchronized</span>(consumer) &#123;</span><br><span class="line">      		<span class="keyword">try</span> &#123;</span><br><span class="line">      			consumer.wait();</span><br><span class="line">      	    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      	    	e.printStackTrace();	    	</span><br><span class="line">      	    &#125;</span><br><span class="line">      	&#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException | TimeoutException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (connection != <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          connection.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException _ignore) &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>服务器代码相当明了:</p>
+<ul>
+<li><p>通常，我们从建立连接、通道和声明队列开始</p>
+</li>
+<li><p>我们可能需要运行多个服务器进程。 为了在多个服务器上平均分配负载，我们需要在<code>basicQos</code>中设置<code>prefetchCount</code>。</p>
+</li>
+<li>使用<code>basicConsume</code>连接队列,并提供一个默认回调</li>
+</ul>
+<p>这是完整的<code>RPCClient.java</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.DefaultConsumer;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.AMQP;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Envelope;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.util.UUID;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeoutException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RPCClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Connection connection;</span><br><span class="line">  <span class="keyword">private</span> Channel channel;</span><br><span class="line">  <span class="keyword">private</span> String requestQueueName = <span class="string">"rpc_queue"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">RPCClient</span><span class="params">()</span> <span class="keyword">throws</span> IOException, TimeoutException </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line"></span><br><span class="line">    connection = factory.newConnection();</span><br><span class="line">    channel = connection.createChannel();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">(String message)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String corrId = UUID.randomUUID().toString();</span><br><span class="line"></span><br><span class="line">    String replyQueueName = channel.queueDeclare().getQueue();</span><br><span class="line">    AMQP.BasicProperties props = <span class="keyword">new</span> AMQP.BasicProperties</span><br><span class="line">            .Builder()</span><br><span class="line">            .correlationId(corrId)</span><br><span class="line">            .replyTo(replyQueueName)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    channel.basicPublish(<span class="string">""</span>, requestQueueName, props, message.getBytes(<span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> BlockingQueue&lt;String&gt; response = <span class="keyword">new</span> ArrayBlockingQueue&lt;String&gt;(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    String ctag = channel.basicConsume(replyQueueName, <span class="keyword">true</span>, <span class="keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDelivery</span><span class="params">(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, <span class="keyword">byte</span>[] body)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (properties.getCorrelationId().equals(corrId)) &#123;</span><br><span class="line">          response.offer(<span class="keyword">new</span> String(body, <span class="string">"UTF-8"</span>));</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    String result = response.take();</span><br><span class="line">    channel.basicCancel(ctag);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    connection.close();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span> </span>&#123;</span><br><span class="line">    RPCClient fibonacciRpc = <span class="keyword">null</span>;</span><br><span class="line">    String response = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      fibonacciRpc = <span class="keyword">new</span> RPCClient();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">        String i_str = Integer.toString(i);</span><br><span class="line">        System.out.println(<span class="string">" [x] Requesting fib("</span> + i_str + <span class="string">")"</span>);</span><br><span class="line">        response = fibonacciRpc.call(i_str);</span><br><span class="line">        System.out.println(<span class="string">" [.] Got '"</span> + response + <span class="string">"'"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>  (IOException | TimeoutException | InterruptedException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (fibonacciRpc!= <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          fibonacciRpc.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (IOException _ignore) &#123;&#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>客户端代码稍微复杂一些::</p>
+<ul>
+<li>建立连接、通道和声明队列。</li>
+<li>提供<code>run</code>方法，已提供<code>RPC</code>执行。<ul>
+<li>首先，我们创建一个独一无二的<code>correlationId</code>，<code>RpcConsumer</code>将会使用这个值来获取响应。</li>
+<li>其次，我们创建一个专用于回复信息的队列，然后订阅它。</li>
+<li>接下来，发出带有<code>replyTo</code>和<code>correlationId</code>两个属性的请求消息。</li>
+<li>由于我们的消费者交付处理是在一个单独的线程中进行的，因此我们需要在响应到来之前暂停主线程。 使用<code>BlockingQueue</code>是一种可能的解决方案。 这里我们创建了<code>ArrayBlockingQueue</code>，容量设置为1，因为我们只需要等待一个响应。</li>
+<li><code>handleDelivery</code>方法正在做一个非常简单的工作。对于每个消耗的响应消息，它检查correlationId是否是我们正在寻找的那个。 如果是这样，它会将响应置于<code>BlockingQueue</code>。</li>
+<li>同时,主线程正在等待从BlockingQueue获取的响应。最后，我们将响应返回给用户。</li>
+</ul>
+</li>
+</ul>
+<p>客户端创建一个请求:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RPCClient fibonacciRpc = <span class="keyword">new</span> RPCClient();</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">" [x] Requesting fib(30)"</span>);</span><br><span class="line">String response = fibonacciRpc.call(<span class="string">"30"</span>);</span><br><span class="line">System.out.println(<span class="string">" [.] Got '"</span> + response + <span class="string">"'"</span>);</span><br><span class="line"></span><br><span class="line">fibonacciRpc.close();</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://wushiyii.github.io/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/" title="Rabbit tutorial-Six" target="_blank" rel="external">https://wushiyii.github.io/2018/12/04/RabbitMQ/RabbitMQ tutorial-six/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/02/20/Javascript/A re-introduction to JavaScript (JS tutorial)/" title="A re-introduction to JavaScript (翻译)"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/12/04/RabbitMQ/RabbitMQ tutorial-five/" title="Rabbit tutorial-Five"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2019 Wushiyi
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '0aa72e1501a75fd11a4d',
+    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
+    repo: 'Wushiyii.github.io',
+    owner: 'Wushiyii',
+    admin: ['Wushiyii'],
+    id: md5(location.pathname),
+    distractionFreeMode: true
+  })
+  gitalk.render('comments')
+  </script>
+
+      
+
+
+
+
+
+
+
+</body>
+</html>
