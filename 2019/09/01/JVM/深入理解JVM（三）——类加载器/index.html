@@ -26,12 +26,12 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="深入理解JVM（三）—类加载器不同类加载器加载的类，并不相同每一个类加载器，都拥有一个独立的类名称空间，所以不同的类加载器即使加载同一个类，这两个类也并不相同（equals、isAssignableFrom、isIntance） 12345678910111213141516171819202122232425public class MyClassLoader &amp;#123;    public">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://wushiyii.github.io/Users/qudian/Desktop/类加载器关系.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.290Z">
+<meta property="og:image" content="https://s2.ax1x.com/2019/10/04/uDyY4A.md.png">
+<meta property="og:updated_time" content="2019-10-04T08:48:15.995Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解JVM（三） --- 类加载器">
 <meta name="twitter:description" content="深入理解JVM（三）—类加载器不同类加载器加载的类，并不相同每一个类加载器，都拥有一个独立的类名称空间，所以不同的类加载器即使加载同一个类，这两个类也并不相同（equals、isAssignableFrom、isIntance） 12345678910111213141516171819202122232425public class MyClassLoader &amp;#123;    public">
-<meta name="twitter:image" content="https://wushiyii.github.io/Users/qudian/Desktop/类加载器关系.png">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/10/04/uDyY4A.md.png">
   <!-- Canonical links -->
   <link rel="canonical" href="https://wushiyii.github.io/2019/09/01/JVM/深入理解JVM（三）——类加载器/index.html">
   
@@ -414,7 +414,7 @@
 </li>
 <li>应用程序类加载器（<code>Application ClassLoader</code>）:由<code>sum.misc.Launch$AppClassLoader</code>实现，也称为系统类加载器。它负责加载用户类路径（ClassPath）上指定的类库，一般如果程序没有自定义过类加载器，默认就是使用系统类加载器。</li>
 </ul>
-<h4 id="类加载器关系"><a href="#类加载器关系" class="headerlink" title="类加载器关系"></a>类加载器关系</h4><p><img src="/Users/qudian/Desktop/类加载器关系.png" alt="类加载器关系"></p>
+<h4 id="类加载器关系"><a href="#类加载器关系" class="headerlink" title="类加载器关系"></a>类加载器关系</h4><p><a href="https://imgchr.com/i/uDyY4A" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/10/04/uDyY4A.md.png" alt="uDyY4A.md.png"></a></p>
 <p>图中各个类加载器之间的关系，称为类加载器的双亲委派模型（<code>Parents Delegation Model</code>）。双亲委派模型要求除了顶层的启动类加载器，其余的类加载器都应当由自己的父类加载器。并且类加载器之间的父子关系不会以继承（<code>Inheritance</code>）的关系实现，而是使用组合（<code>Composition</code>）关系来复用父类加载器代码。</p>
 <p>双亲委派模型的<strong>工作过程</strong>是:如果一个类加载器收到了类加载的请求，它首先不会加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都会传送到顶层的启动类加载器中，只有父类加载器反馈无法加载时，子加载器才会尝试加载。</p>
 <p>使用双亲委派模型有一个显而易见的好处就是Java类随着类加载器一起具备类一种带优先级的层次关系，比如一个Object类，它存放在rt.jar中，无论在哪一个类加载器中加载，最终都会到启动类加载器中进行加载，因此Object在程序中的各个环境里都是同一个类。</p>
