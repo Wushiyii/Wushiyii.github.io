@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-23T09:31:07.896Z">
+<meta property="og:updated_time" content="2019-10-23T12:53:16.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell">
 <meta name="twitter:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
@@ -386,10 +386,10 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/18/Linux/Shell/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 947(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,082(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
       </div>
@@ -454,6 +454,27 @@
 <li>case</li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">case item in </span><br><span class="line">	xx1) command</span><br><span class="line">	;;</span><br><span class="line">	xx2) command</span><br><span class="line">	;;</span><br><span class="line">	...</span><br><span class="line">	*) default command</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<h5 id="Shell-函数"><a href="#Shell-函数" class="headerlink" title="Shell 函数"></a>Shell 函数</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function fun() &#123;</span><br><span class="line">    echo "hello"</span><br><span class="line">	return `expr 10 + 10`</span><br><span class="line">&#125;</span><br><span class="line">fun</span><br><span class="line">echo $? # $?可以获取最近一次的函数返回值</span><br><span class="line"></span><br><span class="line">echo "Hello World" | grep -e "World"</span><br><span class="line">echo $? # 值为0，代表匹配到字符串</span><br><span class="line"></span><br><span class="line">param()&#123;</span><br><span class="line">		echo "first param : $1"</span><br><span class="line">		echo "second param : $2"</span><br><span class="line">		echo "third param : $3"</span><br><span class="line">		echo "total params : $#"</span><br><span class="line">		echo "All params : $*"</span><br><span class="line">&#125;</span><br><span class="line">param 10 20 30 #在方法名后加入参，即可传参</span><br></pre></td></tr></table></figure>
+<h5 id="Shell-I-O重定向"><a href="#Shell-I-O重定向" class="headerlink" title="Shell I/O重定向"></a>Shell I/O重定向</h5><table>
+<thead>
+<tr>
+<th>command</th>
+<th>detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command &gt;/&gt;&gt; file</code></td>
+<td>重定向/追加 command命令产生的输出到file</td>
+</tr>
+<tr>
+<td><code>command &lt; file</code></td>
+<td>重定向输入到file</td>
+</tr>
+</tbody>
+</table>
+<p>eg:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch filename</span><br><span class="line">echo "hello world" &gt; filename</span><br></pre></td></tr></table></figure>
 
       
     </div>
