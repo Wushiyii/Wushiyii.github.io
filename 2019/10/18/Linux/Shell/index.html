@@ -18,18 +18,18 @@
   
   
   <title>Shell | Hexo</title>
-  <meta name="description" content="What’s shell?shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin">
+  <meta name="description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
 <meta name="keywords" content="Linux,Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell">
 <meta property="og:url" content="https://wushiyii.github.io/2019/10/18/Linux/Shell/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="What’s shell?shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin">
+<meta property="og:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-22T14:10:43.216Z">
+<meta property="og:updated_time" content="2019-10-23T09:31:07.896Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell">
-<meta name="twitter:description" content="What’s shell?shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin">
+<meta name="twitter:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
   <!-- Canonical links -->
   <link rel="canonical" href="https://wushiyii.github.io/2019/10/18/Linux/Shell/index.html">
   
@@ -386,17 +386,17 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/18/Linux/Shell/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 760(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 947(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h4 id="What’s-shell"><a href="#What’s-shell" class="headerlink" title="What’s shell?"></a>What’s shell?</h4><p><code>shell</code>是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell</p>
+        <h4 id="Shell简易入门"><a href="#Shell简易入门" class="headerlink" title="Shell简易入门"></a>Shell简易入门</h4><p><code>shell</code>是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$SHELL</span>  <span class="comment">#查看当前使用的Shell</span></span><br><span class="line">cat /etc/shells <span class="comment">#一共装了哪些Shell</span></span><br></pre></td></tr></table></figure>
 <h4 id="Execute-bash"><a href="#Execute-bash" class="headerlink" title="Execute bash"></a>Execute bash</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. chmod xxx test.sh</span><br><span class="line">   ./test.sh</span><br><span class="line">2. sh test.sh</span><br><span class="line">3. /bin/sh test.sh</span><br></pre></td></tr></table></figure>
 <h4 id="Shell-Variable"><a href="#Shell-Variable" class="headerlink" title="Shell Variable"></a>Shell Variable</h4><h5 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"Jimmy"</span> <span class="comment">#变量只能使用英文字母，数字和下划线，首个字符不能以数字开头；不能使用标点符号；不能使用shell关键字</span></span><br><span class="line"><span class="keyword">for</span> etcName <span class="keyword">in</span> `ls /etc` <span class="comment">#可以使用语句进行赋值、循环</span></span><br><span class="line"></span><br><span class="line">num=10</span><br><span class="line"><span class="built_in">readonly</span> num <span class="comment">#定义只读变量</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> num <span class="comment">#删除变量</span></span><br></pre></td></tr></table></figure>
@@ -427,8 +427,33 @@
 <li>printf</li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">printf "%-10s %-8s %-4s\n" name gender weight</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Sally female 49</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Ford male 61</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Heisnburg male 66</span><br></pre></td></tr></table></figure>
-<p><code>printf</code>可以格式化输出，<code>%s</code>表示字符,<code>%f</code>表示浮点数,<code>%n</code>表示整数;<code>printf</code>的语法规则为:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf  format-string  [arguments...]</span><br></pre></td></tr></table></figure>
+<p><code>printf</code>可以格式化输出，<code>%s</code>表示字符,<code>%f</code>表示浮点数,<code>%n</code>表示整数;<code>%-10s</code>:代替符中的数字代表输出一个固定为10的字符</p>
+<ul>
+<li>test</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 数值测试</span></span><br><span class="line">num1=20</span><br><span class="line">num2=30</span><br><span class="line">if test $&#123;num1&#125; -eq $&#123;num2&#125;</span><br><span class="line">then</span><br><span class="line">    echo 'The two nums are equals'</span><br><span class="line">else</span><br><span class="line">    echo 'not euquals'</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p><code>test</code>命令用于检查条件,在数值测试中<code>eq</code>,<code>ne</code>,<code>gt</code>,<code>ge</code>,<code>lt</code>,<code>le</code>为对比字符，e/eq : equals , n : not , gt : greater than , ge: greater or equals ,lt: less than, le : less or equals 。</p>
+<p>此外，test也可以用于文件测试、字符串测试等</p>
+<h5 id="Shell流程"><a href="#Shell流程" class="headerlink" title="Shell流程"></a>Shell流程</h5><ul>
+<li>if</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if con</span><br><span class="line">then</span><br><span class="line">	xxxx</span><br><span class="line">elif</span><br><span class="line">then</span><br><span class="line">	xxx</span><br><span class="line">else</span><br><span class="line">	xxxx</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<ul>
+<li>for</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for item in item1 item2 item3 ... itemN</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<ul>
+<li>while</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while con</span><br><span class="line">do</span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<ul>
+<li>until</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until con</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<ul>
+<li>case</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">case item in </span><br><span class="line">	xx1) command</span><br><span class="line">	;;</span><br><span class="line">	xx2) command</span><br><span class="line">	;;</span><br><span class="line">	...</span><br><span class="line">	*) default command</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
 
       
     </div>
