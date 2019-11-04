@@ -1,420 +1,175 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000">
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top">
-  
-  
-  <title>Shell | Hexo</title>
-  <meta name="description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
+    <meta charset="utf-8">
+<title>Shell --- Basci Usage - Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Recording the learning process">
+
+
+
+<meta name="keywords" content="A,B,C">
+
+
+
+    <meta name="description" content="Shell — Basci Usage">
 <meta name="keywords" content="Linux,Shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Shell">
+<meta property="og:title" content="Shell --- Basci Usage">
 <meta property="og:url" content="https://wushiyii.github.io/2019/10/18/Linux/Shell/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
+<meta property="og:description" content="Shell — Basci Usage">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-23T12:53:16.243Z">
+<meta property="og:updated_time" content="2019-11-04T02:22:09.805Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell">
-<meta name="twitter:description" content="Shell简易入门shell是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell 12echo $SHELL  #查看当前使用的Shellcat /etc/shells #一共装了哪些Shell Execute bash12341. chmod xxx test.sh   ./test.sh2. sh test.sh3. /bin/sh">
-  <!-- Canonical links -->
-  <link rel="canonical" href="https://wushiyii.github.io/2019/10/18/Linux/Shell/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-  
-  
-  
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.css">
-  
+<meta name="twitter:title" content="Shell --- Basci Usage">
+<meta name="twitter:description" content="Shell — Basci Usage">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
 </head>
-
-
-<body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/Wushiyii" target="_blank">
-          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
-        </a>
-        <h2 id="name" class="hidden-xs hidden-sm">Wushiyii</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Backend Developer</h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> XiaMen, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
-
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
-  </div>
-</div>
-
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-repository">
-          <a href="/repository">
-            
-            <i class="icon icon-project"></i>
-            
-            <span class="menu-title">项目</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-books">
-          <a href="/books">
-            
-            <i class="icon icon-book-fill"></i>
-            
-            <span class="menu-title">书单</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-links">
-          <a href="/links">
-            
-            <i class="icon icon-friendship"></i>
-            
-            <span class="menu-title">友链</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about">
-            
-            <i class="icon icon-cup-fill"></i>
-            
-            <span class="menu-title">关于</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
-        
-    </ul>
-
-    </nav>
-  </div>
-</header>
-
-  
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
+<body>
     
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>Welcome</p>
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    五十一
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-    </div>
-</div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JAVA/">JAVA</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JS/">JS</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Workflow/">Workflow</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/消息队列/">消息队列</a><span class="category-list-count">7</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/">CI/CD</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/">Shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEB/">WEB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/">Workflow</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/消息队列/">消息队列</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语言/">语言</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合/">集合</a><span class="tag-list-count">3</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/CI-CD/" style="font-size: 13.43px;">CI/CD</a> <a href="/tags/Docker/" style="font-size: 13.43px;">Docker</a> <a href="/tags/JAVA/" style="font-size: 13.86px;">JAVA</a> <a href="/tags/JVM/" style="font-size: 13.43px;">JVM</a> <a href="/tags/Linux/" style="font-size: 13.57px;">Linux</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/Shell/" style="font-size: 13px;">Shell</a> <a href="/tags/Spring/" style="font-size: 13px;">Spring</a> <a href="/tags/WEB/" style="font-size: 13.43px;">WEB</a> <a href="/tags/Workflow/" style="font-size: 13.14px;">Workflow</a> <a href="/tags/blog/" style="font-size: 13px;">blog</a> <a href="/tags/git/" style="font-size: 13.14px;">git</a> <a href="/tags/分布式/" style="font-size: 13.71px;">分布式</a> <a href="/tags/容器/" style="font-size: 13.43px;">容器</a> <a href="/tags/消息队列/" style="font-size: 13.71px;">消息队列</a> <a href="/tags/编程/" style="font-size: 14px;">编程</a> <a href="/tags/语言/" style="font-size: 13.57px;">语言</a> <a href="/tags/集合/" style="font-size: 13.29px;">集合</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">3</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-          <li>
+        <div class="navbar-menu navbar-start">
             
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Linux/">Linux</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/10/18/Linux/Shell/" class="title">Shell</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-10-18T03:14:21.000Z" itemprop="datePublished">2019-10-18</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
+            <a class="navbar-item " href="/archives">Archives</a>
             
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/JAVA/">JAVA</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/09/22/JVM/深入理解JVM（五）/" class="title">深入理解JVM（五） --- 早期编译</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-09-22T12:47:12.000Z" itemprop="datePublished">2019-09-22</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
+            <a class="navbar-item " href="/about">About</a>
             
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/JAVA/">JAVA</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/09/08/JVM/深入理解JVM（四）——栈帧结构/" class="title">深入理解JVM（四） --- 栈帧结构</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-09-08T07:40:34.000Z" itemprop="datePublished">2019-09-08</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/JAVA/">JAVA</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/09/03/Java/Spring/AOP/" class="title">Aop是什么</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-09-03T09:33:01.000Z" itemprop="datePublished">2019-09-03</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/JAVA/">JAVA</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/09/01/JVM/深入理解JVM（三）——类加载器/" class="title">深入理解JVM（三） --- 类加载器</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-09-01T05:10:34.000Z" itemprop="datePublished">2019-09-01</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Linux/Shell" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
+        </div>
         
-  
-    <h1 class="article-title" itemprop="name">
-      Shell
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Suche" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Wushiyii">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Shell --- Basci Usage
+        
     </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2019/10/18/Linux/Shell/" class="article-date">
-	  <time datetime="2019-10-18T03:14:21.000Z" itemprop="datePublished">2019-10-18</time>
-	</a>
-</span>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-10-18T03:14:21.000Z" itemprop="datePublished">10月 18 2019</time>
+        </span>
         
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-  </span>
-
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Linux/">Linux</a>
+        </span>
         
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/Linux/">Linux</a>, <a class="article-tag-link" href="/tags/Shell/">Shell</a>
-  </span>
-
-
         
-	<span class="article-read hidden-xs">
-	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
-	    <span id="busuanzi_container_page_pv">
-			<span id="busuanzi_value_page_pv">0</span>
-		</span>
-	</span>
-
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/18/Linux/Shell/#comments" class="article-comment-link">评论</a></span>
+        <span class="column is-narrow">
+            
+            
+            6 分钟 lesen (Über 963 Wörter)
+        </span>
         
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1,082(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
-	
-
-      </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h4 id="Shell简易入门"><a href="#Shell简易入门" class="headerlink" title="Shell简易入门"></a>Shell简易入门</h4><p><code>shell</code>是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$SHELL</span>  <span class="comment">#查看当前使用的Shell</span></span><br><span class="line">cat /etc/shells <span class="comment">#一共装了哪些Shell</span></span><br></pre></td></tr></table></figure>
-<h4 id="Execute-bash"><a href="#Execute-bash" class="headerlink" title="Execute bash"></a>Execute bash</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. chmod xxx test.sh</span><br><span class="line">   ./test.sh</span><br><span class="line">2. sh test.sh</span><br><span class="line">3. /bin/sh test.sh</span><br></pre></td></tr></table></figure>
-<h4 id="Shell-Variable"><a href="#Shell-Variable" class="headerlink" title="Shell Variable"></a>Shell Variable</h4><h5 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"Jimmy"</span> <span class="comment">#变量只能使用英文字母，数字和下划线，首个字符不能以数字开头；不能使用标点符号；不能使用shell关键字</span></span><br><span class="line"><span class="keyword">for</span> etcName <span class="keyword">in</span> `ls /etc` <span class="comment">#可以使用语句进行赋值、循环</span></span><br><span class="line"></span><br><span class="line">num=10</span><br><span class="line"><span class="built_in">readonly</span> num <span class="comment">#定义只读变量</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> num <span class="comment">#删除变量</span></span><br></pre></td></tr></table></figure>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>Shell — Basci Usage<br><a id="more"></a></p>
+<p><code>shell</code>是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$SHELL</span>  <span class="hljs-comment">#查看当前使用的Shell</span></span><br><span class="line">cat /etc/shells <span class="hljs-comment">#一共装了哪些Shell</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Execute-bash"><a href="#Execute-bash" class="headerlink" title="Execute bash"></a>Execute bash</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. chmod xxx test.sh</span><br><span class="line">   ./test.sh</span><br><span class="line">2. sh test.sh</span><br><span class="line">3. /bin/sh test.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="Shell-Variable"><a href="#Shell-Variable" class="headerlink" title="Shell Variable"></a>Shell Variable</h4><h5 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="hljs-string">"Jimmy"</span> <span class="hljs-comment">#变量只能使用英文字母，数字和下划线，首个字符不能以数字开头；不能使用标点符号；不能使用shell关键字</span></span><br><span class="line"><span class="hljs-keyword">for</span> etcName <span class="hljs-keyword">in</span> `ls /etc` <span class="hljs-comment">#可以使用语句进行赋值、循环</span></span><br><span class="line"></span><br><span class="line">num=10</span><br><span class="line"><span class="hljs-built_in">readonly</span> num <span class="hljs-comment">#定义只读变量</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">unset</span> num <span class="hljs-comment">#删除变量</span></span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>需要注意，变量之后与<code>=</code>之间不能有空格，值与<code>=</code>也不能有空格：</p>
 <p>比如<code>num = 10</code>执行即会报错,需要改为<code>num=10</code></p>
 </blockquote>
-<h5 id="使用变量"><a href="#使用变量" class="headerlink" title="使用变量"></a>使用变量</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/zsh</span></span><br><span class="line">name=<span class="string">"Jimmy"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$name</span> <span class="comment">#使用时，在变量名前加$</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;name&#125;</span> <span class="comment">#模板字符串用法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> hobby <span class="keyword">in</span> Eating Swimming Sleeping; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"I like <span class="variable">$&#123;hobby&#125;</span>"</span></span><br><span class="line"><span class="keyword">done</span>;</span><br></pre></td></tr></table></figure>
+<h5 id="使用变量"><a href="#使用变量" class="headerlink" title="使用变量"></a>使用变量</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#!/bin/zsh</span></span><br><span class="line">name=<span class="hljs-string">"Jimmy"</span></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$name</span> <span class="hljs-comment">#使用时，在变量名前加$</span></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;name&#125;</span> <span class="hljs-comment">#模板字符串用法</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> hobby <span class="hljs-keyword">in</span> Eating Swimming Sleeping; <span class="hljs-keyword">do</span></span><br><span class="line">    <span class="hljs-built_in">echo</span> <span class="hljs-string">"I like <span class="hljs-variable">$&#123;hobby&#125;</span>"</span></span><br><span class="line"><span class="hljs-keyword">done</span>;</span><br></pre></td></tr></table></figure>
+
 <h5 id="Shell-字符串"><a href="#Shell-字符串" class="headerlink" title="Shell 字符串"></a>Shell 字符串</h5><ul>
 <li>单引号</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str=<span class="string">'single dot string'</span> <span class="comment">#单引号字符串不支持模板变量，并且不支持单引号转义</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str=<span class="hljs-string">'single dot string'</span> <span class="hljs-comment">#单引号字符串不支持模板变量，并且不支持单引号转义</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>双引号</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">'Jimmy'</span></span><br><span class="line">str=<span class="string">"Hello , my 'name' is <span class="variable">$&#123;name&#125;</span>"</span> <span class="comment">#双引号支持模板变量，也可以有转义符号</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$str</span></span><br></pre></td></tr></table></figure>
-<h5 id="Shell基本变量与操作"><a href="#Shell基本变量与操作" class="headerlink" title="Shell基本变量与操作"></a>Shell基本变量与操作</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#字符串类</span></span><br><span class="line">name=<span class="string">'Jimmy'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#name&#125;</span> <span class="comment"># 变量名前加`#`输出长度</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;name:1:3&#125;</span> <span class="comment"># result: imm 截取下标1~3字符串（从0开始）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#数组类</span></span><br><span class="line">arr=(1 2 3 4)</span><br><span class="line">arr=(</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;arr[0]&#125;</span> <span class="comment">#打印第一个元素</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;arr[@]&#125;</span> <span class="comment">#打印所有元素</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;#arr[@]&#125;</span> <span class="comment">#打印数组长度 也可使用echo $&#123;#arr[n]&#125;</span></span><br></pre></td></tr></table></figure>
-<h5 id="Shell运算符"><a href="#Shell运算符" class="headerlink" title="Shell运算符"></a>Shell运算符</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">num=`expr 2 + 2` <span class="comment">#shell本身不支持数学运算，可以通过awk、expr实现</span></span><br><span class="line">num=`expr 2 - 2`<span class="comment">#减法</span></span><br><span class="line">num=`expr 2 \* 2`<span class="comment">#乘法</span></span><br><span class="line">num=`expr 2 / 2`<span class="comment">#除法</span></span><br><span class="line">num=`expr 2 % 2`<span class="comment">#余数</span></span><br><span class="line">num2=<span class="variable">$num</span><span class="comment">#赋值</span></span><br><span class="line">[<span class="variable">$num</span>==<span class="variable">$num2</span>]<span class="comment">#比较两个数字是否相同</span></span><br><span class="line">[<span class="variable">$num</span>!=<span class="variable">$num2</span>]<span class="comment">#比较两个数字是否不同</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="hljs-string">'Jimmy'</span></span><br><span class="line">str=<span class="hljs-string">"Hello , my 'name' is <span class="hljs-variable">$&#123;name&#125;</span>"</span> <span class="hljs-comment">#双引号支持模板变量，也可以有转义符号</span></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$str</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Shell基本变量与操作"><a href="#Shell基本变量与操作" class="headerlink" title="Shell基本变量与操作"></a>Shell基本变量与操作</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#字符串类</span></span><br><span class="line">name=<span class="hljs-string">'Jimmy'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;#name&#125;</span> <span class="hljs-comment"># 变量名前加`#`输出长度</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;name:1:3&#125;</span> <span class="hljs-comment"># result: imm 截取下标1~3字符串（从0开始）</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">#数组类</span></span><br><span class="line">arr=(1 2 3 4)</span><br><span class="line">arr=(</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">)</span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;arr[0]&#125;</span> <span class="hljs-comment">#打印第一个元素</span></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;arr[@]&#125;</span> <span class="hljs-comment">#打印所有元素</span></span><br><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$&#123;#arr[@]&#125;</span> <span class="hljs-comment">#打印数组长度 也可使用echo $&#123;#arr[n]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Shell运算符"><a href="#Shell运算符" class="headerlink" title="Shell运算符"></a>Shell运算符</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">num=`expr 2 + 2` <span class="hljs-comment">#shell本身不支持数学运算，可以通过awk、expr实现</span></span><br><span class="line">num=`expr 2 - 2`<span class="hljs-comment">#减法</span></span><br><span class="line">num=`expr 2 \* 2`<span class="hljs-comment">#乘法</span></span><br><span class="line">num=`expr 2 / 2`<span class="hljs-comment">#除法</span></span><br><span class="line">num=`expr 2 % 2`<span class="hljs-comment">#余数</span></span><br><span class="line">num2=<span class="hljs-variable">$num</span><span class="hljs-comment">#赋值</span></span><br><span class="line">[<span class="hljs-variable">$num</span>==<span class="hljs-variable">$num2</span>]<span class="hljs-comment">#比较两个数字是否相同</span></span><br><span class="line">[<span class="hljs-variable">$num</span>!=<span class="hljs-variable">$num2</span>]<span class="hljs-comment">#比较两个数字是否不同</span></span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>expr表达式需要注意：<code>expr</code>关键字与后续表达式之间需呀有空格<code></code>,表达式之间也需要有空格<code>2 + 2</code></p>
 <p>布尔条件表达式要放在方括号之间，并且要有空格，例如: <code>[$a==$b]</code> 是错误的，必须写成 <code>[ $a == $b ]</code>。</p>
@@ -422,39 +177,48 @@
 <h5 id="Shell-简单命令"><a href="#Shell-简单命令" class="headerlink" title="Shell 简单命令"></a>Shell 简单命令</h5><ul>
 <li>echo</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">echo hello </span><br><span class="line">echo "\"hello\""</span><br><span class="line"></span><br><span class="line">read test #从标准输入流中读取一行，并赋值</span><br><span class="line">echo "input is $&#123;test&#125;"</span><br><span class="line"></span><br><span class="line">echo hello world &gt; aaa.txt #将内容定向至文件</span><br><span class="line">echo 'hello\"' #使用单引号屏蔽转义字符</span><br><span class="line"></span><br><span class="line">echo `date` #显示命令执行结果</span><br><span class="line">echo `ls`</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">echo hello </span><br><span class="line">echo "\"hello\""</span><br><span class="line"></span><br><span class="line">read test #从标准输入流中读取一行，并赋值</span><br><span class="line">echo "input is $&#123;test&#125;"</span><br><span class="line"></span><br><span class="line">echo hello world &gt; aaa.txt #将内容定向至文件</span><br><span class="line">echo 'hello\"' #使用单引号屏蔽转义字符</span><br><span class="line"></span><br><span class="line">echo `date` #显示命令执行结果</span><br><span class="line">echo `ls`</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>printf</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">printf "%-10s %-8s %-4s\n" name gender weight</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Sally female 49</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Ford male 61</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Heisnburg male 66</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">printf "%-10s %-8s %-4s\n" name gender weight</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Sally female 49</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Ford male 61</span><br><span class="line">printf "%-10s %-8s %-4.2f\n" Heisnburg male 66</span><br></pre></td></tr></table></figure>
+
 <p><code>printf</code>可以格式化输出，<code>%s</code>表示字符,<code>%f</code>表示浮点数,<code>%n</code>表示整数;<code>%-10s</code>:代替符中的数字代表输出一个固定为10的字符</p>
 <ul>
 <li>test</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 数值测试</span></span><br><span class="line">num1=20</span><br><span class="line">num2=30</span><br><span class="line">if test $&#123;num1&#125; -eq $&#123;num2&#125;</span><br><span class="line">then</span><br><span class="line">    echo 'The two nums are equals'</span><br><span class="line">else</span><br><span class="line">    echo 'not euquals'</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 数值测试</span></span><br><span class="line">num1=20</span><br><span class="line">num2=30</span><br><span class="line">if test $&#123;num1&#125; -eq $&#123;num2&#125;</span><br><span class="line">then</span><br><span class="line">    echo 'The two nums are equals'</span><br><span class="line">else</span><br><span class="line">    echo 'not euquals'</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
 <p><code>test</code>命令用于检查条件,在数值测试中<code>eq</code>,<code>ne</code>,<code>gt</code>,<code>ge</code>,<code>lt</code>,<code>le</code>为对比字符，e/eq : equals , n : not , gt : greater than , ge: greater or equals ,lt: less than, le : less or equals 。</p>
 <p>此外，test也可以用于文件测试、字符串测试等</p>
 <h5 id="Shell流程"><a href="#Shell流程" class="headerlink" title="Shell流程"></a>Shell流程</h5><ul>
 <li>if</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if con</span><br><span class="line">then</span><br><span class="line">	xxxx</span><br><span class="line">elif</span><br><span class="line">then</span><br><span class="line">	xxx</span><br><span class="line">else</span><br><span class="line">	xxxx</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if con</span><br><span class="line">then</span><br><span class="line">	xxxx</span><br><span class="line">elif</span><br><span class="line">then</span><br><span class="line">	xxx</span><br><span class="line">else</span><br><span class="line">	xxxx</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>for</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for item in item1 item2 item3 ... itemN</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for item in item1 item2 item3 ... itemN</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>while</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while con</span><br><span class="line">do</span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while con</span><br><span class="line">do</span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>until</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until con</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">until con</span><br><span class="line">do </span><br><span class="line">	xxxx</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>case</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">case item in </span><br><span class="line">	xx1) command</span><br><span class="line">	;;</span><br><span class="line">	xx2) command</span><br><span class="line">	;;</span><br><span class="line">	...</span><br><span class="line">	*) default command</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
-<h5 id="Shell-函数"><a href="#Shell-函数" class="headerlink" title="Shell 函数"></a>Shell 函数</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function fun() &#123;</span><br><span class="line">    echo "hello"</span><br><span class="line">	return `expr 10 + 10`</span><br><span class="line">&#125;</span><br><span class="line">fun</span><br><span class="line">echo $? # $?可以获取最近一次的函数返回值</span><br><span class="line"></span><br><span class="line">echo "Hello World" | grep -e "World"</span><br><span class="line">echo $? # 值为0，代表匹配到字符串</span><br><span class="line"></span><br><span class="line">param()&#123;</span><br><span class="line">		echo "first param : $1"</span><br><span class="line">		echo "second param : $2"</span><br><span class="line">		echo "third param : $3"</span><br><span class="line">		echo "total params : $#"</span><br><span class="line">		echo "All params : $*"</span><br><span class="line">&#125;</span><br><span class="line">param 10 20 30 #在方法名后加入参，即可传参</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">case item in </span><br><span class="line">	xx1) command</span><br><span class="line">	;;</span><br><span class="line">	xx2) command</span><br><span class="line">	;;</span><br><span class="line">	...</span><br><span class="line">	*) default command</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+
+<h5 id="Shell-函数"><a href="#Shell-函数" class="headerlink" title="Shell 函数"></a>Shell 函数</h5><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function fun() &#123;</span><br><span class="line">    echo "hello"</span><br><span class="line">	return `expr 10 + 10`</span><br><span class="line">&#125;</span><br><span class="line">fun</span><br><span class="line">echo $? # $?可以获取最近一次的函数返回值</span><br><span class="line"></span><br><span class="line">echo "Hello World" | grep -e "World"</span><br><span class="line">echo $? # 值为0，代表匹配到字符串</span><br><span class="line"></span><br><span class="line">param()&#123;</span><br><span class="line">		echo "first param : $1"</span><br><span class="line">		echo "second param : $2"</span><br><span class="line">		echo "third param : $3"</span><br><span class="line">		echo "total params : $#"</span><br><span class="line">		echo "All params : $*"</span><br><span class="line">&#125;</span><br><span class="line">param 10 20 30 #在方法名后加入参，即可传参</span><br></pre></td></tr></table></figure>
+
 <h5 id="Shell-I-O重定向"><a href="#Shell-I-O重定向" class="headerlink" title="Shell I/O重定向"></a>Shell I/O重定向</h5><table>
 <thead>
 <tr>
@@ -474,165 +238,246 @@
 </tbody>
 </table>
 <p>eg:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch filename</span><br><span class="line">echo "hello world" &gt; filename</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch filename</span><br><span class="line">echo "hello world" &gt; filename</span><br></pre></td></tr></table></figure>
 
-      
+
+    
     </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
     
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="https://wushiyii.github.io/2019/10/18/Linux/Shell/" title="Shell" target="_blank" rel="external">https://wushiyii.github.io/2019/10/18/Linux/Shell/</a>
-    </li>
+    <div class="columns is-variable is-1 is-multiline is-mobile">
     
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Linux/">#Linux</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Shell/">#Shell</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/09/22/JVM/深入理解JVM（五）/">深入理解JVM（五） --- 早期编译</a>
+            
+        </span>
+    </div>
+    
+</article>
 
 
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/Wushiyii" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/Wushiyii" target="_blank"><span class="text-dark">Wushiyii</span><small class="ml-1x">Backend Developer</small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type="text/javascript" src="www.baidu.com" async="async"></script>
+
 </div>
 
 
+
     </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-           
-    
-  </section>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2019 Wushiyi&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
 
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    
-    <li class="next">
-      <a href="/2019/09/22/JVM/深入理解JVM（五）/" title="深入理解JVM（五） --- 早期编译"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
-
-
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/Wushiyii" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
-        
-    </ul>
-
-    <div class="copyright">
-    	
-        &copy; 2019 Wushiyi
-        
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Wushiyii">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
         </div>
     </div>
 </footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script src="/js/plugin.min.js"></script>
-<script src="/js/application.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("zh-CN");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
         },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Seiten',
+                CATEGORIES: 'Kategorien',
+                TAGS: 'Tags',
+                UNTITLED: '(Sin título)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
 </script>
 <script src="/js/insight.js"></script>
-
-
-
-
-
-   
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-
-
-   
     
-  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
-  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
-  <script type="text/javascript">
-  var gitalk = new Gitalk({
-    clientID: '0aa72e1501a75fd11a4d',
-    clientSecret: 'edd89c9407a32f1be7c09385220eae8692d356ee',
-    repo: 'Wushiyii.github.io',
-    owner: 'Wushiyii',
-    admin: ['Wushiyii'],
-    id: md5(location.pathname),
-    distractionFreeMode: true
-  })
-  gitalk.render('comments')
-  </script>
-
-      
-
-
-
-
-
-
-
 </body>
 </html>
