@@ -1,11 +1,11 @@
 ---
-title: Shell --- Basci Usage
+title: Shell简易用法
 date: 2019-10-18 11:14:21
 tags: [Linux,Shell]
 categories: Linux	
 ---
 
-Shell --- Basci Usage
+定义变量、模板解析、IO重定向...
 <!-- more -->
 
 `shell`是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell
