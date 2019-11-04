@@ -6,7 +6,7 @@ categories: JAVA
 
 ---
 
-<!-- more -->
+`AOP` is just `Aspect Oriented Programming`
 
-# Aop
+<!-- more -->
 

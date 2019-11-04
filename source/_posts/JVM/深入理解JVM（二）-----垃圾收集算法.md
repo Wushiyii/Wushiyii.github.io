@@ -5,6 +5,8 @@ tags: [JAVA,JVM]
 categories: JAVA
 ---
 
+How GC algorithm works
+
 <!-- more -->
 
 # 深入理解JVM（二）---垃圾收集算法

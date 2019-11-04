@@ -7,6 +7,8 @@ categories: JAVA
 
 ---
 
+How to transfer `.java` to `.class`
+
 <!-- more -->
 
 Java的编译包括前端编译、后端编译，前端编译器把`*.java`编译为`*.class`，而后端编译有运行期编译（JIT）、提前编译（AOT）等。在本篇中主要将前端编译（早期编译）。

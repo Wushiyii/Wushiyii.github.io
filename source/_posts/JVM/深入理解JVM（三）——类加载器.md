@@ -6,6 +6,8 @@ categories: JAVA
 
 ---
 
+Defenite a classloader
+
 <!-- more -->
 
 # 深入理解JVM（三）—类加载器

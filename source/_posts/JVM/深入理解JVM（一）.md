@@ -4,7 +4,7 @@ date: 2019-07-28 15:38:07
 tags: [JAVA,JVM]
 categories: JAVA
 ---
-什么是`JVM`?`JVM`的内存模型又是怎么样的呢?
+What is `JVM`?
 
 <!-- more -->
 
