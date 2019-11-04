@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/python-one.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/sending.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/receiving.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.295Z">
+<meta property="og:updated_time" content="2019-10-21T13:22:42.273Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Rabbit tutorial-one">
 <meta name="twitter:description" content="RabbitMQ入门教程系列—（1）">
@@ -53,7 +53,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -96,15 +96,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -143,7 +143,7 @@
         <span class="column is-narrow">
             
             
-            12 分钟 lesen (Über 1725 Wörter)
+            12 分钟 读完 (约 1725 字)
         </span>
         
     </div>
@@ -179,39 +179,62 @@
 <p><img src="http://www.rabbitmq.com/img/tutorials/sending.png" alt="sending"></p>
 <p>我们将称呼消息发布者(<code>Sender</code>)<code>Send</code> 和称呼消息使用者(<code>Receiver</code>)<code>Recv</code>。 消息发布者将连接到 <code>RabbitMQ</code>，发送一条消息，然后退出。</p>
 <p>在<code>send.java</code>中，首先导入一些包（<code>amqp-client-4.0.2.jar</code>,<code>slf4j-api-1.7.21</code>,<code>slf4j-simple-1.7.22</code>）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Send</span> </span>&#123;</span><br><span class="line">    <span class="comment">//命名队列</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String QUEUE_NAME = <span class="string">"hello"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Send</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">//命名队列</span></span><br><span class="line">  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String QUEUE_NAME = <span class="hljs-string">"hello"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span></span></span><br><span class="line"><span class="hljs-function">      <span class="hljs-keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>和服务器建立连接</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">Connection connection = factory.newConnection();</span><br><span class="line">Channel channel = connection.createChannel();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">Connection connection = factory.newConnection();</span><br><span class="line">Channel channel = connection.createChannel();</span><br></pre></td></tr></table></figure>
+
 <p>该连接对<code>Socket</code>连接进行抽象，并为我们处理协议版本协商和身份验证等问题。 在这里我们连接到本地机器上的<code>Broker</code>。 如果我们想连接到不同机器上的代理，我们只需在这里指定它的名称或 IP 地址。</p>
 <p>接下来创建一个通道<code>Channel</code>，这里包括大多数用于完成业务需要 用到的 API。</p>
 <p>为了发送消息，我们必须声明一个队列以供我们发送，然后将消息发布到队列:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">channel.queueDeclare(QUEUE_NAME, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">null</span>);</span><br><span class="line">String message = <span class="string">"Hello World!"</span>;</span><br><span class="line">channel.basicPublish(<span class="string">""</span>, QUEUE_NAME, <span class="keyword">null</span>, message.getBytes());</span><br><span class="line">System.out.println(<span class="string">" [x] Sent '"</span> + message + <span class="string">"'"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">channel.queueDeclare(QUEUE_NAME, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">null</span>);</span><br><span class="line">String message = <span class="hljs-string">"Hello World!"</span>;</span><br><span class="line">channel.basicPublish(<span class="hljs-string">""</span>, QUEUE_NAME, <span class="hljs-keyword">null</span>, message.getBytes());</span><br><span class="line">System.out.println(<span class="hljs-string">" [x] Sent '"</span> + message + <span class="hljs-string">"'"</span>);</span><br></pre></td></tr></table></figure>
+
 <p>声明队列是幂等的——只有当队列不存在时才创建它。 消息内容是一个字节数组，因此我们可以在那里对任何内容进行编码及修改。</p>
 <p>最后，关闭通道和连接;</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">channel.close();</span><br><span class="line">connection.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">channel.close();</span><br><span class="line">connection.close();</span><br></pre></td></tr></table></figure>
+
 <p>点击此处查看完整的<code>Send.java</code>类。</p>
 </li>
 <li><p>Receiving<br>消费者是通过 <code>RabbitMQ</code> 获取消息，与发布单个消息的发布者不同，我们将让消费者保持监听消息的状态，并打印出消息。<br><img src="http://www.rabbitmq.com/img/tutorials/receiving.png" alt="rec"><br>导入包</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Consumer;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.DefaultConsumer;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Consumer;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.DefaultConsumer;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
-<p><code>DefaultConsumer</code>接口实现了<code>Consumer</code>接口，我们将使用该接口来缓冲服务器推送给我们的消息。<br>设置与发布者(<code>Sender</code>)相同; 我们打开一个连接和一个通道，并声明我们要使用的队列。 请注意，这与发布者的队列名称相同。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Recv</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String QUEUE_NAME = <span class="string">"hello"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> java.io.IOException,</span></span><br><span class="line"><span class="function">             java.lang.InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.queueDeclare(QUEUE_NAME, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">false</span>, <span class="keyword">null</span>);</span><br><span class="line">    System.out.println(<span class="string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>DefaultConsumer</code>接口实现了<code>Consumer</code>接口，我们将使用该接口来缓冲服务器推送给我们的消息。<br>设置与发布者(<code>Sender</code>)相同; 我们打开一个连接和一个通道，并声明我们要使用的队列。 请注意，这与发布者的队列名称相同。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Recv</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String QUEUE_NAME = <span class="hljs-string">"hello"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span></span></span><br><span class="line"><span class="hljs-function">      <span class="hljs-keyword">throws</span> java.io.IOException,</span></span><br><span class="line"><span class="hljs-function">             java.lang.InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.queueDeclare(QUEUE_NAME, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">false</span>, <span class="hljs-keyword">null</span>);</span><br><span class="line">    System.out.println(<span class="hljs-string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>注意，我们在这里同样也声明了队列，因为我们可能在发布者之前启动使用者，所以我们希望在尝试使用来自该队列的消息之前确保队列的存在。</p>
-<p>接下来我们将要告诉发布者从队列中传递消息，因为它将以异步方式推送我们的消息。接下来使用<code>DefaultConsumer</code>来缓冲消息，直到我们准备好使用它们。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Consumer consumer = <span class="keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDelivery</span><span class="params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="function"><span class="params">                             AMQP.BasicProperties properties, <span class="keyword">byte</span>[] body)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String message = <span class="keyword">new</span> String(body, <span class="string">"UTF-8"</span>);</span><br><span class="line">    System.out.println(<span class="string">" [x] Received '"</span> + message + <span class="string">"'"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">channel.basicConsume(QUEUE_NAME, <span class="keyword">true</span>, consumer);</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们将要告诉发布者从队列中传递消息，因为它将以异步方式推送我们的消息。接下来使用<code>DefaultConsumer</code>来缓冲消息，直到我们准备好使用它们。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Consumer consumer = <span class="hljs-keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">  <span class="hljs-meta">@Override</span></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handleDelivery</span><span class="hljs-params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                             AMQP.BasicProperties properties, <span class="hljs-keyword">byte</span>[] body)</span></span></span><br><span class="line"><span class="hljs-function">      <span class="hljs-keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String message = <span class="hljs-keyword">new</span> String(body, <span class="hljs-string">"UTF-8"</span>);</span><br><span class="line">    System.out.println(<span class="hljs-string">" [x] Received '"</span> + message + <span class="hljs-string">"'"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">channel.basicConsume(QUEUE_NAME, <span class="hljs-keyword">true</span>, consumer);</span><br></pre></td></tr></table></figure>
+
 <p>  点击此处查看完整的<code>Recv.java</code>类。</p>
-<h4 id="将两个实例同时运行"><a href="#将两个实例同时运行" class="headerlink" title="将两个实例同时运行"></a>将两个实例同时运行</h4><p>你可以在类路径中通过 RabbitMQ java 客户端编译这两个代码:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac -cp amqp-client-4.0.2.jar Send.java Recv.java</span><br></pre></td></tr></table></figure></p>
-<p>要运行它们，还需要<code>rabbitmq-client.jar</code>及其依赖。在终端中，运行消费者(<code>Consumer</code>) :<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp .:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar Recv</span><br></pre></td></tr></table></figure></p>
-<p>然后，运行发布者(<code>Producer</code>) :<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp .:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar Send</span><br></pre></td></tr></table></figure></p>
+<h4 id="将两个实例同时运行"><a href="#将两个实例同时运行" class="headerlink" title="将两个实例同时运行"></a>将两个实例同时运行</h4><p>你可以在类路径中通过 RabbitMQ java 客户端编译这两个代码:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javac -cp amqp-client-4.0.2.jar Send.java Recv.java</span><br></pre></td></tr></table></figure>
+
+<p>要运行它们，还需要<code>rabbitmq-client.jar</code>及其依赖。在终端中，运行消费者(<code>Consumer</code>) :</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp .:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar Recv</span><br></pre></td></tr></table></figure>
+
+<p>然后，运行发布者(<code>Producer</code>) :</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp .:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar Send</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>在 <code>Windows</code> 上，使用<strong>分号</strong>而不是<strong>冒号</strong>分隔类路径中的项。</p>
 </blockquote>
 <p>消费者将通过<code>RabbitMQ</code> 打印从发布者那里获得的消息。 使用者将继续运行，等待消息(使用 Ctrl-C 停止它) ，因此尝试从另一个终端运行发布者。</p>
 <blockquote>
-<p>你可能希望看到<code>RabbitMQ</code> 运行着什么队列以及队列中有多少消息。你可以(管理以模式)使用<code>rabbitmqctl</code>工具:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rabbitmqctl list_queues</span><br></pre></td></tr></table></figure></p>
+<p>你可能希望看到<code>RabbitMQ</code> 运行着什么队列以及队列中有多少消息。你可以(管理以模式)使用<code>rabbitmqctl</code>工具:</p>
 </blockquote>
-<p>或者在<code>Windows</code>上省略sudo:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl.bat list_queues</span><br></pre></td></tr></table></figure></p>
-<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><p>为了保存输入，你可以为路径设置一个环境变量:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CP=.:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar</span><br><span class="line">java -cp <span class="variable">$CP</span> Send</span><br></pre></td></tr></table></figure></p>
-<p>或者在<code>Windows</code>上:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> CP=.;amqp-client-4.0.2.jar;slf4j-api-1.7.21.jar;slf4j-simple-1.7.22.jar</span><br><span class="line">java -cp %CP% Send</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rabbitmqctl list_queues</span><br></pre></td></tr></table></figure>
+
+<p>或者在<code>Windows</code>上省略sudo:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl.bat list_queues</span><br></pre></td></tr></table></figure>
+
+<h4 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h4><p>为了保存输入，你可以为路径设置一个环境变量:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">export</span> CP=.:amqp-client-4.0.2.jar:slf4j-api-1.7.21.jar:slf4j-simple-1.7.22.jar</span><br><span class="line">java -cp <span class="hljs-variable">$CP</span> Send</span><br></pre></td></tr></table></figure>
+
+<p>或者在<code>Windows</code>上:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">set</span> CP=.;amqp-client-4.0.2.jar;slf4j-api-1.7.21.jar;slf4j-simple-1.7.22.jar</span><br><span class="line">java -cp %CP% Send</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>本教程全文翻译自 <code>http://www.rabbitmq.com/tutorials/tutorial-one-java.html</code></p>
 </blockquote>
@@ -245,13 +268,6 @@
     
 </article>
 
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
 
 
 
@@ -357,69 +373,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -433,7 +386,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -445,11 +398,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

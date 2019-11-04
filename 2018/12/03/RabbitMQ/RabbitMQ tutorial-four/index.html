@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/direct-exchange.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/direct-exchange-multiple.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/python-four.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.294Z">
+<meta property="og:updated_time" content="2019-10-21T13:22:42.273Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Rabbit tutorial-Four">
 <meta name="twitter:description" content="RabbitMQ入门教程系列—（4）">
@@ -50,7 +50,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -93,15 +93,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -140,7 +140,7 @@
         <span class="column is-narrow">
             
             
-            8 分钟 lesen (Über 1206 Wörter)
+            8 分钟 读完 (约 1206 字)
         </span>
         
     </div>
@@ -151,9 +151,12 @@
 <h1 id="RabbitMQ-tutorial-Four"><a href="#RabbitMQ-tutorial-Four" class="headerlink" title="RabbitMQ tutorial-Four"></a>RabbitMQ tutorial-Four</h1><h3 id="路由-Routing"><a href="#路由-Routing" class="headerlink" title="路由(Routing)"></a>路由(Routing)</h3><p>在上一个教程中，我们构建了一个简单的日志记录系统。 我们可以向许多接收者广播日志消息。</p>
 <p>在本教程中，我们将向其添加一个特性—-我们将使订阅仅限于消息的一个子集(部分)。 例如，我们将能够只将关键的错误消息导向日志文件(以节省磁盘空间) ，同时仍然能够在控制台上打印所有的日志消息。</p>
 <h4 id="绑定-Bindings"><a href="#绑定-Bindings" class="headerlink" title="绑定(Bindings)"></a>绑定(Bindings)</h4><p>在前面的示例中，我们已经创建了绑定:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="hljs-string">""</span>);</span><br></pre></td></tr></table></figure>
+
 <p>绑定就是绑定交换器和队列之间的关系。这可以简单地理解为: 队列对此交换器中的消息感兴趣。</p>
-<p>绑定可以采用额外的 <code>routingKey</code> 参数。 为了避免与<code>basic_publis</code>参数的混淆，我们将其称为 <code>binding key</code>。 这就是我们如何创建一个关键字绑定:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">"black"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>绑定可以采用额外的 <code>routingKey</code> 参数。 为了避免与<code>basic_publis</code>参数的混淆，我们将其称为 <code>binding key</code>。 这就是我们如何创建一个关键字绑定:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, EXCHANGE_NAME, <span class="hljs-string">"black"</span>);</span><br></pre></td></tr></table></figure>
+
 <p>绑定键的含义取决于交换类型,我们之前使用的扇出交换<code>fanout</code>是默认忽略绑定的。</p>
 <h4 id="直接交换-Direct-exchange"><a href="#直接交换-Direct-exchange" class="headerlink" title="直接交换(Direct exchange)"></a>直接交换(Direct exchange)</h4><p>前一教程中的日志记录系统,将所有消息广播给使用者,我们希望将此扩展到允许根据消息的严重程度对消息进行过滤。例如，我们可能希望将日志消息系统在写入磁盘的时候，只接收关键错误<code>error</code>，而不是在警告<code>warning</code>或信息<code>info</code>日志消息上浪费磁盘空间。</p>
 <p>之前我们使用的是扇出交换<code>fanout exchange</code>，它不能给我们很大的灵活性，它只能进行盲目的广播。</p>
@@ -165,13 +168,19 @@
 <p>使用相同的绑定键绑定多个队列是完全没问题的。在我们的示例中，我们可以在 <code>x</code> 和<code>Q1</code>之间添加绑定键 black。 在这种情况下，直接交换将像扇出一样工作，并将消息传播到所有匹配的队列。 所有带有<code>routing key</code>为<code>black</code>的消息将被传递到<code>Q1</code>和<code>Q2</code>。</p>
 <h4 id="发送日志-Emitting-logs"><a href="#发送日志-Emitting-logs" class="headerlink" title="发送日志 (Emitting logs)"></a>发送日志 (Emitting logs)</h4><p>我们将把这个模型用于我们的日志系统，此外，我们将消息发送到一个直接的交换器中，而不是扇出交换器。 我们将提供日志级别作为路由密钥。 这样，日志接收程序就能够选择它想要接收的日志。</p>
 <p>首先创建一个交换:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish(EXCHANGE_NAME, severity, <span class="keyword">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish(EXCHANGE_NAME, severity, <span class="hljs-keyword">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure>
+
 <p>为了简化，我们假设日志级别程度可以是<code>info</code>、<code>warning</code>、<code>error</code>之一。</p>
 <h4 id="订阅-Subscribing"><a href="#订阅-Subscribing" class="headerlink" title="订阅 (Subscribing)"></a>订阅 (Subscribing)</h4><p>接收消息的工作原理与前面的教程相同，只有一个例外——我们将为我们感兴趣的每个日志级别创建一个新的绑定。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String queueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(String severity : argv)&#123;</span><br><span class="line">  channel.queueBind(queueName, EXCHANGE_NAME, severity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String queueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span>(String severity : argv)&#123;</span><br><span class="line">  channel.queueBind(queueName, EXCHANGE_NAME, severity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="合并到一起"><a href="#合并到一起" class="headerlink" title="合并到一起"></a>合并到一起</h4><p><img src="http://www.rabbitmq.com/img/tutorials/python-four.png" alt="together"></p>
-<p><code>EmitLogDirect.java</code>的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmitLogDirect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXCHANGE_NAME = <span class="string">"direct_logs"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span></span></span><br><span class="line"><span class="function">                  <span class="keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        Connection connection = factory.newConnection();</span><br><span class="line">        Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">        channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"direct"</span>);</span><br><span class="line"></span><br><span class="line">        String severity = getSeverity(argv);</span><br><span class="line">        String message = getMessage(argv);</span><br><span class="line"></span><br><span class="line">        channel.basicPublish(EXCHANGE_NAME, severity, <span class="keyword">null</span>, message.getBytes());</span><br><span class="line">        System.out.println(<span class="string">" [x] Sent '"</span> + severity + <span class="string">"':'"</span> + message + <span class="string">"'"</span>);</span><br><span class="line"></span><br><span class="line">        channel.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>ReceiveLogsDirect.java</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReceiveLogsDirect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXCHANGE_NAME = <span class="string">"direct_logs"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"direct"</span>);</span><br><span class="line">    String queueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argv.length &lt; <span class="number">1</span>)&#123;</span><br><span class="line">      System.err.println(<span class="string">"Usage: ReceiveLogsDirect [info] [warning] [error]"</span>);</span><br><span class="line">      System.exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(String severity : argv)&#123;</span><br><span class="line">      channel.queueBind(queueName, EXCHANGE_NAME, severity);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line"></span><br><span class="line">    Consumer consumer = <span class="keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDelivery</span><span class="params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 AMQP.BasicProperties properties, <span class="keyword">byte</span>[] body)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String message = <span class="keyword">new</span> String(body, <span class="string">"UTF-8"</span>);</span><br><span class="line">        System.out.println(<span class="string">" [x] Received '"</span> + envelope.getRoutingKey() + <span class="string">"':'"</span> + message + <span class="string">"'"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel.basicConsume(queueName, <span class="keyword">true</span>, consumer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>EmitLogDirect.java</code>的代码：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmitLogDirect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String EXCHANGE_NAME = <span class="hljs-string">"direct_logs"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span></span></span><br><span class="line"><span class="hljs-function">                  <span class="hljs-keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">        Connection connection = factory.newConnection();</span><br><span class="line">        Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">        channel.exchangeDeclare(EXCHANGE_NAME, <span class="hljs-string">"direct"</span>);</span><br><span class="line"></span><br><span class="line">        String severity = getSeverity(argv);</span><br><span class="line">        String message = getMessage(argv);</span><br><span class="line"></span><br><span class="line">        channel.basicPublish(EXCHANGE_NAME, severity, <span class="hljs-keyword">null</span>, message.getBytes());</span><br><span class="line">        System.out.println(<span class="hljs-string">" [x] Sent '"</span> + severity + <span class="hljs-string">"':'"</span> + message + <span class="hljs-string">"'"</span>);</span><br><span class="line"></span><br><span class="line">        channel.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-comment">//..</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>ReceiveLogsDirect.java</code>:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReceiveLogsDirect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String EXCHANGE_NAME = <span class="hljs-string">"direct_logs"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.exchangeDeclare(EXCHANGE_NAME, <span class="hljs-string">"direct"</span>);</span><br><span class="line">    String queueName = channel.queueDeclare().getQueue();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> (argv.length &lt; <span class="hljs-number">1</span>)&#123;</span><br><span class="line">      System.err.println(<span class="hljs-string">"Usage: ReceiveLogsDirect [info] [warning] [error]"</span>);</span><br><span class="line">      System.exit(<span class="hljs-number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span>(String severity : argv)&#123;</span><br><span class="line">      channel.queueBind(queueName, EXCHANGE_NAME, severity);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="hljs-string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line"></span><br><span class="line">    Consumer consumer = <span class="hljs-keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">      <span class="hljs-meta">@Override</span></span><br><span class="line">      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handleDelivery</span><span class="hljs-params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                 AMQP.BasicProperties properties, <span class="hljs-keyword">byte</span>[] body)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String message = <span class="hljs-keyword">new</span> String(body, <span class="hljs-string">"UTF-8"</span>);</span><br><span class="line">        System.out.println(<span class="hljs-string">" [x] Received '"</span> + envelope.getRoutingKey() + <span class="hljs-string">"':'"</span> + message + <span class="hljs-string">"'"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel.basicConsume(queueName, <span class="hljs-keyword">true</span>, consumer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>本教程全文翻译自 <code>http://www.rabbitmq.com/tutorials/tutorial-four-java.html</code></p>
 </blockquote>
@@ -205,13 +214,6 @@
     
 </article>
 
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
 
 
 
@@ -317,69 +319,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -393,7 +332,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -405,11 +344,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

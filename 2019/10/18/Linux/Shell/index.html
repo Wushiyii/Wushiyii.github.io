@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-<title>Shell --- Basci Usage - Blog</title>
+<title>Shell简易用法 - Blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -18,18 +18,18 @@
 
 
 
-    <meta name="description" content="Shell — Basci Usage">
+    <meta name="description" content="定义变量、模板解析、IO重定向…">
 <meta name="keywords" content="Linux,Shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Shell --- Basci Usage">
+<meta property="og:title" content="Shell简易用法">
 <meta property="og:url" content="https://wushiyii.github.io/2019/10/18/Linux/Shell/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="Shell — Basci Usage">
+<meta property="og:description" content="定义变量、模板解析、IO重定向…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-04T02:22:09.805Z">
+<meta property="og:updated_time" content="2019-11-04T06:40:10.500Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell --- Basci Usage">
-<meta name="twitter:description" content="Shell — Basci Usage">
+<meta name="twitter:title" content="Shell简易用法">
+<meta name="twitter:description" content="定义变量、模板解析、IO重定向…">
 
 
 
@@ -46,7 +46,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -89,15 +89,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -119,7 +119,7 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            Shell --- Basci Usage
+            Shell简易用法
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -136,13 +136,13 @@
         <span class="column is-narrow">
             
             
-            6 分钟 lesen (Über 963 Wörter)
+            6 分钟 读完 (约 974 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>Shell — Basci Usage<br><a id="more"></a></p>
+        <p>定义变量、模板解析、IO重定向…<br><a id="more"></a></p>
 <p><code>shell</code>是一个用c写的程序，它既是一种命令解释器，同时也是一个程序语言。以下命令可以查看当前Linux装了什么Shell</p>
 <figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$SHELL</span>  <span class="hljs-comment">#查看当前使用的Shell</span></span><br><span class="line">cat /etc/shells <span class="hljs-comment">#一共装了哪些Shell</span></span><br></pre></td></tr></table></figure>
 
@@ -267,13 +267,6 @@
 </article>
 
 
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
-
 
 
     </div>
@@ -378,69 +371,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -454,7 +384,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -466,11 +396,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

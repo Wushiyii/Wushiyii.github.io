@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://docs.docker.com/get-started/images/app-in-browser-swarm.png">
 <meta property="og:image" content="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.289Z">
+<meta property="og:updated_time" content="2019-10-21T13:22:42.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker Get start(4)--Swarm">
 <meta name="twitter:description" content="Docker get start系列第四节教程">
@@ -49,7 +49,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -92,15 +92,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -139,7 +139,7 @@
         <span class="column is-narrow">
             
             
-            18 分钟 lesen (Über 2732 Wörter)
+            18 分钟 读完 (约 2732 字)
         </span>
         
     </div>
@@ -159,30 +159,47 @@
 <li>单击创建<code>外部</code>类型的虚拟网络交换机</li>
 <li>设置名称<code>myswitch</code>，并选中<code>外部网络</code>选择框</li>
 </ol>
-<p>现在，使用我们的节点管理工具 <code>docker-machine</code> 创建几个虚拟主机:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> myvm1</span><br><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> myvm2</span><br></pre></td></tr></table></figure></p>
-<p>如果出现本地无法使用，不能识别版本号之类的，可以使用如下命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create --driver hyperv --hyperv-virtual-switch <span class="string">"myswitch"</span> --hyperv-boot2docker-url file://C:/Users/User_name/.docker/machine/machines/dev/boot2docker.iso myvm1</span><br></pre></td></tr></table></figure></p>
+<p>现在，使用我们的节点管理工具 <code>docker-machine</code> 创建几个虚拟主机:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="hljs-string">"myswitch"</span> myvm1</span><br><span class="line">docker-machine create -d hyperv --hyperv-virtual-switch <span class="hljs-string">"myswitch"</span> myvm2</span><br></pre></td></tr></table></figure>
+
+<p>如果出现本地无法使用，不能识别版本号之类的，可以使用如下命令:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine create --driver hyperv --hyperv-virtual-switch <span class="hljs-string">"myswitch"</span> --hyperv-boot2docker-url file://C:/Users/User_name/.docker/machine/machines/dev/boot2docker.iso myvm1</span><br></pre></td></tr></table></figure>
+
 <p>其中<code>boot2docker</code>的<a href="https://github.com/boot2docker/boot2docker/releases/download/v18.09.0/boot2docker.iso" target="_blank" rel="noopener">下载链接</a>.</p>
-<h5 id="列出虚拟机并获取它们的-IP-地址"><a href="#列出虚拟机并获取它们的-IP-地址" class="headerlink" title="列出虚拟机并获取它们的 IP 地址"></a>列出虚拟机并获取它们的 IP 地址</h5><p>现在已经创建了两个虚拟机，分别命名为<code>myvm1</code>和<code>myvm2</code>。<br>使用此命令列出机器并获取它们的 IP 地址。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL                         SWARM    DOCKER        ERRORS</span><br><span class="line">myvm1   -        virtualbox   Running   tcp://192.168.99.100:2376            v17.06.2-ce</span><br><span class="line">myvm2   -        virtualbox   Running   tcp://192.168.99.101:2376            v17.06.2-ce</span><br></pre></td></tr></table></figure></p>
-<h5 id="初始化集群并添加节点"><a href="#初始化集群并添加节点" class="headerlink" title="初始化集群并添加节点"></a>初始化集群并添加节点</h5><p>第一台主机扮演管理者的角色，执行管理命令并认证<code>worker</code>加入集群，第二台主机是<code>worker</code>。<br>可以使用<code>docker-machine ssh</code>将命令发送到你的虚拟机中。 命令<code>myvm1</code>成为一个带有 <code>docker swarm init</code>的 <code>swarm manager</code>，输出如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker swarm init --advertise-addr &lt;myvm1 ip&gt;&quot;</span><br><span class="line">Swarm initialized: current node &lt;node ID&gt; is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">  docker swarm join \</span><br><span class="line">  --token &lt;token&gt; \</span><br><span class="line">  &lt;myvm ip&gt;:&lt;port&gt;</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run &apos;docker swarm join-token manager&apos; and follow the instructions.</span><br></pre></td></tr></table></figure></p>
-<p>可以看见，<code>docker swarm init</code> 的响应包含一个预先配置的 <code>docker swarm join</code>命令，您可以在想要添加的任何节点上运行该命令。 复制这个命令，通过 <code>docker-machine ssh</code> 发送到 myvm2，让 myvm2作为一个<code>worker</code>加入你的 <code>swarm</code>集群:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm2 &quot;docker swarm join \</span><br><span class="line">--token &lt;token&gt; \</span><br><span class="line">&lt;ip&gt;:2377&quot;</span><br><span class="line"></span><br><span class="line">This node joined a swarm as a worker.</span><br></pre></td></tr></table></figure></p>
+<h5 id="列出虚拟机并获取它们的-IP-地址"><a href="#列出虚拟机并获取它们的-IP-地址" class="headerlink" title="列出虚拟机并获取它们的 IP 地址"></a>列出虚拟机并获取它们的 IP 地址</h5><p>现在已经创建了两个虚拟机，分别命名为<code>myvm1</code>和<code>myvm2</code>。<br>使用此命令列出机器并获取它们的 IP 地址。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL                         SWARM    DOCKER        ERRORS</span><br><span class="line">myvm1   -        virtualbox   Running   tcp://192.168.99.100:2376            v17.06.2-ce</span><br><span class="line">myvm2   -        virtualbox   Running   tcp://192.168.99.101:2376            v17.06.2-ce</span><br></pre></td></tr></table></figure>
+
+<h5 id="初始化集群并添加节点"><a href="#初始化集群并添加节点" class="headerlink" title="初始化集群并添加节点"></a>初始化集群并添加节点</h5><p>第一台主机扮演管理者的角色，执行管理命令并认证<code>worker</code>加入集群，第二台主机是<code>worker</code>。<br>可以使用<code>docker-machine ssh</code>将命令发送到你的虚拟机中。 命令<code>myvm1</code>成为一个带有 <code>docker swarm init</code>的 <code>swarm manager</code>，输出如下:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker swarm init --advertise-addr &lt;myvm1 ip&gt;&quot;</span><br><span class="line">Swarm initialized: current node &lt;node ID&gt; is now a manager.</span><br><span class="line"></span><br><span class="line">To add a worker to this swarm, run the following command:</span><br><span class="line"></span><br><span class="line">  docker swarm join \</span><br><span class="line">  --token &lt;token&gt; \</span><br><span class="line">  &lt;myvm ip&gt;:&lt;port&gt;</span><br><span class="line"></span><br><span class="line">To add a manager to this swarm, run &apos;docker swarm join-token manager&apos; and follow the instructions.</span><br></pre></td></tr></table></figure>
+
+<p>可以看见，<code>docker swarm init</code> 的响应包含一个预先配置的 <code>docker swarm join</code>命令，您可以在想要添加的任何节点上运行该命令。 复制这个命令，通过 <code>docker-machine ssh</code> 发送到 myvm2，让 myvm2作为一个<code>worker</code>加入你的 <code>swarm</code>集群:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm2 &quot;docker swarm join \</span><br><span class="line">--token &lt;token&gt; \</span><br><span class="line">&lt;ip&gt;:2377&quot;</span><br><span class="line"></span><br><span class="line">This node joined a swarm as a worker.</span><br></pre></td></tr></table></figure>
+
 <p><strong>注意</strong> ： 此处加入的端口不能与leader端口号相同，否则会报错。</p>
-<p>在管理器上运行<code>docker node ls</code>来查看这个集群中的节点:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker node ls&quot;</span><br><span class="line">            ID               HOSTNAME   STATUS  AVAILABILITY   MANAGER STATUS</span><br><span class="line">brtu9urxwfd5j0zrmkubhpkbd     myvm2     Ready      Active</span><br><span class="line">rihwohkh3ph38fhillhhb84sk *   myvm1     Ready      Active         Leader</span><br></pre></td></tr></table></figure></p>
+<p>在管理器上运行<code>docker node ls</code>来查看这个集群中的节点:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ssh myvm1 &quot;docker node ls&quot;</span><br><span class="line">            ID               HOSTNAME   STATUS  AVAILABILITY   MANAGER STATUS</span><br><span class="line">brtu9urxwfd5j0zrmkubhpkbd     myvm2     Ready      Active</span><br><span class="line">rihwohkh3ph38fhillhhb84sk *   myvm1     Ready      Active         Leader</span><br></pre></td></tr></table></figure>
+
 <p>如果你想重新开始，你可以在每个节点运行<code>docker swarm leave</code></p>
 <h3 id="将应用部署到Swarm集群中"><a href="#将应用部署到Swarm集群中" class="headerlink" title="将应用部署到Swarm集群中"></a>将应用部署到Swarm集群中</h3><p>困难的部分已经过去了。 现在只需重复教程第3部分中使用的在新的集群上部署的过程，只要记住，只有像 <code>myvm1</code>这样的<code>swarm manager</code>群管理器才能执行 <code>Docker</code> 命令; <code>worker</code>只是为了满足运算能力。</p>
 <h4 id="为Swarm-manager-集群管理器-配置一个-docker-machine-shell"><a href="#为Swarm-manager-集群管理器-配置一个-docker-machine-shell" class="headerlink" title="为Swarm manager(集群管理器)配置一个 docker-machine shell"></a>为Swarm manager(集群管理器)配置一个 <code>docker-machine shell</code></h4><p>到目前为止，我们一直在<code>docker-machine ssh</code>中加入 <code>Docker</code> 命令来与虚拟机交流。 另一种方式是运行<code>docker-machine env &lt;machine&gt;</code>，获取并运行一个命令，该命令将当前 shell 配置为与虚拟机上的<code>Docker</code> 守护进程联通。 这种方法在之后的实践效果更好，因为它允许使用本地的<code>docker-compose. yml</code>文件通过远程部署应用程序，而无需在任何地方复制它。<br>输入 <code>docker-machine env myvm1</code>，然后终端输出的最后一行复制、粘贴并运行，以配置当前<code>shell</code> 与 <code>myvm1(swarm manager)</code>联通。</p>
 <h5 id="Windows10下配置"><a href="#Windows10下配置" class="headerlink" title="Windows10下配置"></a>Windows10下配置</h5><ol>
 <li><p>运行 <code>docker-machine env myvm1</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\sam\sandbox\get-started&gt; docker-machine env myvm1</span><br><span class="line">$Env:DOCKER_TLS_VERIFY = &quot;1&quot;</span><br><span class="line">$Env:DOCKER_HOST = &quot;tcp://192.168.203.207:2376&quot;</span><br><span class="line">$Env:DOCKER_CERT_PATH = &quot;C:\Users\sam\.docker\machine\machines\myvm1&quot;</span><br><span class="line">$Env:DOCKER_MACHINE_NAME = &quot;myvm1&quot;</span><br><span class="line">$Env:COMPOSE_CONVERT_WINDOWS_PATHS = &quot;true&quot;</span><br><span class="line"># Run this command to configure your shell:</span><br><span class="line"># &amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\sam\sandbox\get-started&gt; docker-machine env myvm1</span><br><span class="line">$Env:DOCKER_TLS_VERIFY = &quot;1&quot;</span><br><span class="line">$Env:DOCKER_HOST = &quot;tcp://192.168.203.207:2376&quot;</span><br><span class="line">$Env:DOCKER_CERT_PATH = &quot;C:\Users\sam\.docker\machine\machines\myvm1&quot;</span><br><span class="line">$Env:DOCKER_MACHINE_NAME = &quot;myvm1&quot;</span><br><span class="line">$Env:COMPOSE_CONVERT_WINDOWS_PATHS = &quot;true&quot;</span><br><span class="line"># Run this command to configure your shell:</span><br><span class="line"># &amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行以下命令。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env myvm1 | Invoke-Expression</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行 <code>docker-machine ls</code>，以验证 <code>myvm1</code>是激活的主机，如其旁边的星号所示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:PATH&gt; docker-machine ls</span><br><span class="line">NAME  ACTIVE  DRIVER   STATE     URL                        SWARM   DOCKER       ERRORS</span><br><span class="line">myvm1 *       hyperv   Running   tcp://192.168.203.207:2376         v17.06.2-ce</span><br><span class="line">myvm2 -       hyperv   Running   tcp://192.168.200.181:2376         v17.06.2-ce</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:PATH&gt; docker-machine ls</span><br><span class="line">NAME  ACTIVE  DRIVER   STATE     URL                        SWARM   DOCKER       ERRORS</span><br><span class="line">myvm1 *       hyperv   Running   tcp://192.168.203.207:2376         v17.06.2-ce</span><br><span class="line">myvm2 -       hyperv   Running   tcp://192.168.200.181:2376         v17.06.2-ce</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
-<h4 id="在Swarm-manager集群管理器上部署应用"><a href="#在Swarm-manager集群管理器上部署应用" class="headerlink" title="在Swarm manager集群管理器上部署应用"></a>在Swarm manager集群管理器上部署应用</h4><p>现在有了 <code>myvm1</code>虚拟主机，你可以使用swarm manager的权力来部署应用，部署的语法与教程第3部分中一样，也使用<code>docker stack deploy</code>命令，与之前不同，在此环境下，可以使用<code>docker-compose.yml</code>文件，而不用去拷贝。命令可能几秒钟就能完成，而部署则需要更多的时间来生效。 在一个集群管理器上使用 <code>docker service ps &lt;service_name&gt;</code> 命令来验证所有的服务都被重新部署了。<br>我们可以通过<code>docker-machine shell</code> 配置连接到<code>myvm1</code>，并且仍然可以访问本地主机上的文件。 请确保当前位于与教程第三部分相同的目录，其中包括<code>docker-compose.yml</code> 。<br>和之前一样，在 <code>myvm1</code>上运行以下命令来部署应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure></p>
-<p>现在我们可以使用在第3部分中使用的相同的 docker 命令。 只有这一次注意到服务(及相关容器)已经在 <code>myvm1</code>和 <code>myvm2</code>之间进行了分发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker stack ps hellolab</span><br><span class="line"></span><br><span class="line">ID              NAME              IMAGE                 NODE    DESIRED STATE   CURRENT STATE               ERROR         PORTS</span><br><span class="line">n8b0m9hd1c3i    hellolab_web.1    wushiyi/hello:part1   myvm1   Running      Running about a minute ago             </span><br><span class="line">vn3onk3495ql    hellolab_web.2    wushiyi/hello:part1   myvm2   Running       Running about a minute ago             </span><br><span class="line">d6qx2aimpq4d    hellolab_web.3    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">zmnsrjk2u2qf    hellolab_web.4    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">8q78o9yenzy3    hellolab_web.5    wushiyi/hello:part1   myvm2   Running       Running about a minute ago</span><br></pre></td></tr></table></figure></p>
+<h4 id="在Swarm-manager集群管理器上部署应用"><a href="#在Swarm-manager集群管理器上部署应用" class="headerlink" title="在Swarm manager集群管理器上部署应用"></a>在Swarm manager集群管理器上部署应用</h4><p>现在有了 <code>myvm1</code>虚拟主机，你可以使用swarm manager的权力来部署应用，部署的语法与教程第3部分中一样，也使用<code>docker stack deploy</code>命令，与之前不同，在此环境下，可以使用<code>docker-compose.yml</code>文件，而不用去拷贝。命令可能几秒钟就能完成，而部署则需要更多的时间来生效。 在一个集群管理器上使用 <code>docker service ps &lt;service_name&gt;</code> 命令来验证所有的服务都被重新部署了。<br>我们可以通过<code>docker-machine shell</code> 配置连接到<code>myvm1</code>，并且仍然可以访问本地主机上的文件。 请确保当前位于与教程第三部分相同的目录，其中包括<code>docker-compose.yml</code> 。<br>和之前一样，在 <code>myvm1</code>上运行以下命令来部署应用。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure>
+
+<p>现在我们可以使用在第3部分中使用的相同的 docker 命令。 只有这一次注意到服务(及相关容器)已经在 <code>myvm1</code>和 <code>myvm2</code>之间进行了分发。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker stack ps hellolab</span><br><span class="line"></span><br><span class="line">ID              NAME              IMAGE                 NODE    DESIRED STATE   CURRENT STATE               ERROR         PORTS</span><br><span class="line">n8b0m9hd1c3i    hellolab_web.1    wushiyi/hello:part1   myvm1   Running      Running about a minute ago             </span><br><span class="line">vn3onk3495ql    hellolab_web.2    wushiyi/hello:part1   myvm2   Running       Running about a minute ago             </span><br><span class="line">d6qx2aimpq4d    hellolab_web.3    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">zmnsrjk2u2qf    hellolab_web.4    wushiyi/hello:part1   myvm1   Running       Running about a minute ago             </span><br><span class="line">8q78o9yenzy3    hellolab_web.5    wushiyi/hello:part1   myvm2   Running       Running about a minute ago</span><br></pre></td></tr></table></figure>
+
 <h4 id="访问集群"><a href="#访问集群" class="headerlink" title="访问集群"></a>访问集群</h4><p>可以通过 <code>myvm1</code>或 <code>myvm2</code>的 IP 地址访问你的应用程序。<br>我们创建的网络在这两个虚拟机与负载均衡之间共享。 运行<code>docker-machine ls</code>获取虚拟主机的 IP 地址，在浏览器上访问其中一个 IP 地址，点击刷新可以看到不同的ID。<br><img src="https://docs.docker.com/get-started/images/app-in-browser-swarm.png" alt="swarm"><br>有五个可能的容器 id 随机循环，说明了负载均衡。<br>这两个 IP 地址工作的原因是一个群中的节点参与进入路由网格。 这样可以确保部署在您的<code>swarm</code>内个端口的服务始终保留该端口，而不管实际运行容器的是在哪个节点。 下面是一个在端口8080上发布的<code>my-web</code>服务的路由网状结构:<br><img src="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png" alt="three-node"></p>
 <h4 id="迭代与扩展你的应用"><a href="#迭代与扩展你的应用" class="headerlink" title="迭代与扩展你的应用"></a>迭代与扩展你的应用</h4><p>从这里你可以做你在第二部分和第三部分中所学的一切。</p>
 <ul>
@@ -190,15 +207,23 @@
 <li>使用不同的应用，然后重新构建，并推送新的镜像。 (要做到这一点，按照之前构建应用程序和发布镜像的相同步骤进行操作)。</li>
 </ul>
 <p>在这两种情况下，只需再次运行 <code>docker stack deploy</code> 就可以部署这些更改。<br>可以使用与 <code>myvm2</code>上相同的<code>docker swarm join</code>命令，将物理的或虚拟的任何主机加入到这个群集中，并将容量添加到你的集群中。 只要运行<code>docker stack deploy</code> 就可以了，应用可以利用这些新资源。</p>
-<h4 id="清理和重启"><a href="#清理和重启" class="headerlink" title="清理和重启"></a>清理和重启</h4><h5 id="堆栈-Stack-与集群-Swarm"><a href="#堆栈-Stack-与集群-Swarm" class="headerlink" title="堆栈(Stack)与集群(Swarm)"></a>堆栈(Stack)与集群(Swarm)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack rm hellolab</span><br></pre></td></tr></table></figure>
-<p>运行<code>docker-machine ssh myvm2 &quot;docker swarm leave&quot;</code>使<code>myvm2</code>离开集群节点，运行<br><code>docker-machine ssh myvm1 &quot;docker swarm leave --force</code>使<code>swarm manager</code>关闭集群</p>
-<h5 id="取消设置docker-machine-shell"><a href="#取消设置docker-machine-shell" class="headerlink" title="取消设置docker-machine shell"></a>取消设置<code>docker-machine shell</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env -u | Invoke-Expression</span><br></pre></td></tr></table></figure>
-<p>这会断开<code>Docker</code>创建的虚拟机与<code>shell</code>的连接，并允许你继续在同一个 shell 中工作。</p>
-<h5 id="重启或删除-Docker上的主机"><a href="#重启或删除-Docker上的主机" class="headerlink" title="重启或删除 Docker上的主机"></a>重启或删除 <code>Docker</code>上的主机</h5><p>如果关闭了本地主机，<code>Docker</code> 主机将停止运行。 可以通过运行 <code>docker-machine ls</code> 来检查机器的状态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL   SWARM   DOCKER    ERRORS</span><br><span class="line">myvm1   -        virtualbox   Stopped                 Unknown</span><br><span class="line">myvm2   -        virtualbox   Stopped                 Unknown</span><br></pre></td></tr></table></figure></p>
-<p>要重新启动停止的主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine start &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
-<p>要删除主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine rm &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
-<p>要停止主机，运行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine stop &lt;machine-name&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="清理和重启"><a href="#清理和重启" class="headerlink" title="清理和重启"></a>清理和重启</h4><h5 id="堆栈-Stack-与集群-Swarm"><a href="#堆栈-Stack-与集群-Swarm" class="headerlink" title="堆栈(Stack)与集群(Swarm)"></a>堆栈(Stack)与集群(Swarm)</h5><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stack rm hellolab</span><br></pre></td></tr></table></figure>
 
+<p>运行<code>docker-machine ssh myvm2 &quot;docker swarm leave&quot;</code>使<code>myvm2</code>离开集群节点，运行<br><code>docker-machine ssh myvm1 &quot;docker swarm leave --force</code>使<code>swarm manager</code>关闭集群</p>
+<h5 id="取消设置docker-machine-shell"><a href="#取消设置docker-machine-shell" class="headerlink" title="取消设置docker-machine shell"></a>取消设置<code>docker-machine shell</code></h5><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp; &quot;C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe&quot; env -u | Invoke-Expression</span><br></pre></td></tr></table></figure>
+
+<p>这会断开<code>Docker</code>创建的虚拟机与<code>shell</code>的连接，并允许你继续在同一个 shell 中工作。</p>
+<h5 id="重启或删除-Docker上的主机"><a href="#重启或删除-Docker上的主机" class="headerlink" title="重启或删除 Docker上的主机"></a>重启或删除 <code>Docker</code>上的主机</h5><p>如果关闭了本地主机，<code>Docker</code> 主机将停止运行。 可以通过运行 <code>docker-machine ls</code> 来检查机器的状态。 </p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-machine ls</span><br><span class="line">NAME    ACTIVE   DRIVER       STATE     URL   SWARM   DOCKER    ERRORS</span><br><span class="line">myvm1   -        virtualbox   Stopped                 Unknown</span><br><span class="line">myvm2   -        virtualbox   Stopped                 Unknown</span><br></pre></td></tr></table></figure>
+
+<p>要重新启动停止的主机，运行:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine start &lt;machine-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>要删除主机，运行:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine rm &lt;machine-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>要停止主机，运行:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine stop &lt;machine-name&gt;</span><br></pre></td></tr></table></figure>
     
     </div>
     
@@ -232,13 +257,6 @@
     
 </article>
 
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
 
 
 
@@ -344,69 +362,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -420,7 +375,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -432,11 +387,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

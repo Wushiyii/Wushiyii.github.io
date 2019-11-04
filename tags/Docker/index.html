@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-<title>Tag: Docker - Blog</title>
+<title>标签: Docker - Blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -45,7 +45,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -88,15 +88,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -143,7 +143,7 @@
         <span class="column is-narrow">
             
             
-            9 分钟 lesen (Über 1336 Wörter)
+            9 分钟 读完 (约 1336 字)
         </span>
         
     </div>
@@ -153,7 +153,8 @@
 <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在教程第4部分中，我们学习了如何建立一个运行<code>Docker</code>的主机集群，并将一个应用部署到它上面，在多台机器上一起运行容器。<br>在第5部分中，您将到达分布式应用程序层次结构的顶端: <code>Stack</code>(堆栈)。 堆栈是一组共享依赖项的相关服务，可以对它们进行编排和扩展。 单个堆栈能够定义和协调整个应用程序的功能。<br>从第3部分开始，创建 <code>Compose</code>文件并使用<code>docker stack deplou</code>时，我们已经开始使用栈了。 但这是在单个主机上运行的单个服务堆栈，这通常不会在生产环境中发生。 在这一节，我们可以利用所学到的知识，使多个服务彼此关联，并在多台机器上运行它们。</p>
 <h3 id="添加新服务并重新部署"><a href="#添加新服务并重新部署" class="headerlink" title="添加新服务并重新部署"></a>添加新服务并重新部署</h3><p>将服务添加到<code>docker-compose.yml</code> 中很容易。 首先，让我们添加一个免费的可视化<code>docker</code>服务，让我们看看集群是如何调度容器的。</p>
 <ol>
-<li>打开 <code>docker-compose.yml</code>文件， 在编辑器中将其内容替换为以下内容。 确保将 <code>username / repo: tag</code> 替换为你在<code>Docker Hub</code>上传的镜像。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    # replace username/repo:tag with your name and image details</span><br><span class="line">    image: username/repo:tag</span><br><span class="line">    deploy:</span><br><span class="line">      replicas: 5</span><br><span class="line">      restart_policy:</span><br><span class="line">        condition: on-failure</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: &quot;0.1&quot;</span><br><span class="line">          memory: 50M</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  visualizer:</span><br><span class="line">    image: dockersamples/visualizer:stable</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8080:8080&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;</span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">networks:</span><br><span class="line">  webnet:</span><br></pre></td></tr></table></figure>
+<li>打开 <code>docker-compose.yml</code>文件， 在编辑器中将其内容替换为以下内容。 确保将 <code>username / repo: tag</code> 替换为你在<code>Docker Hub</code>上传的镜像。<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3&quot;</span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    # replace username/repo:tag with your name and image details</span><br><span class="line">    image: username/repo:tag</span><br><span class="line">    deploy:</span><br><span class="line">      replicas: 5</span><br><span class="line">      restart_policy:</span><br><span class="line">        condition: on-failure</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: &quot;0.1&quot;</span><br><span class="line">          memory: 50M</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  visualizer:</span><br><span class="line">    image: dockersamples/visualizer:stable</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8080:8080&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;</span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">networks:</span><br><span class="line">  webnet:</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <p>这里唯一的新知识是对等网络服务，名为<code>visualizer</code>。 注意这里有两个新的东西: 一个<code>volumes</code>关键字，让<code>visualizer</code>访问主机上<code>Docker</code> 的Socket文件，和一个<code>placement</code>关键字，确保这个服务只在一个群管理器上运行—- 绝不是一个<code>worker</code>。</p>
@@ -166,7 +167,8 @@
 <p><code>Visualizer</code>是一个独立的服务，可以在任何包含它的应用程序堆栈中运行。 它不依赖于任何其他东西。 现在让我们创建一个具有依赖性的服务: 提供访问者计数器的<code>Redis</code>服务。</p>
 <h3 id="持久化数据"><a href="#持久化数据" class="headerlink" title="持久化数据"></a>持久化数据</h3><p>让我们再次进行相同的工作流程，添加一个用于存储应用数据的<code>Redis</code>数据库。</p>
 <ol>
-<li>保存下方的 <code>docker-compose.yml</code> 文件，它添加了一个<code>Redis</code> 服务。 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">version: <span class="string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    <span class="comment"># replace username/repo:tag with your name and image details</span></span><br><span class="line">    image: username/repo:tag</span><br><span class="line">    deploy:</span><br><span class="line">      replicas: 5</span><br><span class="line">      restart_policy:</span><br><span class="line">        condition: on-failure</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: <span class="string">"0.1"</span></span><br><span class="line">          memory: 50M</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">"80:80"</span></span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  visualizer:</span><br><span class="line">    image: dockersamples/visualizer:stable</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">"8080:8080"</span></span><br><span class="line">    volumes:</span><br><span class="line">      - <span class="string">"/var/run/docker.sock:/var/run/docker.sock"</span></span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  redis:</span><br><span class="line">    image: redis</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">"6379:6379"</span></span><br><span class="line">    volumes:</span><br><span class="line">      - <span class="string">"/home/docker/data:/data"</span></span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    <span class="built_in">command</span>: redis-server --appendonly yes</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">networks:</span><br><span class="line">  webnet:</span><br></pre></td></tr></table></figure>
+<li>保存下方的 <code>docker-compose.yml</code> 文件，它添加了一个<code>Redis</code> 服务。 <figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">version: <span class="hljs-string">"3"</span></span><br><span class="line">services:</span><br><span class="line">  web:</span><br><span class="line">    <span class="hljs-comment"># replace username/repo:tag with your name and image details</span></span><br><span class="line">    image: username/repo:tag</span><br><span class="line">    deploy:</span><br><span class="line">      replicas: 5</span><br><span class="line">      restart_policy:</span><br><span class="line">        condition: on-failure</span><br><span class="line">      resources:</span><br><span class="line">        limits:</span><br><span class="line">          cpus: <span class="hljs-string">"0.1"</span></span><br><span class="line">          memory: 50M</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="hljs-string">"80:80"</span></span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  visualizer:</span><br><span class="line">    image: dockersamples/visualizer:stable</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="hljs-string">"8080:8080"</span></span><br><span class="line">    volumes:</span><br><span class="line">      - <span class="hljs-string">"/var/run/docker.sock:/var/run/docker.sock"</span></span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">  redis:</span><br><span class="line">    image: redis</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="hljs-string">"6379:6379"</span></span><br><span class="line">    volumes:</span><br><span class="line">      - <span class="hljs-string">"/home/docker/data:/data"</span></span><br><span class="line">    deploy:</span><br><span class="line">      placement:</span><br><span class="line">        constraints: [node.role == manager]</span><br><span class="line">    <span class="hljs-built_in">command</span>: redis-server --appendonly yes</span><br><span class="line">    networks:</span><br><span class="line">      - webnet</span><br><span class="line">networks:</span><br><span class="line">  webnet:</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 <p><code>Redis</code>在 <code>Docker</code>库中有一个正式的镜像，并且镜像名称很短—-<code>redis</code>，所以这里没有<code>username/ repo</code>标记。 <code>Redis</code> 端口，6379，已经被 <code>Redis</code> 预先配置为从容器暴露到主机，在我们的 Compose 文件中，我们公开它从主机到外网，所以你可以实际输入任何节点的 IP 到 <code>Redis</code> 桌面管理器，并管理这<code>Redis</code> 实例。<br>最重要的是，<code>redis</code> 规范中有一些东西可以让数据在这个堆栈的部署之间保持持久性:</p>
@@ -177,12 +179,12 @@
 <p>并且，这将在主机的物理文件系统中为 Redis 数据创建一个”真实源”。 如果没有它，Redis 就会将它的数据存储在容器文件系统的<code>/ data</code>目录中，如果容器被重新部署，这些数据就会被清除。</p>
 <ol start="2">
 <li><p>创建一个节点管理器的<code>/ data</code> 目录:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh myvm1 &quot;mkdir ./data&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-machine ssh myvm1 &quot;mkdir ./data&quot;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>确保当前 <code>shell</code>被配置为与 <code>myvm1</code>联通</p>
 </li>
 <li><p>再次运行<code>docker stack deploy</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker stack deploy -c docker-compose.yml hellolab</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行 <code>docker service ls</code>来验证这三个服务是否按预期的方式运行。</p>
 </li>
@@ -223,15 +225,15 @@
         <span class="column is-narrow">
             
             
-            18 分钟 lesen (Über 2732 Wörter)
+            18 分钟 读完 (约 2732 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p> Docker get start系列第四节教程<br>
-        </p><p class="article-more-link">
-            <a href="/2018/11/21/Docker/Docker-get-start(4)--swarm/#more">mehr</a>
+        <p> Docker get start系列第四节教程<br></p>
+        <p class="article-more-link">
+            <a href="/2018/11/21/Docker/Docker-get-start(4)--swarm/#more">阅读更多</a>
         </p>
     
     </div>
@@ -263,15 +265,15 @@
         <span class="column is-narrow">
             
             
-            9 分钟 lesen (Über 1283 Wörter)
+            9 分钟 读完 (约 1283 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>Docker中的服务<br>
-        </p><p class="article-more-link">
-            <a href="/2018/11/20/Docker/Docker-get-start(3)--service/#more">mehr</a>
+        <p>Docker中的服务<br></p>
+        <p class="article-more-link">
+            <a href="/2018/11/20/Docker/Docker-get-start(3)--service/#more">阅读更多</a>
         </p>
     
     </div>
@@ -303,15 +305,15 @@
         <span class="column is-narrow">
             
             
-            12 分钟 lesen (Über 1745 Wörter)
+            12 分钟 读完 (约 1745 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>何为容器？<br>
-        </p><p class="article-more-link">
-            <a href="/2018/11/19/Docker/Docker-get-start(2)--container/#more">mehr</a>
+        <p>何为容器？<br></p>
+        <p class="article-more-link">
+            <a href="/2018/11/19/Docker/Docker-get-start(2)--container/#more">阅读更多</a>
         </p>
     
     </div>
@@ -343,7 +345,7 @@
         <span class="column is-narrow">
             
             
-            5 分钟 lesen (Über 705 Wörter)
+            5 分钟 读完 (约 705 字)
         </span>
         
     </div>
@@ -351,7 +353,7 @@
     
         <p>Docker的简介与基本命令<br></p>
         <p class="article-more-link">
-            <a href="/2018/11/19/Docker/Docker-get-start(1)--简介/#more">mehr</a>
+            <a href="/2018/11/19/Docker/Docker-get-start(1)--简介/#more">阅读更多</a>
         </p>
     
     </div>
@@ -466,69 +468,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -542,7 +481,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -554,11 +493,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

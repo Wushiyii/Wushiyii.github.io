@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/exchanges.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/bindings.png">
 <meta property="og:image" content="http://www.rabbitmq.com/img/tutorials/python-three-overall.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.295Z">
+<meta property="og:updated_time" content="2019-10-21T13:22:42.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Rabbit tutorial-three">
 <meta name="twitter:description" content="RabbitMQ入门教程系列—（3）">
@@ -50,7 +50,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -93,15 +93,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -140,7 +140,7 @@
         <span class="column is-narrow">
             
             
-            12 分钟 lesen (Über 1864 Wörter)
+            12 分钟 读完 (约 1864 字)
         </span>
         
     </div>
@@ -161,23 +161,28 @@
 </ul>
 <p><code>RabbitMQ</code>中消息传递模型的核心思想是:生产者从不直接向队列发送任何消息, 实际上,生产者甚至根本不知道消息是否会被传递到任何队列。</p>
 <p>相反，生产者只能向交换器( <code>exchange</code> )发送消息。 交换是一件非常简单的事情, 它一边接收来自生产者的消息，另一边将消息推送到队列。 交换机必须确切地知道如何处理它收到的消息—- 它是否应该附加到特定的队列中？ 它是否应该附加到全部队列中？ 还是应该被抛弃。 其规则由交换器类型( <code>exchange type</code> )定义。<br><img src="http://www.rabbitmq.com/img/tutorials/exchanges.png" alt="exchange"></p>
-<p><code>RabbitMQ</code>提供了几种交换器类型: 直接类型( <code>direct</code> )、主题类型( <code>topic</code> )、页眉类型( <code>headers</code> )和扇出类型( <code>fanout</code> )。 我们将把重点放在最后一个—-扇出类型。 让我们创建一个这种类型的交换，并命名为<code>logs</code>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="string">"logs"</span>, <span class="string">"fanout"</span>);</span><br></pre></td></tr></table></figure></p>
+<p><code>RabbitMQ</code>提供了几种交换器类型: 直接类型( <code>direct</code> )、主题类型( <code>topic</code> )、页眉类型( <code>headers</code> )和扇出类型( <code>fanout</code> )。 我们将把重点放在最后一个—-扇出类型。 让我们创建一个这种类型的交换，并命名为<code>logs</code>:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.exchangeDeclare(<span class="hljs-string">"logs"</span>, <span class="hljs-string">"fanout"</span>);</span><br></pre></td></tr></table></figure>
+
 <p>扇出交换非常简单,正如你可能从名称中猜到的那样，它只是将收到的所有消息传播到它所知道的所有队列—-而这正是我们的<code>logger</code>所需要的。 </p>
 <blockquote>
 <p><strong>列出所有 Exchanges</strong></p>
 <p>要列出服务器上的交换器，你可以运行曾经有用的 rabbitmqctl:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; sudo rabbitmqctl list_exchanges</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; sudo rabbitmqctl list_exchanges</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
 <p>在这个列表中将有一些名称为 <code>amq.*</code>的<code>Exchanges</code>和默认交换器(未命名)。这些都是默认创建的，但目前不太可能需要使用它们。</p>
 <p><strong>无名称的 Exchanges</strong></p>
 <p>在本教程的前几部分中，我们对交换器一无所知，但仍然能够将消息发送到队列。 这是可能的，因为我们使用的是默认交换，我们通过空字符串(“”)来标识它。</p>
-<p>我们以前是怎么发布消息的:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; channel.basicPublish(<span class="string">""</span>, <span class="string">"hello"</span>, <span class="keyword">null</span>, message.getBytes());</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>我们以前是怎么发布消息的:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; channel.basicPublish(<span class="hljs-string">""</span>, <span class="hljs-string">"hello"</span>, <span class="hljs-keyword">null</span>, message.getBytes());</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <blockquote>
 <p>第一个参数是交换的名称；第二个参数为空字符串，表示使用默认交换或无名称交换: 消息被路由到指定的 <code>routingKey</code> 队列中。</p>
 </blockquote>
-<p>现在，我们可以发布到指定名称的交换器了:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish( <span class="string">"logs"</span>, <span class="string">""</span>, <span class="keyword">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure></p>
+<p>现在，我们可以发布到指定名称的交换器了:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish( <span class="hljs-string">"logs"</span>, <span class="hljs-string">""</span>, <span class="hljs-keyword">null</span>, message.getBytes());</span><br></pre></td></tr></table></figure>
+
 <h4 id="临时队列-Temporary-queues"><a href="#临时队列-Temporary-queues" class="headerlink" title="临时队列 (Temporary queues)"></a>临时队列 (Temporary queues)</h4><p>你可能还记得，在前面的教程里，我们使用了具有特定名称的队列(还记得<code>hello</code>和 <code>task queue</code>吗?) . 能够命名一个队列对我们来说至关重要—-我们需要将工作队列指向同一个队列。 当您希望在生产者和使用者之间共享队列时，为队列赋予一个名称非常重要。</p>
 <p>但是对于我们的<code>logger</code>来说，情况并非如此。 我们希望看到所有的日志信息，而不仅仅是其中的一个部分。 我们也只对当前信息流感兴趣，而不是旧的信息。 要解决这个问题，我们需要两样东西。</p>
 <ul>
@@ -186,19 +191,28 @@
 <li><p>其次，一旦我们断开消费者的连接，队列应该被自动删除。</p>
 </li>
 </ul>
-<p>在 <code>Java</code>中，当我们不向 <code>queueDeclare ()</code>提供任何参数时，我们就创建了一个非持久的、独占的、自动删除的队列，队列名称可以这样获得:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String queueName = channel.queueDeclare().getQueue();</span><br></pre></td></tr></table></figure></p>
+<p>在 <code>Java</code>中，当我们不向 <code>queueDeclare ()</code>提供任何参数时，我们就创建了一个非持久的、独占的、自动删除的队列，队列名称可以这样获得:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String queueName = channel.queueDeclare().getQueue();</span><br></pre></td></tr></table></figure>
+
 <p>此时 <code>queueName</code> 包含随机队列名,它可能看起来像 <code>amq.gen-jzty20brgko-hjmuj0wlg。</code></p>
 <h4 id="绑定-（Bindings）"><a href="#绑定-（Bindings）" class="headerlink" title="绑定 （Bindings）"></a>绑定 （Bindings）</h4><p><img src="http://www.rabbitmq.com/img/tutorials/bindings.png" alt="bingding"></p>
-<p>我们已经创建了扇出交换( <code>fanout</code> )和队列 (<code>queue</code>) 。 现在我们需要告诉交换器将消息发送到我们的队列,交换器和队列之间的关系称为<strong>绑定</strong>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, <span class="string">"logs"</span>, <span class="string">""</span>);</span><br></pre></td></tr></table></figure></p>
+<p>我们已经创建了扇出交换( <code>fanout</code> )和队列 (<code>queue</code>) 。 现在我们需要告诉交换器将消息发送到我们的队列,交换器和队列之间的关系称为<strong>绑定</strong>。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName, <span class="hljs-string">"logs"</span>, <span class="hljs-string">""</span>);</span><br></pre></td></tr></table></figure>
+
 <p>从现在起，日志交换器将向我们的队列追加消息。</p>
 <blockquote>
-<p>列出所有绑定( <code>bindings</code> )<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; rabbitmqctl list_bindings</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>列出所有绑定( <code>bindings</code> )</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; rabbitmqctl list_bindings</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <h4 id="将以上步骤聚合"><a href="#将以上步骤聚合" class="headerlink" title="将以上步骤聚合"></a>将以上步骤聚合</h4><p><img src="http://www.rabbitmq.com/img/tutorials/python-three-overall.png" alt="together"></p>
-<p>生产者程序发出(<code>emit</code>)日志信息，看起来和上一个教程没有什么不同。 最重要的变化是，我们现在想要将消息发布到<code>log</code>交换器中，而不是发布无名消息。 我们需要在发送时提供一个 <code>routingKey</code>，但是对于扇出交换器它的值被忽略。 下面是 <code>EmitLog.java</code>程序的代码:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmitLog</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXCHANGE_NAME = <span class="string">"logs"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span></span></span><br><span class="line"><span class="function">                  <span class="keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">        Connection connection = factory.newConnection();</span><br><span class="line">        Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">        channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"fanout"</span>);</span><br><span class="line"></span><br><span class="line">        String message = getMessage(argv);</span><br><span class="line"></span><br><span class="line">        channel.basicPublish(EXCHANGE_NAME, <span class="string">""</span>, <span class="keyword">null</span>, message.getBytes());</span><br><span class="line">        System.out.println(<span class="string">" [x] Sent '"</span> + message + <span class="string">"'"</span>);</span><br><span class="line"></span><br><span class="line">        channel.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>生产者程序发出(<code>emit</code>)日志信息，看起来和上一个教程没有什么不同。 最重要的变化是，我们现在想要将消息发布到<code>log</code>交换器中，而不是发布无名消息。 我们需要在发送时提供一个 <code>routingKey</code>，但是对于扇出交换器它的值被忽略。 下面是 <code>EmitLog.java</code>程序的代码:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.ConnectionFactory;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Connection;</span><br><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.Channel;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EmitLog</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String EXCHANGE_NAME = <span class="hljs-string">"logs"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span></span></span><br><span class="line"><span class="hljs-function">                  <span class="hljs-keyword">throws</span> java.io.IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">        factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">        Connection connection = factory.newConnection();</span><br><span class="line">        Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">        channel.exchangeDeclare(EXCHANGE_NAME, <span class="hljs-string">"fanout"</span>);</span><br><span class="line"></span><br><span class="line">        String message = getMessage(argv);</span><br><span class="line"></span><br><span class="line">        channel.basicPublish(EXCHANGE_NAME, <span class="hljs-string">""</span>, <span class="hljs-keyword">null</span>, message.getBytes());</span><br><span class="line">        System.out.println(<span class="hljs-string">" [x] Sent '"</span> + message + <span class="hljs-string">"'"</span>);</span><br><span class="line"></span><br><span class="line">        channel.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如你所见，在建立连接后，我们宣布交换。 这一步是必要的，因为发布到不存在的交换是被禁止的。</p>
 <p>如果还没有队列绑定到交换器，消息将丢失，但这对我们来说是可以的; 如果还没有消费者在监听，我们可以安全地丢弃消息。</p>
-<p>以下是 <code>ReceiveLogs.java</code> :<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReceiveLogs</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EXCHANGE_NAME = <span class="string">"logs"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] argv)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.exchangeDeclare(EXCHANGE_NAME, <span class="string">"fanout"</span>);</span><br><span class="line">    String queueName = channel.queueDeclare().getQueue();</span><br><span class="line">    channel.queueBind(queueName, EXCHANGE_NAME, <span class="string">""</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line"></span><br><span class="line">    Consumer consumer = <span class="keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDelivery</span><span class="params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 AMQP.BasicProperties properties, <span class="keyword">byte</span>[] body)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String message = <span class="keyword">new</span> String(body, <span class="string">"UTF-8"</span>);</span><br><span class="line">        System.out.println(<span class="string">" [x] Received '"</span> + message + <span class="string">"'"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel.basicConsume(queueName, <span class="keyword">true</span>, consumer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以下是 <code>ReceiveLogs.java</code> :</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> com.rabbitmq.client.*;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReceiveLogs</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String EXCHANGE_NAME = <span class="hljs-string">"logs"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] argv)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ConnectionFactory factory = <span class="hljs-keyword">new</span> ConnectionFactory();</span><br><span class="line">    factory.setHost(<span class="hljs-string">"localhost"</span>);</span><br><span class="line">    Connection connection = factory.newConnection();</span><br><span class="line">    Channel channel = connection.createChannel();</span><br><span class="line"></span><br><span class="line">    channel.exchangeDeclare(EXCHANGE_NAME, <span class="hljs-string">"fanout"</span>);</span><br><span class="line">    String queueName = channel.queueDeclare().getQueue();</span><br><span class="line">    channel.queueBind(queueName, EXCHANGE_NAME, <span class="hljs-string">""</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="hljs-string">" [*] Waiting for messages. To exit press CTRL+C"</span>);</span><br><span class="line"></span><br><span class="line">    Consumer consumer = <span class="hljs-keyword">new</span> DefaultConsumer(channel) &#123;</span><br><span class="line">      <span class="hljs-meta">@Override</span></span><br><span class="line">      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">handleDelivery</span><span class="hljs-params">(String consumerTag, Envelope envelope,</span></span></span><br><span class="line"><span class="hljs-function"><span class="hljs-params">                                 AMQP.BasicProperties properties, <span class="hljs-keyword">byte</span>[] body)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String message = <span class="hljs-keyword">new</span> String(body, <span class="hljs-string">"UTF-8"</span>);</span><br><span class="line">        System.out.println(<span class="hljs-string">" [x] Received '"</span> + message + <span class="hljs-string">"'"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel.basicConsume(queueName, <span class="hljs-keyword">true</span>, consumer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>本教程全文翻译自 <code>http://www.rabbitmq.com/tutorials/tutorial-three-java.html</code></p>
 </blockquote>
@@ -232,13 +246,6 @@
     
 </article>
 
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
 
 
 
@@ -344,69 +351,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -420,7 +364,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -432,11 +376,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };

@@ -27,7 +27,7 @@
 <meta property="og:description" content="何为容器？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://docs.docker.com/get-started/images/app-in-browser.png">
-<meta property="og:updated_time" content="2019-09-24T02:25:20.289Z">
+<meta property="og:updated_time" content="2019-10-21T13:22:42.264Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker Get start(2)---Container">
 <meta name="twitter:description" content="何为容器？">
@@ -48,7 +48,7 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -91,15 +91,15 @@
         
         <div class="navbar-menu navbar-start">
             
-            <a class="navbar-item " href="/archives">Archives</a>
+            <a class="navbar-item " href="/archives">归档</a>
             
-            <a class="navbar-item " href="/about">About</a>
+            <a class="navbar-item " href="/about">关于</a>
             
         </div>
         
         <div class="navbar-menu navbar-end">
             
-            <a class="navbar-item search" title="Suche" href="javascript:;">
+            <a class="navbar-item search" title="搜索" href="javascript:;">
                 <i class="fas fa-search"></i>
             </a>
             
@@ -138,7 +138,7 @@
         <span class="column is-narrow">
             
             
-            12 分钟 lesen (Über 1745 Wörter)
+            12 分钟 读完 (约 1745 字)
         </span>
         
     </div>
@@ -153,29 +153,51 @@
 </ul>
 <h4 id="不需要为开发环境烦恼"><a href="#不需要为开发环境烦恼" class="headerlink" title="不需要为开发环境烦恼"></a>不需要为开发环境烦恼</h4><p>在过去，如果你要写一个 Python web，得在PC上装好<code>python</code>语言包、<code>flask</code>、<code>redis</code>、<code>SQL</code>… 环境又多又不好配置，应用程序想要按照预期运行，还需要与你的生产环境相匹配。<br>使用<strong>Docker</strong>，你pull到一个可移植的 <code>Python</code>镜像，不需要再安装一堆环境。在此Docker环境中构建<code>python</code>程序，可以确保<code>python</code>程序与环境的依赖关系能够按预期运行。</p>
 <h4 id="使用DockerFile-定义一个容器"><a href="#使用DockerFile-定义一个容器" class="headerlink" title="使用DockerFile 定义一个容器"></a>使用DockerFile 定义一个容器</h4><p><code>Dockerfile</code> 定义了在容器内部的环境中进行的操作。 对网络和I/O等资源的访问是在这个容器中进行虚拟化的，容器本身与系统是隔离的，所以还需将端口映射到外网，并在<code>DockerFile</code>中具体说明希望pull到该容器的文件。 并且，有了<code>Dockerfile</code>文件，可以在任何PC上创建同一个环境的容器，而应用程序的在此环境中的运行都完全相同。</p>
-<h5 id="DockerFile-sample"><a href="#DockerFile-sample" class="headerlink" title="DockerFile sample"></a>DockerFile sample</h5><p>新建一个空文件，重命名为<code>DockerFile</code>,不要有后缀名<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用python2.7作为父容器</span></span><br><span class="line"><span class="keyword">FROM</span> python:<span class="number">2.7</span>-slim</span><br><span class="line"><span class="comment"># 设置工作路径</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /app</span></span><br><span class="line"><span class="comment"># 复制当前文档下的文件到/app下</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . /app</span></span><br><span class="line"><span class="comment"># 安装requirements.txt中定义的环境</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install --trusted-host pypi.python.org -r requirements.txt</span></span><br><span class="line"><span class="comment"># 对外部开放80端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"><span class="comment"># 定义容器名称</span></span><br><span class="line"><span class="keyword">ENV</span> NAME World</span><br><span class="line"><span class="comment"># 设置容器启动命令</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"python"</span>, <span class="string">"app.py"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="DockerFile-sample"><a href="#DockerFile-sample" class="headerlink" title="DockerFile sample"></a>DockerFile sample</h5><p>新建一个空文件，重命名为<code>DockerFile</code>,不要有后缀名</p>
+<figure class="highlight dockerfile hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 使用python2.7作为父容器</span></span><br><span class="line"><span class="hljs-keyword">FROM</span> python:<span class="hljs-number">2.7</span>-slim</span><br><span class="line"><span class="hljs-comment"># 设置工作路径</span></span><br><span class="line"><span class="hljs-keyword">WORKDIR</span><span class="hljs-bash"> /app</span></span><br><span class="line"><span class="hljs-comment"># 复制当前文档下的文件到/app下</span></span><br><span class="line"><span class="hljs-keyword">COPY</span><span class="hljs-bash"> . /app</span></span><br><span class="line"><span class="hljs-comment"># 安装requirements.txt中定义的环境</span></span><br><span class="line"><span class="hljs-keyword">RUN</span><span class="hljs-bash"> pip install --trusted-host pypi.python.org -r requirements.txt</span></span><br><span class="line"><span class="hljs-comment"># 对外部开放80端口</span></span><br><span class="line"><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">80</span></span><br><span class="line"><span class="hljs-comment"># 定义容器名称</span></span><br><span class="line"><span class="hljs-keyword">ENV</span> NAME World</span><br><span class="line"><span class="hljs-comment"># 设置容器启动命令</span></span><br><span class="line"><span class="hljs-keyword">CMD</span><span class="hljs-bash"> [<span class="hljs-string">"python"</span>, <span class="hljs-string">"app.py"</span>]</span></span><br></pre></td></tr></table></figure>
+
 <p>再创建两个文件<code>requirements.txt</code> 和<code>app.py</code>，并将它们与 <code>Dockerfile</code> 放在同一个文件夹中。 这就完成了我们的应用程序，正如你看到的，非常简单。</p>
-<h5 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a>requirements.txt</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Flask</span><br><span class="line">Redis</span><br></pre></td></tr></table></figure>
-<h5 id="app-py"><a href="#app-py" class="headerlink" title="app.py"></a>app.py</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis, RedisError</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to Redis</span></span><br><span class="line">redis = Redis(host=<span class="string">"redis"</span>, db=<span class="number">0</span>, socket_connect_timeout=<span class="number">2</span>, socket_timeout=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        visits = redis.incr(<span class="string">"counter"</span>)</span><br><span class="line">    <span class="keyword">except</span> RedisError:</span><br><span class="line">        visits = <span class="string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span></span><br><span class="line"></span><br><span class="line">    html = <span class="string">"&lt;h3&gt;Hello &#123;name&#125;!&lt;/h3&gt;"</span> \</span><br><span class="line">           <span class="string">"&lt;b&gt;Hostname:&lt;/b&gt; &#123;hostname&#125;&lt;br/&gt;"</span> \</span><br><span class="line">           <span class="string">"&lt;b&gt;Visits:&lt;/b&gt; &#123;visits&#125;"</span></span><br><span class="line">    <span class="keyword">return</span> html.format(name=os.getenv(<span class="string">"NAME"</span>, <span class="string">"world"</span>), hostname=socket.gethostname(), visits=visits)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">80</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a>requirements.txt</h5><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Flask</span><br><span class="line">Redis</span><br></pre></td></tr></table></figure>
+
+<h5 id="app-py"><a href="#app-py" class="headerlink" title="app.py"></a>app.py</h5><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask</span><br><span class="line"><span class="hljs-keyword">from</span> redis <span class="hljs-keyword">import</span> Redis, RedisError</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line"><span class="hljs-keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># Connect to Redis</span></span><br><span class="line">redis = Redis(host=<span class="hljs-string">"redis"</span>, db=<span class="hljs-number">0</span>, socket_connect_timeout=<span class="hljs-number">2</span>, socket_timeout=<span class="hljs-number">2</span>)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">@app.route("/")</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hello</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        visits = redis.incr(<span class="hljs-string">"counter"</span>)</span><br><span class="line">    <span class="hljs-keyword">except</span> RedisError:</span><br><span class="line">        visits = <span class="hljs-string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span></span><br><span class="line"></span><br><span class="line">    html = <span class="hljs-string">"&lt;h3&gt;Hello &#123;name&#125;!&lt;/h3&gt;"</span> \</span><br><span class="line">           <span class="hljs-string">"&lt;b&gt;Hostname:&lt;/b&gt; &#123;hostname&#125;&lt;br/&gt;"</span> \</span><br><span class="line">           <span class="hljs-string">"&lt;b&gt;Visits:&lt;/b&gt; &#123;visits&#125;"</span></span><br><span class="line">    <span class="hljs-keyword">return</span> html.format(name=os.getenv(<span class="hljs-string">"NAME"</span>, <span class="hljs-string">"world"</span>), hostname=socket.gethostname(), visits=visits)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:</span><br><span class="line">    app.run(host=<span class="hljs-string">'0.0.0.0'</span>, port=<span class="hljs-number">80</span>)</span><br></pre></td></tr></table></figure>
+
 <p><code>requirements.txt</code>为 <code>Python</code> 安装 <code>Flask</code> 和<code>Redis</code> 库，<code>app.py</code>打印环境变量文件名以及输出 <code>socket.gethostname ()</code>。 最后，由于<code>Redis</code>没有运行,在这里使用它的会失败并产生错误消息。</p>
-<h4 id="开始构建应用"><a href="#开始构建应用" class="headerlink" title="开始构建应用"></a>开始构建应用</h4><p>我们已经准备好开发这个应用程序, 确保当前处位于新目录的顶层。 以下是<code>ls</code>应该展示的内容:<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-a----       <span class="number">2018</span>/<span class="number">11</span>/<span class="number">19</span>     <span class="number">13</span>:<span class="number">42</span>            <span class="number">687</span> app.py</span><br><span class="line">-a----       <span class="number">2018</span>/<span class="number">11</span>/<span class="number">19</span>     <span class="number">13</span>:<span class="number">40</span>            <span class="number">531</span> Dockerfile</span><br><span class="line">-a----       <span class="number">2018</span>/<span class="number">11</span>/<span class="number">19</span>     <span class="number">13</span>:<span class="number">42</span>             <span class="number">12</span> requirements.txt</span><br></pre></td></tr></table></figure></p>
-<p>现在运行 build 命令。 这将创建一个 Docker 映像，使用-t 来使用别名,最后有个<code>.</code>不要忘记。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t hello .</span><br></pre></td></tr></table></figure></p>
-<p>创建好的镜像在哪？ 使用<code>docker image ls</code>查看<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line">REPOSITORY   TAG      IMAGE ID      CREATED        SIZE  </span><br><span class="line">hello        latest   d9d1a64ec3ff  20 hours ago   131MB</span><br></pre></td></tr></table></figure></p>
-<h4 id="运行应用"><a href="#运行应用" class="headerlink" title="运行应用"></a>运行应用</h4><p>运行应用程序，使用<code>-p</code>将PC的端口4000映射到容器发布的端口80:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 4000:80 hello</span><br><span class="line"></span><br><span class="line"> * Serving Flask app <span class="string">"app"</span> (lazy loading)</span><br><span class="line"> * Environment: production</span><br><span class="line">   WARNING: Do not use the development server <span class="keyword">in</span> a production environment.</span><br><span class="line">   Use a production WSGI server instead.</span><br><span class="line"> * Debug mode: off</span><br><span class="line"> * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure></p>
+<h4 id="开始构建应用"><a href="#开始构建应用" class="headerlink" title="开始构建应用"></a>开始构建应用</h4><p>我们已经准备好开发这个应用程序, 确保当前处位于新目录的顶层。 以下是<code>ls</code>应该展示的内容:</p>
+<figure class="highlight powershell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-a----       <span class="hljs-number">2018</span>/<span class="hljs-number">11</span>/<span class="hljs-number">19</span>     <span class="hljs-number">13</span>:<span class="hljs-number">42</span>            <span class="hljs-number">687</span> app.py</span><br><span class="line">-a----       <span class="hljs-number">2018</span>/<span class="hljs-number">11</span>/<span class="hljs-number">19</span>     <span class="hljs-number">13</span>:<span class="hljs-number">40</span>            <span class="hljs-number">531</span> Dockerfile</span><br><span class="line">-a----       <span class="hljs-number">2018</span>/<span class="hljs-number">11</span>/<span class="hljs-number">19</span>     <span class="hljs-number">13</span>:<span class="hljs-number">42</span>             <span class="hljs-number">12</span> requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>现在运行 build 命令。 这将创建一个 Docker 映像，使用-t 来使用别名,最后有个<code>.</code>不要忘记。</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t hello .</span><br></pre></td></tr></table></figure>
+
+<p>创建好的镜像在哪？ 使用<code>docker image ls</code>查看</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br><span class="line">REPOSITORY   TAG      IMAGE ID      CREATED        SIZE  </span><br><span class="line">hello        latest   d9d1a64ec3ff  20 hours ago   131MB</span><br></pre></td></tr></table></figure>
+
+<h4 id="运行应用"><a href="#运行应用" class="headerlink" title="运行应用"></a>运行应用</h4><p>运行应用程序，使用<code>-p</code>将PC的端口4000映射到容器发布的端口80:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 4000:80 hello</span><br><span class="line"></span><br><span class="line"> * Serving Flask app <span class="hljs-string">"app"</span> (lazy loading)</span><br><span class="line"> * Environment: production</span><br><span class="line">   WARNING: Do not use the development server <span class="hljs-keyword">in</span> a production environment.</span><br><span class="line">   Use a production WSGI server instead.</span><br><span class="line"> * Debug mode: off</span><br><span class="line"> * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
 <p>之后打印了消息显示，映射到容器的地址是<code>http://0.0.0.0:80</code>。 但是这条消息来自容器内部，但是容器不知道容器的端口<code>80</code>被映射到了<code>4000</code>，从而生成了正确的 URL <code>http://localhost: 4000</code>。<br>此时打开<code>http://localhost: 4000</code>,页面如下</p>
 <p><a href="https://docs.docker.com/get-started/images/app-in-browser.png" target="_blank" rel="noopener"><img src="https://docs.docker.com/get-started/images/app-in-browser.png" alt="页面"></a></p>
 <p>在<code>Windows</code> 系统上，<code>ctrl + c</code>只会退出，不会停止容器。 因此，首先键入 <code>ctrl + c</code>来获得打开另一个 shell，然后输入 <code>docker contianer ls</code>来列出正在运行的容器(更多<code>docker container ls</code> 参数<a href="https://www.yiibai.com/docker/container_ls.html" target="_blank" rel="noopener">命令</a>)，接着键入<code>docker container stop &lt;Container NAME or ID&gt;</code>来停止容器。 否则，尝试重新运行容器时，将从<code>Deamo</code>进程中获得一个错误响应。</p>
-<p>现在让我们在后台挂起模式下运行应用程序:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 4000:80 hello</span><br><span class="line"></span><br><span class="line">ce8d40b8aa206b670bf3a1b8109f12db0eb30d49439a231047bd78aad74b7865</span><br></pre></td></tr></table></figure></p>
-<p>挂起容器讲话返回一串容器ID<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker container ls</span><br><span class="line">CONTAINER     ID     IMAGE    COMMAND  CREATED              STATUS                 </span><br><span class="line">ce8d40b8aa20  hello  <span class="string">"python  app.py"</span>  About a minute ago   Up About a minute   </span><br><span class="line">PORTS                  NAMES</span><br><span class="line"><span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">4000</span>-&gt;<span class="number">80</span>/tcp   ecstatic_swanson</span><br><span class="line"></span><br><span class="line">docker stop ce8d</span><br><span class="line">ce8d</span><br></pre></td></tr></table></figure></p>
+<p>现在让我们在后台挂起模式下运行应用程序:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 4000:80 hello</span><br><span class="line"></span><br><span class="line">ce8d40b8aa206b670bf3a1b8109f12db0eb30d49439a231047bd78aad74b7865</span><br></pre></td></tr></table></figure>
+
+<p>挂起容器讲话返回一串容器ID</p>
+<figure class="highlight powershell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker container ls</span><br><span class="line">CONTAINER     ID     IMAGE    COMMAND  CREATED              STATUS                 </span><br><span class="line">ce8d40b8aa20  hello  <span class="hljs-string">"python  app.py"</span>  About a minute ago   Up About a minute   </span><br><span class="line">PORTS                  NAMES</span><br><span class="line"><span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>:<span class="hljs-number">4000</span>-&gt;<span class="hljs-number">80</span>/tcp   ecstatic_swanson</span><br><span class="line"></span><br><span class="line">docker stop ce8d</span><br><span class="line">ce8d</span><br></pre></td></tr></table></figure>
+
 <h4 id="分享你的镜像"><a href="#分享你的镜像" class="headerlink" title="分享你的镜像"></a>分享你的镜像</h4><p>为了证明我们刚刚创建的内容的可移植性，让我们上传我们构建的镜像并在其他地方运行它。</p>
 <h5 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h5><p>首先在<code>hub.docker.com</code>注册，然后在Terminal输入<code>docker login</code>。</p>
-<h5 id="标记镜像"><a href="#标记镜像" class="headerlink" title="标记镜像"></a>标记镜像</h5><p>在上传镜像前，先要进行一次标记，标记的作用是用来提供版本迭代的机制，你也可以不使用标记。<br>命令的语法是<code>docker tag image username/repository:tag</code>。<br>sample:<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag hellogordon/get-started:part2</span><br></pre></td></tr></table></figure></p>
-<p>运行 docker 映像来查看你的新标记的图像。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">friendlyhello            latest              d9e555c53008        3 minutes ago       195MB</span><br><span class="line">gordon/get-started       part2               d9e555c53008        3 minutes ago       195MB</span><br><span class="line">python                   2.7-slim            1c7128a655f6        5 days ago          183MB</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h5 id="标记镜像"><a href="#标记镜像" class="headerlink" title="标记镜像"></a>标记镜像</h5><p>在上传镜像前，先要进行一次标记，标记的作用是用来提供版本迭代的机制，你也可以不使用标记。<br>命令的语法是<code>docker tag image username/repository:tag</code>。<br>sample:</p>
+<figure class="highlight powershell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag hellogordon/get-started:part2</span><br></pre></td></tr></table></figure>
+
+<p>运行 docker 映像来查看你的新标记的图像。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">friendlyhello            latest              d9e555c53008        3 minutes ago       195MB</span><br><span class="line">gordon/get-started       part2               d9e555c53008        3 minutes ago       195MB</span><br><span class="line">python                   2.7-slim            1c7128a655f6        5 days ago          183MB</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
 <h5 id="发布镜像"><a href="#发布镜像" class="headerlink" title="发布镜像"></a>发布镜像</h5><p><code>docker push username/repository:tag</code></p>
 <p>一旦完成，这个上传的结果是公开可用的。 如果您登录到 Docker Hub，您会看到那里有一个新的镜像，带有它的 <code>pull</code>命令。</p>
 <h5 id="从远程镜像仓库中拉取并运行镜像"><a href="#从远程镜像仓库中拉取并运行镜像" class="headerlink" title="从远程镜像仓库中拉取并运行镜像"></a>从远程镜像仓库中拉取并运行镜像</h5><p>从现在开始，你可以使用 docker run 在任何机器上运行你的应用程序，命令如下:</p>
 <p><code>docker run -p 4000:80 username/repository:tag</code></p>
-<p>如果映像在机器上的本地位置不可用，Docker 会从存储库中提取它。<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -p <span class="number">4000</span>:<span class="number">80</span> gordon/get-started:part2</span><br><span class="line">Unable to find image <span class="string">'gordon/get-started:part2'</span> locally</span><br><span class="line">part2: Pulling from gordon/get-started</span><br><span class="line"><span class="number">10</span>a267c67f42: Already exists</span><br><span class="line">f68a39a6a5e4: Already exists</span><br><span class="line"><span class="number">9</span>beaffc0cf19: Already exists</span><br><span class="line"><span class="number">3</span>c1fe835fb6b: Already exists</span><br><span class="line"><span class="number">4</span>c9f1fa8fcb8: Already exists</span><br><span class="line">ee7d8f576a14: Already exists</span><br><span class="line">fbccdcced46e: Already exists</span><br><span class="line">Digest: sha256:<span class="number">0601</span>c866aab2adcc6498200efd0f754037e909e5fd42069adeff72d1e2439068</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> gordon/get-started:part2</span><br><span class="line"> * Running on http://<span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span>/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure></p>
+<p>如果映像在机器上的本地位置不可用，Docker 会从存储库中提取它。</p>
+<figure class="highlight powershell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -p <span class="hljs-number">4000</span>:<span class="hljs-number">80</span> gordon/get-started:part2</span><br><span class="line">Unable to find image <span class="hljs-string">'gordon/get-started:part2'</span> locally</span><br><span class="line">part2: Pulling from gordon/get-started</span><br><span class="line"><span class="hljs-number">10</span>a267c67f42: Already exists</span><br><span class="line">f68a39a6a5e4: Already exists</span><br><span class="line"><span class="hljs-number">9</span>beaffc0cf19: Already exists</span><br><span class="line"><span class="hljs-number">3</span>c1fe835fb6b: Already exists</span><br><span class="line"><span class="hljs-number">4</span>c9f1fa8fcb8: Already exists</span><br><span class="line">ee7d8f576a14: Already exists</span><br><span class="line">fbccdcced46e: Already exists</span><br><span class="line">Digest: sha256:<span class="hljs-number">0601</span>c866aab2adcc6498200efd0f754037e909e5fd42069adeff72d1e2439068</span><br><span class="line">Status: Downloaded newer image <span class="hljs-keyword">for</span> gordon/get-started:part2</span><br><span class="line"> * Running on http://<span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>:<span class="hljs-number">80</span>/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
 <p>无论 <code>docker run</code>在哪里执行，它都会拉取你需要的镜像，以及 <code>Python</code> 和 <code>requirements.txt</code> 中的所有依赖项，并运行您的代码。 它们都在一个精巧的小包中，<code>Docker</code>无需在主机上安装任何东西就可以运行。</p>
 <blockquote>
 <p>全文教程翻译自Docker官方文档。    —— <a href="https://docs.docker.com/get-started/part2/" target="_blank" rel="noopener">Docker</a></p>
@@ -214,13 +236,6 @@
     
 </article>
 
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type="text/javascript" src="www.baidu.com" async="async"></script>
-
-</div>
 
 
 
@@ -326,69 +341,6 @@
 
     
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
     
     
 
@@ -402,7 +354,7 @@
     <div class="searchbox-mask"></div>
     <div class="searchbox-container ins-search-container">
         <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Suche etwas...">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
             <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
         </div>
         <div class="searchbox-result-wrapper ins-section-wrapper">
@@ -414,11 +366,11 @@
     (function (window) {
         var INSIGHT_CONFIG = {
             TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Seiten',
-                CATEGORIES: 'Kategorien',
-                TAGS: 'Tags',
-                UNTITLED: '(Sin título)',
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
             },
             CONTENT_URL: '/content.json',
         };
