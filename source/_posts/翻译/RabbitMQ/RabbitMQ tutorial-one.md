@@ -1,8 +1,8 @@
 ---
-  title: Rabbit tutorial-one
-  date: 2018-11-29 19:45:48
-  tags: [编程,分布式,消息队列]
-  categories: 消息队列	
+title: Rabbit tutorial-one
+date: 2018-11-29 19:45:48
+tags: [编程,分布式,消息队列]
+categories: 消息队列	
 ---
 
 RabbitMQ入门教程系列---（1）
