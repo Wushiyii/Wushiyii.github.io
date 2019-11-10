@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-<title>标签: 分布式 - Blog</title>
+<title>读《代码整洁之道》 - Blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -18,17 +18,18 @@
 
 
 
-    <meta name="description" content="Recording the learning process">
-<meta name="keywords" content="A,B,C">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="https://wushiyii.github.io/tags/分布式/index.html">
+    <meta name="description" content="读代码整洁之道（Clean Code）对开发的一些认知与启示">
+<meta name="keywords" content="JAVA,READ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读《代码整洁之道》">
+<meta property="og:url" content="https://wushiyii.github.io/2019/11/10/Reading/读《代码整洁之道》/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="Recording the learning process">
+<meta property="og:description" content="读代码整洁之道（Clean Code）对开发的一些认知与启示">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-10T15:04:52.544Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
-<meta name="twitter:description" content="Recording the learning process">
+<meta name="twitter:title" content="读《代码整洁之道》">
+<meta name="twitter:description" content="读代码整洁之道（Clean Code）对开发的一些认知与启示">
 
 
 
@@ -113,257 +114,73 @@
     </div>
 </nav>
 
-    <section class="section section-heading">
+    <section class="section">
     <div class="container">
-        <div class="content">
-            <h5>#分布式</h5>
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="container">
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
+    <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2018/12/04/翻译/RabbitMQ/RabbitMQ tutorial-six/" itemprop="url">Rabbit tutorial-Six</a>
+            读《代码整洁之道》
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2018-12-04T03:29:48.000Z" itemprop="datePublished">12月 4 2018</time>
+            <time datetime="2019-11-10T14:24:10.000Z" itemprop="datePublished">11月 10 2019</time>
         </span>
         
         <span class="column is-narrow article-category">
             <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
+            <a class="article-category-link" href="/categories/READ/">READ</a>
         </span>
         
         
         <span class="column is-narrow">
             
             
-            15 分钟 读完 (约 2315 字)
+            2 分钟 读完 (约 283 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p>RabbitMQ入门教程系列—（6）</p>
-        <p class="article-more-link">
-            <a href="/2018/12/04/翻译/RabbitMQ/RabbitMQ tutorial-six/#more">阅读更多</a>
-        </p>
+        <p>读<code>代码整洁之道（Clean Code）</code>对开发的一些认知与启示</p>
+<a id="more"></a>
+<h3 id="1-代码规范"><a href="#1-代码规范" class="headerlink" title="1.代码规范"></a>1.代码规范</h3><ol>
+<li>有意义的命名</li>
+</ol>
+<p>尽量使用可以表示意义的命名，比如一个<code>int d;</code>,本意是代表消逝时间，那为何不用<code>int elapsedTimeStamp</code>代替呢？</p>
+<p>不使用魔数，使用能代表业务意义的字段代替：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//代码的业务意义是：i1为性别，1代表男性，2代表女性；此函数的作用为判断性别是否为男性</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">judge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i1)</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (i1 == <span class="hljs-number">1</span>) &#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (i1 == <span class="hljs-number">2</span>)&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"..."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//以下为修改后代码,尽量使用易懂的常量名代替魔数</span></span><br><span class="line"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> MALE = <span class="hljs-number">1</span>;</span><br><span class="line"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> FEMALE = <span class="hljs-number">2</span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">isMale</span><span class="hljs-params">(<span class="hljs-keyword">int</span> gender)</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (gender == MALE) &#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (gender == FEMALE)&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"..."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外，一些意义冗余的名称也不要随意用，比如在一个函数里，用<code>account、accountInfo、accountData</code>,<code>moneyAmount</code>与<code>money</code>，<code>theMessage</code>与<code>message</code>，诸如此类，意义基本上都是一样的，所以尽量使用简单、易懂、不冗余的命名。</p>
+
     
     </div>
     
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JAVA/">#JAVA</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/READ/">#READ</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/10/18/Linux/Shell/">Shell简易用法</a>
+            
+        </span>
+    </div>
     
 </article>
 
 
 
 
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2018/12/04/翻译/RabbitMQ/RabbitMQ tutorial-five/" itemprop="url">Rabbit tutorial-Five</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2018-12-04T01:03:23.000Z" itemprop="datePublished">12月 4 2018</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            8 分钟 读完 (约 1239 字)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p>RabbitMQ入门教程系列—（5）</p>
-        <p class="article-more-link">
-            <a href="/2018/12/04/翻译/RabbitMQ/RabbitMQ tutorial-five/#more">阅读更多</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2018/12/03/翻译/RabbitMQ/RabbitMQ tutorial-four/" itemprop="url">Rabbit tutorial-Four</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2018-12-03T03:29:48.000Z" itemprop="datePublished">12月 3 2018</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            8 分钟 读完 (约 1206 字)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p>RabbitMQ入门教程系列—（4）</p>
-        <p class="article-more-link">
-            <a href="/2018/12/03/翻译/RabbitMQ/RabbitMQ tutorial-four/#more">阅读更多</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2018/12/01/翻译/RabbitMQ/RabbitMQ tutorial-three/" itemprop="url">Rabbit tutorial-three</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2018-12-01T15:22:11.000Z" itemprop="datePublished">12月 1 2018</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            12 分钟 读完 (约 1864 字)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p>RabbitMQ入门教程系列—（3）</p>
-        <p class="article-more-link">
-            <a href="/2018/12/01/翻译/RabbitMQ/RabbitMQ tutorial-three/#more">阅读更多</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2018/11/30/翻译/RabbitMQ/RabbitMQ tutorial-two/" itemprop="url">Rabbit tutorial-two</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2018-11-30T02:24:18.000Z" itemprop="datePublished">11月 30 2018</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            17 分钟 读完 (约 2580 字)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p>RabbitMQ入门教程系列—（2）</p>
-        <p class="article-more-link">
-            <a href="/2018/11/30/翻译/RabbitMQ/RabbitMQ tutorial-two/#more">阅读更多</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2018/11/29/翻译/RabbitMQ/什么是消息队列/" itemprop="url">什么是消息队列？</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2018-11-29T06:42:11.000Z" itemprop="datePublished">11月 29 2018</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/消息队列/">消息队列</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            8 分钟 读完 (约 1202 字)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <p>消息队列的简介<br></p>
-        <p class="article-more-link">
-            <a href="/2018/11/29/翻译/RabbitMQ/什么是消息队列/#more">阅读更多</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-    
     </div>
 </section>
     <footer class="footer">
