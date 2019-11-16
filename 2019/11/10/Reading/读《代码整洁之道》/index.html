@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="读代码整洁之道（Clean Code）对开发的一些认知与启示">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-10T15:04:52.544Z">
+<meta property="og:updated_time" content="2019-11-16T13:52:36.462Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读《代码整洁之道》">
 <meta name="twitter:description" content="读代码整洁之道（Clean Code）对开发的一些认知与启示">
@@ -136,7 +136,7 @@
         <span class="column is-narrow">
             
             
-            2 分钟 读完 (约 283 字)
+            3 分钟 读完 (约 467 字)
         </span>
         
     </div>
@@ -144,15 +144,19 @@
     
         <p>读<code>代码整洁之道（Clean Code）</code>对开发的一些认知与启示</p>
 <a id="more"></a>
-<h3 id="1-代码规范"><a href="#1-代码规范" class="headerlink" title="1.代码规范"></a>1.代码规范</h3><ol>
-<li>有意义的命名</li>
-</ol>
-<p>尽量使用可以表示意义的命名，比如一个<code>int d;</code>,本意是代表消逝时间，那为何不用<code>int elapsedTimeStamp</code>代替呢？</p>
+<h4 id="1-有意义的命名"><a href="#1-有意义的命名" class="headerlink" title="1.有意义的命名"></a>1.有意义的命名</h4><p>尽量使用可以表示意义的命名，比如一个<code>int d;</code>,本意是代表消逝时间，那为何不用<code>int elapsedTimeStamp</code>代替呢？</p>
 <p>不使用魔数，使用能代表业务意义的字段代替：</p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//代码的业务意义是：i1为性别，1代表男性，2代表女性；此函数的作用为判断性别是否为男性</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">judge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i1)</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (i1 == <span class="hljs-number">1</span>) &#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (i1 == <span class="hljs-number">2</span>)&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"..."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//以下为修改后代码,尽量使用易懂的常量名代替魔数</span></span><br><span class="line"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> MALE = <span class="hljs-number">1</span>;</span><br><span class="line"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> FEMALE = <span class="hljs-number">2</span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">isMale</span><span class="hljs-params">(<span class="hljs-keyword">int</span> gender)</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (gender == MALE) &#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (gender == FEMALE)&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">"..."</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>另外，一些意义冗余的名称也不要随意用，比如在一个函数里，用<code>account、accountInfo、accountData</code>,<code>moneyAmount</code>与<code>money</code>，<code>theMessage</code>与<code>message</code>，诸如此类，意义基本上都是一样的，所以尽量使用简单、易懂、不冗余的命名。</p>
-
+<h4 id="2-函数行为控制"><a href="#2-函数行为控制" class="headerlink" title="2.函数行为控制"></a>2.函数行为控制</h4><ul>
+<li>短小（行数不要太长，可以抽取尽量抽取）</li>
+<li>少做事（原书中说只能做一件事，这个就看个人理解了，我觉得类似于主流程肯定无法避免多次调用了）</li>
+<li>根据自顶向下读代码来抽象代码</li>
+<li>函数入参不宜太多，控制在1～2个，3个及以上的入参尽量考虑封装成对象</li>
+<li>保持函数的单纯，不要掺杂副作用（比如一个校验用户密码，就保持它的单纯性只是用来校验，返回一个boolean，而不是校验通过之后又连带着进行session初始化）</li>
+</ul>
+<h4 id="3-用好注释"><a href="#3-用好注释" class="headerlink" title="3.用好注释"></a>3.用好注释</h4>
     
     </div>
     
