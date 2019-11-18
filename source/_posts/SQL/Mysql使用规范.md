@@ -1,9 +1,8 @@
 ---
 title: Mysql使用规范
-date: 2019-11-18 17:43:05
+date: 2019-11-17 11:43:05
 tags: [Mysql,workflow]
 categories: Mysql
-
 ---
 
 为保障业务稳定，降低发生数据库故障概率等原因，尽量遵守以下规范。
