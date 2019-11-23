@@ -143,89 +143,16 @@
         <span class="column is-narrow">
             
             
-            7 分钟 读完 (约 997 字)
+            7 分钟 读完 (约 1006 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <a id="more"></a>
-<h3 id="一-库表命名规范"><a href="#一-库表命名规范" class="headerlink" title="一.库表命名规范"></a>一.库表命名规范</h3><ol>
-<li>库名必须有固定的命名长度，12个字符以内 ,  表名、字段名20个字符以内，需见名知意</li>
-<li>表名字段名使用单数的英文单词，多个单词使用 _ 符号连接</li>
-<li>库名、表名、字段名禁使用MySQL保留字</li>
-<li>临时库、表名必须以<code>tmp</code>为前缀，并以日期为后缀</li>
-</ol>
-<h3 id="二-库、表、字段开发设计规范"><a href="#二-库、表、字段开发设计规范" class="headerlink" title="二.库、表、字段开发设计规范"></a>二.库、表、字段开发设计规范</h3><ol>
-<li>原则上禁用分区表</li>
-<li>拆分大字段和访问频率低的字段，分离冷热数据</li>
-<li>用Hash进行分表，表名后缀使进制数</li>
-<li>按日期时间分表需符合<code>YYYY[MM][DD][HH]</code>格式</li>
-<li>尽可能不使用<code>TEXT</code>、<code>BLOB</code>类型,尽量使用<code>varchar</code>类型，实在避免不了，请拆表</li>
-<li>用<code>DECIMAL</code>代替<code>FLOAT</code>和<code>DOUBLE</code>存储精确浮点数</li>
-<li>所有字段均定义为<code>NOT NULL</code>，默认值，整型为<code>0</code>、字符串为空字符’’ ，字段需要建索引的必须用<code>NOT NULL</code>、<code>NULL</code>字段很难查询优化，<code>NULL</code>字段的索引需要额外空间</li>
-<li>大表使用<code>bigint unsigned</code> 作为自增列</li>
-<li>使用<code>timestamp</code>存储时间</li>
-<li>禁止在数据库中存储明文密码，把密码加密后存储</li>
-<li>尽量使用数值类型字段替代字符串类型</li>
-<li>不允许使用<code>ENUM</code>，<code>ENUM</code>字段加类型是<code>DDL</code>操作，使用<code>TINYINT</code>来代替<code>ENUM</code>类型</li>
-<li>尽量使用<code>varchar</code>存储字符串。<code>VARCHAR(M)</code>，<code>M</code>尽可能小，因为<code>VARCHAR</code>按实际的字符数申请内存时，如果大于255个，需要2bytes，小于 等于255个，需要1bytes。M表示字符数而不是字节数，比如<code>VARCHAR(1024)</code>，最大可存储1024个汉字，根据实际业务选择长度M</li>
-</ol>
-<h3 id="三-索引规范"><a href="#三-索引规范" class="headerlink" title="三.索引规范"></a>三.索引规范</h3><h4 id="1-索引的数量要控制"><a href="#1-索引的数量要控制" class="headerlink" title="1. 索引的数量要控制:"></a>1. 索引的数量要控制:</h4><ol>
-<li><p>单张表中索引数量不超过8个</p>
-</li>
-<li><p>单个索引中的字段数不超过4个</p>
-</li>
-<li><p>对字符串优先考虑使用前缀索引，前缀索引长度不超过10个字符</p>
-</li>
-</ol>
-<h4 id="2-主键准则"><a href="#2-主键准则" class="headerlink" title="2. 主键准则"></a>2. 主键准则</h4><ol>
-<li><p>表必须有主键</p>
-</li>
-<li><p>不使用更新频繁的列作为主键</p>
-</li>
-<li><p>尽量不选择字符串列作为主键</p>
-</li>
-<li><p>不使用<code>UUID</code>、<code>MD5</code>、<code>HASH</code>这些作为主键(数值太离散了)</p>
-</li>
-<li><p>默认使<code>非空的唯一键</code>作为主键</p>
-</li>
-<li><p>建议选择自增或发号器</p>
-</li>
-</ol>
-<h4 id="3-重要的SQL必须被索引，比如"><a href="#3-重要的SQL必须被索引，比如" class="headerlink" title="3. 重要的SQL必须被索引，比如:"></a>3. 重要的SQL必须被索引，比如:</h4><ol>
-<li><p><code>UPDATE</code>、<code>DELETE</code>语句的<code>WHERE</code>条件列</p>
-</li>
-<li><p><code>ORDER BY</code>、<code>GROUP BY</code>、<code>DISTINCT</code>的字段</p>
-</li>
-</ol>
-<h4 id="4-多表JOIN的字段注意以下"><a href="#4-多表JOIN的字段注意以下" class="headerlink" title="4. 多表JOIN的字段注意以下:"></a>4. 多表JOIN的字段注意以下:</h4><ol>
-<li><p>区分度最大的字段放在前面</p>
-</li>
-<li><p>优先考虑覆盖索引</p>
-</li>
-<li><p>避免冗余和重复索引</p>
-</li>
-<li><p>索引要综合评估数据密度和分布以及考虑查询和更新比例</p>
-</li>
-</ol>
-<h4 id="5-索引禁忌"><a href="#5-索引禁忌" class="headerlink" title="5. 索引禁忌"></a>5. 索引禁忌</h4><ol>
-<li><p>不在低基数列上建立索引，例如“性别”</p>
-</li>
-<li><p>不在索引列进行数学运算和函数运算</p>
-</li>
-</ol>
-<h4 id="6-不使用外键"><a href="#6-不使用外键" class="headerlink" title="6. 不使用外键"></a>6. 不使用外键</h4><ol>
-<li><p>外键用来保护参照完整性，可在业务端实现</p>
-</li>
-<li><p>对父表和子表的操作会相互影响，降低可用性</p>
-</li>
-<li><p>增加锁冲突的概率</p>
-</li>
-<li><p>增加写入和更新的延迟</p>
-</li>
-</ol>
-<h4 id="7-索引命名-非唯一索引必须以-idx-字段1-字段2命名，唯一所以必须以uniq-字段1-字段2命名，索引名称必须全部小写"><a href="#7-索引命名-非唯一索引必须以-idx-字段1-字段2命名，唯一所以必须以uniq-字段1-字段2命名，索引名称必须全部小写" class="headerlink" title="7. 索引命名:非唯一索引必须以 idx_字段1_字段2命名，唯一所以必须以uniq_字段1_字段2命名，索引名称必须全部小写"></a>7. 索引命名:非唯一索引必须以 idx_字段1_字段2命名，唯一所以必须以<code>uniq_字段1_字段2</code>命名，索引名称必须全部小写</h4><h4 id="8-索引字段的默认值不能为NULL，要改为其他的default或者空。NULL非常影响索引的查询效率"><a href="#8-索引字段的默认值不能为NULL，要改为其他的default或者空。NULL非常影响索引的查询效率" class="headerlink" title="8. 索引字段的默认值不能为NULL，要改为其他的default或者空。NULL非常影响索引的查询效率"></a>8. 索引字段的默认值不能为NULL，要改为其他的<code>default</code>或者空。NULL非常影响索引的查询效率</h4><h4 id="9-反复查看与表相关的SQL，符合最左前缀的特点建立索引。多条字段重复的语句，要修改语句条件字段的顺序，为其建立一条联合索引，减少-索引数量"><a href="#9-反复查看与表相关的SQL，符合最左前缀的特点建立索引。多条字段重复的语句，要修改语句条件字段的顺序，为其建立一条联合索引，减少-索引数量" class="headerlink" title="9. 反复查看与表相关的SQL，符合最左前缀的特点建立索引。多条字段重复的语句，要修改语句条件字段的顺序，为其建立一条联合索引，减少 索引数量"></a>9. 反复查看与表相关的SQL，符合最左前缀的特点建立索引。多条字段重复的语句，要修改语句条件字段的顺序，为其建立一条联合索引，减少 索引数量</h4><h4 id="10-能使用唯一索引就要使用唯一索引，提高查询效率"><a href="#10-能使用唯一索引就要使用唯一索引，提高查询效率" class="headerlink" title="10. 能使用唯一索引就要使用唯一索引，提高查询效率"></a>10. 能使用唯一索引就要使用唯一索引，提高查询效率</h4><h4 id="11、研发要经常使用explain，如果发现索引选择性差，必须学会使用hint"><a href="#11、研发要经常使用explain，如果发现索引选择性差，必须学会使用hint" class="headerlink" title="11、研发要经常使用explain，如果发现索引选择性差，必须学会使用hint"></a>11、研发要经常使用<code>explain</code>，如果发现索引选择性差，必须学会使用<code>hint</code></h4>
+        <p>一些数据库设计规范</p>
+        <p class="article-more-link">
+            <a href="/2019/11/18/SQL/表、字段、索引设计规范/#more">阅读更多</a>
+        </p>
     
     </div>
     

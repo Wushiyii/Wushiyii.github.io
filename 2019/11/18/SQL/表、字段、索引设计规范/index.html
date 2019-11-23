@@ -18,18 +18,18 @@
 
 
 
-    <meta name="description" content="一.库表命名规范 库名必须有固定的命名长度，12个字符以内 ,  表名、字段名20个字符以内，需见名知意 表名字段名使用单数的英文单词，多个单词使用 _ 符号连接 库名、表名、字段名禁使用MySQL保留字 临时库、表名必须以tmp为前缀，并以日期为后缀  二.库、表、字段开发设计规范 原则上禁用分区表 拆分大字段和访问频率低的字段，分离冷热数据 用Hash进行分表，表名后缀使进制数 按日期时间分">
+    <meta name="description" content="一些数据库设计规范">
 <meta name="keywords" content="Mysql,workflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="表、字段、索引设计规范">
 <meta property="og:url" content="https://wushiyii.github.io/2019/11/18/SQL/表、字段、索引设计规范/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="一.库表命名规范 库名必须有固定的命名长度，12个字符以内 ,  表名、字段名20个字符以内，需见名知意 表名字段名使用单数的英文单词，多个单词使用 _ 符号连接 库名、表名、字段名禁使用MySQL保留字 临时库、表名必须以tmp为前缀，并以日期为后缀  二.库、表、字段开发设计规范 原则上禁用分区表 拆分大字段和访问频率低的字段，分离冷热数据 用Hash进行分表，表名后缀使进制数 按日期时间分">
+<meta property="og:description" content="一些数据库设计规范">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-18T11:05:57.168Z">
+<meta property="og:updated_time" content="2019-11-19T01:35:14.070Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="表、字段、索引设计规范">
-<meta name="twitter:description" content="一.库表命名规范 库名必须有固定的命名长度，12个字符以内 ,  表名、字段名20个字符以内，需见名知意 表名字段名使用单数的英文单词，多个单词使用 _ 符号连接 库名、表名、字段名禁使用MySQL保留字 临时库、表名必须以tmp为前缀，并以日期为后缀  二.库、表、字段开发设计规范 原则上禁用分区表 拆分大字段和访问频率低的字段，分离冷热数据 用Hash进行分表，表名后缀使进制数 按日期时间分">
+<meta name="twitter:description" content="一些数据库设计规范">
 
 
 
@@ -136,13 +136,14 @@
         <span class="column is-narrow">
             
             
-            7 分钟 读完 (约 997 字)
+            7 分钟 读完 (约 1006 字)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <a id="more"></a>
+        <p>一些数据库设计规范</p>
+<a id="more"></a>
 <h3 id="一-库表命名规范"><a href="#一-库表命名规范" class="headerlink" title="一.库表命名规范"></a>一.库表命名规范</h3><ol>
 <li>库名必须有固定的命名长度，12个字符以内 ,  表名、字段名20个字符以内，需见名知意</li>
 <li>表名字段名使用单数的英文单词，多个单词使用 _ 符号连接</li>
