@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+<title>Springboot接入Redis - Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Recording the learning process">
+
+
+
+<meta name="keywords" content="A,B,C">
+
+
+
+    <meta name="description" content="从0开始接入Redis">
+<meta name="keywords" content="JAVA,Spring,Springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Springboot接入Redis">
+<meta property="og:url" content="https://wushiyii.github.io/2020/02/28/Java/Spring/接入Redis/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="从0开始接入Redis">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-28T03:12:23.842Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Springboot接入Redis">
+<meta name="twitter:description" content="从0开始接入Redis">
+
+
+
+
+
+<link rel="icon" href="/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    五十一
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item " href="/archives">归档</a>
+            
+            <a class="navbar-item " href="/about">关于</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="搜索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/Wushiyii">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Springboot接入Redis
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-02-28T01:54:01.000Z" itemprop="datePublished">2月 28 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/JAVA/">JAVA</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            8 分钟 读完 (约 1186 字)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>从0开始接入Redis</p>
+<a id="more"></a>
+<h4 id="1-Redis基础知识"><a href="#1-Redis基础知识" class="headerlink" title="1.Redis基础知识"></a>1.Redis基础知识</h4><p>Redis 可以存储键与5种不同数据结构类型之间的映射，这5种数据结构类型分别为：<code>String</code>（字符串）、<code>List</code>（列表）、<code>Set</code>（集合）、<code>Hash</code>（散列）和 <code>zSet</code>（有序集合）。</p>
+<ul>
+<li>String</li>
+</ul>
+<p><strong>结构存储的值：</strong><br>  可以是字符串、整数或者浮点数。</p>
+<p><strong>结构的读写能力：</strong><br>  对整个字符串或者字符串的其中一部分执行操作，对象和浮点数执行自增(increment)或者自减(decrement)。</p>
+<ul>
+<li>List</li>
+</ul>
+<p><strong>结构存储的值：</strong><br>  一个链表，链表上的每个节点都包含了一个字符串。</p>
+<p><strong>结构的读写能力：</strong><br>  从链表的两端推入或者弹出元素，根据偏移量(offset)对链表进行修剪(trim)，读取单个或者多个元素，根据值来查找或者移除元素。</p>
+<ul>
+<li>Set</li>
+</ul>
+<p><strong>结构存储的值：</strong><br>  包含字符串的无序收集器(unOrderedCollection)，并且被包含的每个字符串都是独一无二的、各不相同。</p>
+<p><strong>结构的读写能力：</strong><br>  添加、获取、移除单个元素，检查一个元素是否存在于某个集合中，计算交集、并集、差集，从集合里面随机获取元素。</p>
+<ul>
+<li>Hash</li>
+</ul>
+<p><strong>结构存储的值：</strong><br>  包含键值对的无序散列表。</p>
+<p><strong>结构的读写能力：</strong><br>  添加、获取、移除单个键值对，获取所有键值对。</p>
+<ul>
+<li>zSet</li>
+</ul>
+<p><strong>结构存储的值：</strong><br>  字符串成员(member)与浮点数分值(score)之间的有序映射，元素的排列顺序由分值(score)的大小决定。</p>
+<p><strong>结构的读写能力：</strong><br>  添加、获取、删除单个元素，根据分值(score)范围(range)或者成员来获取元素。</p>
+<h4 id="2-Springboot配置Redis"><a href="#2-Springboot配置Redis" class="headerlink" title="2.Springboot配置Redis"></a>2.Springboot配置Redis</h4><p>如果代码需要区分不通组件的配置，可以新建一个配置，名称风格可以和spring的统一，比如<code>application-redis.properties</code>或者<code>application-redis.yml</code>，然后在spring基础配置里加上<code>spring.profiles.include=redis</code></p>
+<p>如不需要区分，可以直接把配置信息贴到spring基础配置文件里，下面是一些常用配置（此处配置为<code>Jedis</code>，也可以选用SpringBoot 1.5之后的<code>lettuce</code>）</p>
+<figure class="highlight properties hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#redis配置</span></span><br><span class="line"><span class="hljs-comment"># Redis数据库索引（默认为0，集群状态只有一个）</span></span><br><span class="line"><span class="hljs-meta">spring.redis.database</span>=<span class="hljs-string">0</span></span><br><span class="line"><span class="hljs-comment"># Redis集群模式，host:port  用,隔开</span></span><br><span class="line"><span class="hljs-comment">#spring.redis.cluster.nodes=</span></span><br><span class="line"><span class="hljs-comment"># Redis服务器地址</span></span><br><span class="line"><span class="hljs-meta">spring.redis.host</span>=<span class="hljs-string">xxx</span></span><br><span class="line"><span class="hljs-comment"># Redis服务器连接端口</span></span><br><span class="line"><span class="hljs-meta">spring.redis.port</span>=<span class="hljs-string">6379</span></span><br><span class="line"><span class="hljs-comment"># Redis服务器连接密码（默认为空）</span></span><br><span class="line"><span class="hljs-meta">spring.redis.password</span>=<span class="hljs-string">xxx</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">#以下为配置jedis链接池</span></span><br><span class="line"><span class="hljs-comment"># 连接池最大连接数（使用负值表示没有限制）</span></span><br><span class="line"><span class="hljs-meta">spring.redis.jedis.pool.max-active</span>=<span class="hljs-string">200</span></span><br><span class="line"><span class="hljs-comment"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span></span><br><span class="line"><span class="hljs-meta">spring.redis.jedis.pool.max-wait</span>=<span class="hljs-string">10000</span></span><br><span class="line"><span class="hljs-comment"># 连接池中的最大空闲连接</span></span><br><span class="line"><span class="hljs-meta">spring.redis.jedis.pool.max-idle</span>=<span class="hljs-string">8</span></span><br><span class="line"><span class="hljs-comment"># 连接池中的最小空闲连接</span></span><br><span class="line"><span class="hljs-meta">spring.redis.jedis.pool.min-idle</span>=<span class="hljs-string">0</span></span><br><span class="line"><span class="hljs-comment"># 连接超时时间（毫秒）</span></span><br><span class="line"><span class="hljs-meta">spring.redis.timeout</span>=<span class="hljs-string">10000</span></span><br></pre></td></tr></table></figure>
+
+<p>之后可以进行可选配置，比如配置@Cacheable注解、配置序列化器等，这时候可以用代码配置</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Configuration</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisConfig</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">CachingConfigurerSupport</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment">     * 配置 <span class="hljs-doctag">@Cacheable</span> 缓存注解</span></span><br><span class="line"><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> connectionFactory Thread-safe factory of Redis connections.</span></span><br><span class="line"><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> CacheManager</span></span><br><span class="line"><span class="hljs-comment">     */</span></span><br><span class="line">    <span class="hljs-meta">@Bean</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> CacheManager <span class="hljs-title">cacheManager</span><span class="hljs-params">(RedisConnectionFactory connectionFactory)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);</span><br><span class="line">        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();</span><br><span class="line">        <span class="hljs-comment">//设置默认超过期时间是5分钟</span></span><br><span class="line">        defaultCacheConfig.entryTtl(Duration.ofMinutes(<span class="hljs-number">5</span>));</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RedisCacheManager(redisCacheWriter, defaultCacheConfig);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  	<span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment">  	 * 配置序列化器（使用Jackson，也可以用Fastjson之类的）</span></span><br><span class="line"><span class="hljs-comment">     */</span></span><br><span class="line">    <span class="hljs-meta">@Bean</span>(<span class="hljs-string">"redisTemplate"</span>)</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="hljs-title">redisTemplateObject</span><span class="hljs-params">(RedisConnectionFactory redisConnectionFactory)</span> </span>&#123;</span><br><span class="line">        Jackson2JsonRedisSerializer&lt;Object&gt; jackson2JsonRedisSerializer = <span class="hljs-keyword">new</span> Jackson2JsonRedisSerializer&lt;&gt;(Object.class);</span><br><span class="line">        ObjectMapper om = <span class="hljs-keyword">new</span> ObjectMapper();</span><br><span class="line">        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);</span><br><span class="line">        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);</span><br><span class="line">        jackson2JsonRedisSerializer.setObjectMapper(om);</span><br><span class="line">        RedisTemplate&lt;String, Object&gt; template = <span class="hljs-keyword">new</span> RedisTemplate&lt;&gt;();</span><br><span class="line">        template.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">        template.setKeySerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.setValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.setHashKeySerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.setHashValueSerializer(jackson2JsonRedisSerializer);</span><br><span class="line">        template.afterPropertiesSet();</span><br><span class="line">        <span class="hljs-keyword">return</span> template;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment">     * 也可以配置string操作模板，比较简单</span></span><br><span class="line"><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> redisConnectionFactory</span></span><br><span class="line"><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span></span><br><span class="line"><span class="hljs-comment">     */</span></span><br><span class="line">  	<span class="hljs-meta">@Bean</span>(<span class="hljs-string">"stringRedisTemplate"</span>)</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> StringRedisTemplate <span class="hljs-title">stringRedisTemplateObject</span><span class="hljs-params">(RedisConnectionFactory redisConnectionFactory)</span> </span>&#123;</span><br><span class="line">        StringRedisTemplate template = <span class="hljs-keyword">new</span> StringRedisTemplate();</span><br><span class="line">        template.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">        <span class="hljs-keyword">return</span> template;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-简单RedisUtil"><a href="#3-简单RedisUtil" class="headerlink" title="3.简单RedisUtil"></a>3.简单RedisUtil</h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">@Slf</span>4j</span><br><span class="line"><span class="hljs-meta">@Component</span></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedisUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-meta">@Resource</span></span><br><span class="line">    <span class="hljs-keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">get</span><span class="hljs-params">(@NotNull String key)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> stringRedisTemplate.opsForValue().get(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> &lt;T&gt; <span class="hljs-function">T <span class="hljs-title">get</span><span class="hljs-params">(@NotNull String key, Class&lt;T&gt; t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String value = stringRedisTemplate.opsForValue().get(key);</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">if</span> (StringUtils.isNoneBlank(value)) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> JacksonUtils.fromJson(value, t);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> &lt;T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(String key, T data)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">this</span>.setForExpire(key, data, <span class="hljs-number">2</span>, TimeUnit.HOURS);</span><br><span class="line">        log.info(<span class="hljs-string">"save redis cache key=&#123;&#125; done value=&#123;&#125;"</span>, key, data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(String key, String value)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">this</span>.setForExpire(key, value, <span class="hljs-number">2</span>, TimeUnit.HOURS);</span><br><span class="line">        log.info(<span class="hljs-string">"save redis cache key=&#123;&#125; done value=&#123;&#125;"</span>, key, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setForExpire</span><span class="hljs-params">(String key, String data, <span class="hljs-keyword">long</span> timeout, TimeUnit timeUnit)</span> </span>&#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().set(key, data, timeout, timeUnit);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">public</span> &lt;T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setForExpire</span><span class="hljs-params">(String key, T data, <span class="hljs-keyword">long</span> timeout, TimeUnit timeUnit)</span> </span>&#123;</span><br><span class="line">        String value = JacksonUtils.toJson(data);</span><br><span class="line">        stringRedisTemplate.opsForValue().set(key, value, timeout, timeUnit);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">remove</span><span class="hljs-params">(String key)</span> </span>&#123;</span><br><span class="line">        stringRedisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Boolean <span class="hljs-title">exists</span><span class="hljs-params">(String key)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> stringRedisTemplate.hasKey(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JAVA/">#JAVA</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Spring/">#Spring</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Springboot/">#Springboot</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/02/26/CDCI/搭建Jenkins/">搭建Jenkins</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2020 Wushiyi&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/Wushiyii">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("zh-CN");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="站内搜索">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>

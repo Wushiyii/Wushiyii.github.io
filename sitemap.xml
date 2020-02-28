@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://wushiyii.github.io/2020/02/28/Java/Spring/%E6%8E%A5%E5%85%A5Redis/</loc>
+    
+    <lastmod>2020-02-28T03:12:23.842Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2020/02/26/CDCI/%E6%90%AD%E5%BB%BAJenkins/</loc>
+    
+    <lastmod>2020-02-28T01:54:13.552Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2018/08/14/Others/My-first-post/</loc>
+    
+    <lastmod>2019-12-25T06:34:29.760Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://wushiyii.github.io/2019/12/08/Reading/%E8%AF%BB%E3%80%8A%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91%E3%80%8B/</loc>
     
     <lastmod>2019-12-08T08:48:23.563Z</lastmod>
@@ -37,21 +58,14 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/08/14/Others/My-first-post/</loc>
-    
-    <lastmod>2019-11-10T15:56:33.796Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wushiyii.github.io/2019/09/01/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/</loc>
+    <loc>https://wushiyii.github.io/2019/09/22/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/</loc>
     
     <lastmod>2019-11-10T15:56:33.795Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/09/22/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/</loc>
+    <loc>https://wushiyii.github.io/2019/09/01/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/</loc>
     
     <lastmod>2019-11-10T15:56:33.795Z</lastmod>
     
@@ -72,14 +86,14 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-one/</loc>
+    <loc>https://wushiyii.github.io/2018/12/04/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-six/</loc>
     
     <lastmod>2019-11-10T15:53:17.981Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/12/04/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-six/</loc>
+    <loc>https://wushiyii.github.io/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-one/</loc>
     
     <lastmod>2019-11-10T15:53:17.981Z</lastmod>
     
@@ -142,20 +156,6 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/books/index.html</loc>
-    
-    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wushiyii.github.io/categories/index.html</loc>
-    
-    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wushiyii.github.io/tags/index.html</loc>
     
     <lastmod>2019-10-21T13:22:42.276Z</lastmod>
@@ -177,9 +177,16 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/about/index.html</loc>
+    <loc>https://wushiyii.github.io/books/index.html</loc>
     
-    <lastmod>2019-10-21T13:22:42.275Z</lastmod>
+    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/categories/index.html</loc>
+    
+    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
     
   </url>
   
@@ -191,14 +198,21 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/08/16/Javascript/TypeScript%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/</loc>
+    <loc>https://wushiyii.github.io/about/index.html</loc>
+    
+    <lastmod>2019-10-21T13:22:42.275Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2018/08/14/Others/MarkDown%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/</loc>
     
     <lastmod>2019-10-21T13:22:42.272Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/08/14/Others/MarkDown%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/</loc>
+    <loc>https://wushiyii.github.io/2018/08/16/Javascript/TypeScript%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/</loc>
     
     <lastmod>2019-10-21T13:22:42.272Z</lastmod>
     
@@ -212,13 +226,6 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/02/26/Javascript/ES6-%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2/</loc>
-    
-    <lastmod>2019-10-21T13:22:42.271Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wushiyii.github.io/2019/02/25/Javascript/ES6-Class/</loc>
     
     <lastmod>2019-10-21T13:22:42.271Z</lastmod>
@@ -226,14 +233,21 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/02/20/Javascript/A%20re-introduction%20to%20JavaScript%20(JS%20tutorial)/</loc>
+    <loc>https://wushiyii.github.io/2019/02/26/Javascript/ES6-%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2/</loc>
+    
+    <lastmod>2019-10-21T13:22:42.271Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2019/04/07/Java/Collection/LinkedList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     
     <lastmod>2019-10-21T13:22:42.270Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/04/07/Java/Collection/LinkedList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <loc>https://wushiyii.github.io/2019/02/20/Javascript/A%20re-introduction%20to%20JavaScript%20(JS%20tutorial)/</loc>
     
     <lastmod>2019-10-21T13:22:42.270Z</lastmod>
     
@@ -268,14 +282,14 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/11/19/Docker/Docker-get-start(2)--container/</loc>
+    <loc>https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/</loc>
     
     <lastmod>2019-10-21T13:22:42.264Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/11/20/Docker/Docker-get-start(3)--service/</loc>
+    <loc>https://wushiyii.github.io/2018/11/19/Docker/Docker-get-start(2)--container/</loc>
     
     <lastmod>2019-10-21T13:22:42.264Z</lastmod>
     
