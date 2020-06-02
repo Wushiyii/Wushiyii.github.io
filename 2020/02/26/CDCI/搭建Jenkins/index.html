@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="在Red Hat上从0到1搭建Jenkins">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-28T01:54:13.552Z">
+<meta property="og:updated_time" content="2020-06-02T04:28:45.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建Jenkins">
 <meta name="twitter:description" content="在Red Hat上从0到1搭建Jenkins">
@@ -136,7 +136,7 @@
         <span class="column is-narrow">
             
             
-            几秒 读完 (约 70 字)
+            2 分钟 读完 (约 270 字)
         </span>
         
     </div>
@@ -148,7 +148,38 @@
 
 <h4 id="2-导入密钥"><a href="#2-导入密钥" class="headerlink" title="2.导入密钥"></a>2.导入密钥</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key</span><br></pre></td></tr></table></figure>
 
-<h4 id="3-yum安装Jenkins"><a href="#3-yum安装Jenkins" class="headerlink" title="3.yum安装Jenkins"></a>3.yum安装Jenkins</h4>
+<h4 id="3-yum安装Jenkins"><a href="#3-yum安装Jenkins" class="headerlink" title="3.yum安装Jenkins"></a>3.yum安装Jenkins</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install jenkins</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-启动Jenkins"><a href="#4-启动Jenkins" class="headerlink" title="4.启动Jenkins"></a>4.启动Jenkins</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service jenkins start</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-初始化Jenkins"><a href="#5-初始化Jenkins" class="headerlink" title="5.初始化Jenkins"></a>5.初始化Jenkins</h4><ol>
+<li>打开jenkins页面（默认port为8080)</li>
+<li>使用默认密码登录（cat /var/lib/jenkins/secrets/initialAdminPassword）</li>
+<li>安装插件（默认安装即可）；安装完成后即可</li>
+</ol>
+<h4 id="6-设置Jenkins"><a href="#6-设置Jenkins" class="headerlink" title="6.设置Jenkins"></a>6.设置Jenkins</h4><ol>
+<li>在 /系统管理/全局工具配置<ul>
+<li>配置Maven、Git、JDK</li>
+</ul>
+</li>
+<li>打开 /系统管理/系统配置<ul>
+<li>Maven ops</li>
+<li>Jenkins启动路径</li>
+<li>Git Parameter</li>
+<li>Git plugin配置全局user信息</li>
+<li>Publish over ssh 配置ssh公钥、服务器地址、用户名等</li>
+</ul>
+</li>
+<li></li>
+</ol>
+<h4 id="7-配置部署Git项目的一些插件"><a href="#7-配置部署Git项目的一些插件" class="headerlink" title="7.配置部署Git项目的一些插件"></a>7.配置部署Git项目的一些插件</h4><p>首先先安装几个必须用到的插件</p>
+<ul>
+<li><a href="https://plugins.jenkins.io/workflow-aggregator" target="_blank" rel="noopener">Git Parameter Plug-In](https://plugins.jenkins.io/git-parameter)</a></li>
+<li><a href="https://plugins.jenkins.io/pipeline-maven" target="_blank" rel="noopener">Pipeline Maven Integration Plugin</a></li>
+<li><a href="https://plugins.jenkins.io/publish-over-ssh" target="_blank" rel="noopener">Publish Over SSH</a></li>
+<li><a href="https://plugins.jenkins.io/ssh" target="_blank" rel="noopener">SSH plugin</a></li>
+</ul>
+
     
     </div>
     
