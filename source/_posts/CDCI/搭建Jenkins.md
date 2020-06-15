@@ -1,6 +1,6 @@
 ---
 title: 搭建Jenkins
-date: 2020-02-26 22:10:03
+date: 2020-06-02 12:10:03
 tags: [Workflow,CD/CI]
 categories: Workflow
 ---
@@ -64,3 +64,13 @@ sudo service jenkins start
 - [Pipeline Maven Integration Plugin](https://plugins.jenkins.io/pipeline-maven)
 - [Publish Over SSH](https://plugins.jenkins.io/publish-over-ssh)
 - [SSH plugin](https://plugins.jenkins.io/ssh)
+
+#### 8. 配置项目与插件
+
+1. 新建一个maven项目，
+2. 在Maven Info Plugin Configuration配置log rotation
+3. 添加`git parameter`配置，并增加对应的BRANCH变量名
+4. 在源码管理tab，填好对应的git地址
+5. 在编译tab中，填好maven编译指令，例如：`mvn clean install -pl xxx -am -Pdev -Dmaven.test.skip=true`
+6. 也在同一tab中，在Post Steps中点击add post-build step，选择send file or exec command over SSH，此时会跳出一个SSH面板，在上面填好相应的编译前置、编译后置、编译完成后执行等指令即可
+7. 到此结束配置，可以回到Jenkins首页选择项目进行部署了
