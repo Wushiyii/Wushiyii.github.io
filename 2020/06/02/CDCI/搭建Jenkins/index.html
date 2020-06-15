@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-<title>标签 - Blog</title>
+<title>搭建Jenkins - Blog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -18,17 +18,18 @@
 
 
 
-    <meta name="description" content="Recording the learning process">
-<meta name="keywords" content="Workflow,CD&#x2F;CI,编程,容器,CI&#x2F;CD,Linux,Docker,git,JAVA,JVM,语言,WEB,MarkDown,blog,READ,CODE,Mysql,workflow,Algorithm,集合,Spring,Springboot,分布式,消息队列">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="https://wushiyii.github.io/tags/index.html">
+    <meta name="description" content="在Red Hat上从0到1搭建Jenkins">
+<meta name="keywords" content="Workflow,CD&#x2F;CI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Jenkins">
+<meta property="og:url" content="https://wushiyii.github.io/2020/06/02/CDCI/搭建Jenkins/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="Recording the learning process">
+<meta property="og:description" content="在Red Hat上从0到1搭建Jenkins">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-06-15T04:49:53.983Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
-<meta name="twitter:description" content="Recording the learning process">
+<meta name="twitter:title" content="搭建Jenkins">
+<meta name="twitter:description" content="在Red Hat上从0到1搭建Jenkins">
 
 
 
@@ -113,114 +114,111 @@
     </div>
 </nav>
 
-    <section class="section section-heading">
+    <section class="section">
     <div class="container">
-        <div class="content">
-            <h5>#标签</h5>
-        </div>
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            搭建Jenkins
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-06-02T04:10:03.000Z" itemprop="datePublished">6月 2 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/Workflow/">Workflow</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            3 分钟 读完 (约 446 字)
+        </span>
+        
     </div>
-</section>
-<section class="section">
-    <div class="container">
-        <div class="columns is-variable is-1 is-multiline is-mobile">
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p>在Red Hat上从0到1搭建Jenkins</p>
+<a id="more"></a>
+<h1 id="Red-Hat搭建Jenkins"><a href="#Red-Hat搭建Jenkins" class="headerlink" title="Red Hat搭建Jenkins"></a>Red Hat搭建Jenkins</h1><h3 id="1-安装JDK、Git、Maven"><a href="#1-安装JDK、Git、Maven" class="headerlink" title="1.安装JDK、Git、Maven"></a>1.安装JDK、Git、Maven</h3><h3 id="2-安装Jenkins"><a href="#2-安装Jenkins" class="headerlink" title="2.安装Jenkins"></a>2.安装Jenkins</h3><h4 id="1-添加Jenkins的repo源"><a href="#1-添加Jenkins的repo源" class="headerlink" title="1.添加Jenkins的repo源"></a>1.添加Jenkins的repo源</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-导入密钥"><a href="#2-导入密钥" class="headerlink" title="2.导入密钥"></a>2.导入密钥</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-yum安装Jenkins"><a href="#3-yum安装Jenkins" class="headerlink" title="3.yum安装Jenkins"></a>3.yum安装Jenkins</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install jenkins</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-启动Jenkins"><a href="#4-启动Jenkins" class="headerlink" title="4.启动Jenkins"></a>4.启动Jenkins</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service jenkins start</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-初始化Jenkins"><a href="#5-初始化Jenkins" class="headerlink" title="5.初始化Jenkins"></a>5.初始化Jenkins</h4><ol>
+<li>打开jenkins页面（默认port为8080)</li>
+<li>使用默认密码登录（cat /var/lib/jenkins/secrets/initialAdminPassword）</li>
+<li>安装插件（默认安装即可）；安装完成后即可</li>
+</ol>
+<h4 id="6-设置Jenkins"><a href="#6-设置Jenkins" class="headerlink" title="6.设置Jenkins"></a>6.设置Jenkins</h4><ol>
+<li>在 /系统管理/全局工具配置<ul>
+<li>配置Maven、Git、JDK</li>
+</ul>
+</li>
+<li>打开 /系统管理/系统配置<ul>
+<li>Maven ops</li>
+<li>Jenkins启动路径</li>
+<li>Git Parameter</li>
+<li>Git plugin配置全局user信息</li>
+<li>Publish over ssh 配置ssh公钥、服务器地址、用户名等</li>
+</ul>
+</li>
+<li></li>
+</ol>
+<h4 id="7-配置部署Git项目的一些插件"><a href="#7-配置部署Git项目的一些插件" class="headerlink" title="7.配置部署Git项目的一些插件"></a>7.配置部署Git项目的一些插件</h4><p>首先先安装几个必须用到的插件</p>
+<ul>
+<li><a href="https://plugins.jenkins.io/workflow-aggregator" target="_blank" rel="noopener">Git Parameter Plug-In](https://plugins.jenkins.io/git-parameter)</a></li>
+<li><a href="https://plugins.jenkins.io/pipeline-maven" target="_blank" rel="noopener">Pipeline Maven Integration Plugin</a></li>
+<li><a href="https://plugins.jenkins.io/publish-over-ssh" target="_blank" rel="noopener">Publish Over SSH</a></li>
+<li><a href="https://plugins.jenkins.io/ssh" target="_blank" rel="noopener">SSH plugin</a></li>
+</ul>
+<h4 id="8-配置项目与插件"><a href="#8-配置项目与插件" class="headerlink" title="8. 配置项目与插件"></a>8. 配置项目与插件</h4><ol>
+<li>新建一个maven项目，</li>
+<li>在Maven Info Plugin Configuration配置log rotation</li>
+<li>添加<code>git parameter</code>配置，并增加对应的BRANCH变量名</li>
+<li>在源码管理tab，填好对应的git地址</li>
+<li>在编译tab中，填好maven编译指令，例如：<code>mvn clean install -pl xxx -am -Pdev -Dmaven.test.skip=true</code></li>
+<li>也在同一tab中，在Post Steps中点击add post-build step，选择send file or exec command over SSH，此时会跳出一个SSH面板，在上面填好相应的编译前置、编译后置、编译完成后执行等指令即可</li>
+<li>到此结束配置，可以回到Jenkins首页选择项目进行部署了</li>
+</ol>
+
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Workflow/">#Workflow</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/CD-CI/">#CD/CI</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Workflow/">#Workflow&nbsp;(3)</a>
-            </span>
+            <a href="/2020/06/14/算法/常用排序实现/">常见排序实现</a>
             
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/CD-CI/">#CD/CI&nbsp;(1)</a>
-            </span>
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
             
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/编程/">#编程&nbsp;(17)</a>
-            </span>
+            <a href="/2020/04/16/Java/Spring/Spring事务/">Spring事务</a>
             
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/容器/">#容器&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/CI-CD/">#CI/CD&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Linux/">#Linux&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Docker/">#Docker&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/git/">#git&nbsp;(2)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/JAVA/">#JAVA&nbsp;(12)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/JVM/">#JVM&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/语言/">#语言&nbsp;(6)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/WEB/">#WEB&nbsp;(5)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/MarkDown/">#MarkDown&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/blog/">#blog&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/READ/">#READ&nbsp;(2)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/CODE/">#CODE&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Mysql/">#Mysql&nbsp;(2)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/workflow/">#workflow&nbsp;(2)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Algorithm/">#Algorithm&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/集合/">#集合&nbsp;(3)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Spring/">#Spring&nbsp;(3)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/Springboot/">#Springboot&nbsp;(1)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/分布式/">#分布式&nbsp;(7)</a>
-            </span>
-            
-            <span class="column is-narrow">
-                <a class="tag is-light article-tag" href="/tags/消息队列/">#消息队列&nbsp;(7)</a>
-            </span>
-            
-        </div>
+        </span>
+    </div>
+    
+</article>
+
+
+
+
     </div>
 </section>
     <footer class="footer">

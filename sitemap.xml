@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wushiyii.github.io/2020/02/26/CDCI/%E6%90%AD%E5%BB%BAJenkins/</loc>
+    <loc>https://wushiyii.github.io/2020/06/14/%E7%AE%97%E6%B3%95/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E5%AE%9E%E7%8E%B0/</loc>
     
-    <lastmod>2020-06-02T04:28:45.263Z</lastmod>
+    <lastmod>2020-06-15T04:57:02.728Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2020/06/02/CDCI/%E6%90%AD%E5%BB%BAJenkins/</loc>
+    
+    <lastmod>2020-06-15T04:49:53.983Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/2020/02/28/Java/Spring/%E6%8E%A5%E5%85%A5Redis/</loc>
+    
+    <lastmod>2020-06-02T04:32:22.504Z</lastmod>
     
   </url>
   
@@ -12,13 +26,6 @@
     <loc>https://wushiyii.github.io/2020/04/16/Java/Spring/Spring%E4%BA%8B%E5%8A%A1/</loc>
     
     <lastmod>2020-04-16T03:02:47.671Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wushiyii.github.io/2020/02/28/Java/Spring/%E6%8E%A5%E5%85%A5Redis/</loc>
-    
-    <lastmod>2020-02-28T03:12:23.842Z</lastmod>
     
   </url>
   
@@ -58,14 +65,14 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/09/01/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/</loc>
+    <loc>https://wushiyii.github.io/2019/09/22/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/</loc>
     
     <lastmod>2019-11-10T15:56:33.795Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/09/22/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/</loc>
+    <loc>https://wushiyii.github.io/2019/09/01/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/</loc>
     
     <lastmod>2019-11-10T15:56:33.795Z</lastmod>
     
@@ -107,14 +114,14 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/11/30/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-two/</loc>
+    <loc>https://wushiyii.github.io/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/%E4%BB%80%E4%B9%88%E6%98%AF%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</loc>
     
     <lastmod>2019-11-10T15:53:17.979Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/%E4%BB%80%E4%B9%88%E6%98%AF%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</loc>
+    <loc>https://wushiyii.github.io/2018/11/30/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-two/</loc>
     
     <lastmod>2019-11-10T15:53:17.979Z</lastmod>
     
@@ -156,27 +163,6 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/categories/index.html</loc>
-    
-    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wushiyii.github.io/links/index.html</loc>
-    
-    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wushiyii.github.io/books/index.html</loc>
-    
-    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wushiyii.github.io/repository/index.html</loc>
     
     <lastmod>2019-10-21T13:22:42.276Z</lastmod>
@@ -191,14 +177,35 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/04/21/Workflow/%E4%BB%80%E4%B9%88%E6%98%AFGit/</loc>
+    <loc>https://wushiyii.github.io/categories/index.html</loc>
+    
+    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/books/index.html</loc>
+    
+    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/links/index.html</loc>
+    
+    <lastmod>2019-10-21T13:22:42.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wushiyii.github.io/about/index.html</loc>
     
     <lastmod>2019-10-21T13:22:42.275Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/about/index.html</loc>
+    <loc>https://wushiyii.github.io/2019/04/21/Workflow/%E4%BB%80%E4%B9%88%E6%98%AFGit/</loc>
     
     <lastmod>2019-10-21T13:22:42.275Z</lastmod>
     
@@ -219,7 +226,7 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/02/25/Javascript/ES6-Class/</loc>
+    <loc>https://wushiyii.github.io/2019/02/25/Javascript/ES6-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0/</loc>
     
     <lastmod>2019-10-21T13:22:42.271Z</lastmod>
     
@@ -233,7 +240,7 @@
   </url>
   
   <url>
-    <loc>https://wushiyii.github.io/2019/02/25/Javascript/ES6-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0/</loc>
+    <loc>https://wushiyii.github.io/2019/02/25/Javascript/ES6-Class/</loc>
     
     <lastmod>2019-10-21T13:22:42.271Z</lastmod>
     
