@@ -4,7 +4,7 @@ avatar: /avatar/zzz.jpg
 # author name
 author: Wushiyi
 # signature
-signature: No!No!No！
+# signature: No!No!No！
 # SNS (you can custom the order)
 social:
   email: wgq287676521@qq.com
@@ -30,8 +30,8 @@ social:
   rss: 
 # friends
 friends:
-  friendA: //www.baidu.com
-  friendB: //www.google.com
+  friendA: 
+  friendB: 
   friendC: 
 about:
   enable: true
@@ -50,7 +50,7 @@ SEO_keywords:
 main_title: Wushiyi.
 
 # subtitle
-subtitle: Record everything
+subtitle: Little bird
 # site haeder image
 site_header_image: '/intro/index-bg2.jpg'
 # post haeder image
