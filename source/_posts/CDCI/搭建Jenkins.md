@@ -1,5 +1,5 @@
 ---
-title: 搭建Jenkins
+title: Red Hat 搭建Jenkins
 date: 2020-06-02 12:10:03
 tags: [Workflow,CD/CI]
 categories: Workflow

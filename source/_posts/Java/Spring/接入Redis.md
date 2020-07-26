@@ -7,55 +7,11 @@ categories: JAVA
 
 ---
 
-从0开始接入Redis
+SpringBoot接入Redis
 
 <!-- more -->
 
-#### 1.Redis基础知识
-
-Redis 可以存储键与5种不同数据结构类型之间的映射，这5种数据结构类型分别为：`String`（字符串）、`List`（列表）、`Set`（集合）、`Hash`（散列）和 `zSet`（有序集合）。
-
-- String
-
-**结构存储的值：**
-  可以是字符串、整数或者浮点数。
-
-**结构的读写能力：**
-  对整个字符串或者字符串的其中一部分执行操作，对象和浮点数执行自增(increment)或者自减(decrement)。
-
-- List
-
-**结构存储的值：**
-  一个链表，链表上的每个节点都包含了一个字符串。
-
-**结构的读写能力：**
-  从链表的两端推入或者弹出元素，根据偏移量(offset)对链表进行修剪(trim)，读取单个或者多个元素，根据值来查找或者移除元素。
-
-- Set
-
-**结构存储的值：**
-  包含字符串的无序收集器(unOrderedCollection)，并且被包含的每个字符串都是独一无二的、各不相同。
-
-**结构的读写能力：**
-  添加、获取、移除单个元素，检查一个元素是否存在于某个集合中，计算交集、并集、差集，从集合里面随机获取元素。
-
-- Hash
-
-**结构存储的值：**
-  包含键值对的无序散列表。
-
-**结构的读写能力：**
-  添加、获取、移除单个键值对，获取所有键值对。
-
-- zSet
-
-**结构存储的值：**
-  字符串成员(member)与浮点数分值(score)之间的有序映射，元素的排列顺序由分值(score)的大小决定。
-
-**结构的读写能力：**
-  添加、获取、删除单个元素，根据分值(score)范围(range)或者成员来获取元素。
-
-#### 2.Springboot配置Redis
+### Springboot配置Redis
 
 如果代码需要区分不通组件的配置，可以新建一个配置，名称风格可以和spring的统一，比如`application-redis.properties`或者`application-redis.yml`，然后在spring基础配置里加上`spring.profiles.include=redis`
 
@@ -145,7 +101,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 
 
-#### 3.简单RedisUtil
+### 常用功能封装RedisUtil
 
 ```java
 @Slf4j
@@ -154,15 +110,25 @@ public class RedisUtil {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+  
+	  private ThreadLocal<String> lockLocal = new ThreadLocal<>();
+
+    private RedisScript<Long> releaseLockScript;
+  
+	  private static final String RELEASE_LOCK_LUA_SCRIPT = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+  
+  	@PostConstruct
+    public void init() {
+        // 设置解锁lua脚本
+        releaseLockScript = new DefaultRedisScript<>(RELEASE_LOCK_LUA_SCRIPT, Long.class);
+    }
 
     public String get(@NotNull String key) {
         return stringRedisTemplate.opsForValue().get(key);
     }
 
     public <T> T get(@NotNull String key, Class<T> t) {
-
         String value = stringRedisTemplate.opsForValue().get(key);
-
         if (StringUtils.isNoneBlank(value)) {
             return JacksonUtils.fromJson(value, t);
         }
@@ -172,15 +138,6 @@ public class RedisUtil {
     public <T> void set(String key, T data) {
         this.setForExpire(key, data, 2, TimeUnit.HOURS);
         log.info("save redis cache key={} done value={}", key, data);
-    }
-
-    public void set(String key, String value) {
-        this.setForExpire(key, value, 2, TimeUnit.HOURS);
-        log.info("save redis cache key={} done value={}", key, value);
-    }
-
-    public void setForExpire(String key, String data, long timeout, TimeUnit timeUnit) {
-        stringRedisTemplate.opsForValue().set(key, data, timeout, timeUnit);
     }
 
     public <T> void setForExpire(String key, T data, long timeout, TimeUnit timeUnit) {
@@ -194,6 +151,89 @@ public class RedisUtil {
 
     public Boolean exists(String key) {
         return stringRedisTemplate.hasKey(key);
+    }
+  
+  	public Long ttl(String key) {
+        return stringRedisTemplate.getExpire(key);
+    }
+
+    public Boolean lock(String key, long timeout) {
+        return lock(key, GLOBAL_LOCK_VALUE, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    public Boolean lock(String key, String value, long timeout, TimeUnit timeUnit) {
+        return stringRedisTemplate.opsForValue().setIfAbsent(key, value, timeout, timeUnit);
+    }
+
+    public Boolean expire(String key, long timeout, TimeUnit timeUnit) {
+        return stringRedisTemplate.expire(key, timeout, timeUnit);
+    }
+  
+  	public String getSequenceNum() {
+        //14位当前时间
+        String currentDateString = DateUtils.dateToString(new Date(), 8);
+        Long value;
+        try {
+            value = this.increment(ID_NUM_KEY_PREFIX + currentDateString);
+            this.expire(ID_NUM_KEY_PREFIX + currentDateString, 5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("redis 请求失败!", e);
+            value = Long.valueOf(RandomStringUtils.randomNumeric(6));
+        }
+        int restSeat = NO_LIMIT - currentDateString.length();
+        return currentDateString + StringUtils.leftPad(String.valueOf(value), restSeat, '0');
+    }
+
+    public String getIdNum(BusinessNoPrefixEnum prefixEnum) {
+        return prefixEnum.getPrefix() + getIdNum();
+    }
+
+
+    public Long increment(@NotEmpty String key) {
+        Long incr = stringRedisTemplate.opsForValue().increment(key);
+        return incr;
+    }
+  
+  public boolean getSpinLock(String key, long timeout, int retryTimes, long sleepTime) {
+        AtomicInteger count = new AtomicInteger();
+        String uuid = UUID.randomUUID().toString();
+
+        while (!lock(key, uuid, timeout, TimeUnit.MILLISECONDS)) {
+            if (retryTimes == count.incrementAndGet()) {
+                log.warn("获取分布式锁失败，获取次数达到限制。 threadName:{}, key:{}, count:{}, retryTimes:{}", Thread.currentThread().getName(), key, count, retryTimes);
+                return false;
+            }
+            try {
+                log.warn("获取分布式锁失败，等待自旋获取。 threadName:{}, key:{}, count:{}, retryTimes:{}", Thread.currentThread().getName(), key, count, retryTimes);
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                log.error("线程等待出现异常", e);
+            }
+        }
+        lockLocal.set(uuid);
+        log.info("获取分布式锁成功。 threadName:{}, key:{}, count:{}, retryTimes:{}", Thread.currentThread().getName(), key, count, retryTimes);
+        return true;
+    }
+
+    public void unlockSpinLock(String key) {
+
+        // 从ThreadLocal取到加锁的uuid
+        String uuid = lockLocal.get();
+        String threadName = Thread.currentThread().getName();
+
+        try {
+            // 参数一：redisScript，参数二：key列表，参数三：arg（可多个）
+            Long result = stringRedisTemplate.execute(releaseLockScript, Collections.singletonList(key), uuid);
+            if (Objects.isNull(result)) {
+                log.error("调用lua脚本解锁失败, key:{}, value:{}, threadName:{}", key, uuid, threadName);
+                remove(key);
+            }
+        } catch (Exception e) {
+            log.error("调用lua脚本解锁失败, key:{}, value:{}, threadName:{}, e:{}", key, uuid, threadName, e);
+            remove(key);
+        } finally {
+            lockLocal.remove();
+        }
     }
 
 }
