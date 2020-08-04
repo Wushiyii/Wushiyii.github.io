@@ -13,7 +13,7 @@ About distribute consistency
 
 在一个分布式系统中，存在多个节点，而在每个节点中的数据都有可能存在不一致的情况。比如Mysql主从复制的原理是启一个异步线程定时从master节点拉取数据，这就存在数据短暂不一致的情况。
 
-为了解决分布式一直问题，比较著名的算法协议有`2PC`（Two Phase Commit Protocol）、`3PC`（Three Phase Commit Protocol）、`Paxos`、`Raft`等。
+为了解决分布式一致问题，比较著名的算法协议有`2PC`（Two Phase Commit Protocol）、`3PC`（Three Phase Commit Protocol）、`Paxos`、`Raft`等。
 
 ### 分布式事务
 
