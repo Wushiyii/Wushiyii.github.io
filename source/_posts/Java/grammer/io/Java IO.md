@@ -192,4 +192,4 @@ public BufferedInputStream(InputStream in, int size) {
 }
 ```
 
-在真正调用的时候，调用read方法实际上就会调用到FilterInputStream里的read方法
+在真正调用的时候，调用read方法实际上就会调用到FilterInputStream里的read方法。
