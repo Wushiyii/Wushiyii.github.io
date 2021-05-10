@@ -17,6 +17,8 @@ Netty基础概念与实现一个Echo服务
 - ChannelFutre -> 异步通知
 - EventLoopGroup ->处理连接的生命周期，包含一个或多个EventLoop
 - ChannelFuture -> Netty中所有操作都是异步的，通过ChannelFuture的addListener方法注册channelFutureListenner，可以在操作完成时进行获得通知。
+- ChannelHandler -> 处理入站、出战数据的应用程序逻辑的容器。
+- ChannelPipeline -> 提供ChannelHandler链的容器，ChannelHandler会被安装到pipeline中。
 
 ### 实现一个Echo服务
 
