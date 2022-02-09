@@ -4,7 +4,7 @@ date: 2021-05-08 18:53:07
 tags: [JAVA,NETTY]
 categories: NETTY
 ---
-Netty组件：ChannelHandlerChannelPipeline的关系
+Netty组件的概念
 
 <!-- more -->
 
@@ -39,3 +39,8 @@ Netty组件：ChannelHandlerChannelPipeline的关系
 #### SimpleChannelInboundHandler
 
 `SimpleChannelInboundHandler`可以处理对应泛型<I>的消息，要注如果在pipeline链上，前一个`ChannelHandler`传过来的消息，必须和<I>指定的类型一致，否则不会解析消息。
+
+
+
+
+
