@@ -23,7 +23,8 @@ public static void main(String[] args) {
     }
 ```
 
-1. NamesrvStartup.main方法启动，首先会调用创建Namesrv的主实例NamesrvController，这个类主要作用为保存Namesrv的配置、Netty配置
+`NamesrvStartup.main()`方法启动，首先会调用创建Namesrv的主实例NamesrvController，这个类主要作用为保存Namesrv的配置、Netty配置
+
 ```java
 public static NamesrvController createNamesrvController(String[] args) throws IOException, JoranException {
        
@@ -40,6 +41,7 @@ public static NamesrvController createNamesrvController(String[] args) throws IO
 ```
 
 `NamesrvController`为Namesrv的主要类，里面存放大量功能服务类，这是其中一部分信息
+
 ```java
 public class NamesrvController {
 
@@ -66,8 +68,8 @@ public class NamesrvController {
     private FileWatchService fileWatchService;
 ```
 
+启动NamesrvController,这一阶段主要分为初始化(`initialize()`)与启动(`start()`)
 
-2. 启动NamesrvController,这一阶段主要分为初始化(`initialize()`)与启动(`start()`)
 ```java
 public boolean initialize() {
 
@@ -95,7 +97,8 @@ public boolean initialize() {
         //... 定时打印KV配置、处理SSL相关
     }
 ```
-3. 执行Broker的start方法，主要是启动Netty服务器
+执行Broker的start方法，主要是启动Netty服务器
+
 ```java
 
     org.apache.rocketmq.remoting.netty.NettyRemotingServer
@@ -107,7 +110,8 @@ public boolean initialize() {
 
 
         ServerBootstrap childHandler =
-            this.serverBootstrap.group(this.eventLoopGroupBoss, this.eventLoopGroupSelector) //boss、selector组合
+          //boss、selector组合
+            this.serverBootstrap.group(this.eventLoopGroupBoss, this.eventLoopGroupSelector) 
                 .channel(useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class) //使用epoll或nio
                 .option(ChannelOption.SO_BACKLOG, 1024)// backlog的定义是已连接但未进行accept处理的socket队列大小， 如果这个队列满了，将会发送一个ECONNREFUSED错误信息给到客户端，即“Connection refused”。
                 .option(ChannelOption.SO_REUSEADDR, true)// 一般来说，一个端口释放后会等待两分钟之后才能再被使用，SO_REUSEADDR是让端口释放后立即就可以被再次使用。
@@ -122,9 +126,9 @@ public boolean initialize() {
                         ch.pipeline()
                             .addLast(defaultEventExecutorGroup, HANDSHAKE_HANDLER_NAME, handshakeHandler)// 
                             .addLast(defaultEventExecutorGroup,
-                                encoder,
-                                new NettyDecoder(),
-                                new IdleStateHandler(0, 0, nettyServerConfig.getServerChannelMaxIdleTimeSeconds()),
+                                encoder,//编码
+                                new NettyDecoder(),//解码
+                                new IdleStateHandler(0, 0, nettyServerConfig.getServerChannelMaxIdleTimeSeconds()),//空闲管理器
                                 connectionManageHandler,
                                 serverHandler // 这个为Netty的业务消息处理器，代码太多，主要为调用NamesrvController初始化阶段时，注册的消息处理器(DefaultRequestProcessor)
                             );
@@ -148,7 +152,8 @@ public boolean initialize() {
 ```
 > 提一下，为什么不使用TCP的keepLive？可以参考这篇 https://www.zhihu.com/question/40602902
 
-4. `DefaultRequestProcessor`处理Broker接收到的请求
+`DefaultRequestProcessor`处理Broker接收到的请求
+
 ```java
 @Override
     public RemotingCommand processRequest(ChannelHandlerContext ctx,
@@ -182,7 +187,7 @@ public boolean initialize() {
     }
 ```
 
-5. Broker的消息处理列表
+以下为Namesrv的TCP接口列表
 
 | 枚举 | CODE | DESC |
 | :-----| ----: | :----: |
@@ -190,9 +195,9 @@ public boolean initialize() {
 | GET_KV_CONFIG | 101 | 获取KV值 |
 | DELETE_KV_CONFIG | 102 | 删除KV值 |
 | QUERY_DATA_VERSION | 322 | Broker调用，对比本地与namesrv的数据，判断namesrv是否已更新 |
-| REGISTER_BROKER | 103 | 注册Broker |
-| UNREGISTER_BROKER | 104 | 注销broker |
-| GET_ROUTEINFO_BY_TOPIC | 105 | 通过topic查询 |
+| REGISTER_BROKER | 103 | `注册Broker` |
+| UNREGISTER_BROKER | 104 | `注销broker` |
+| GET_ROUTEINFO_BY_TOPIC | 105 | 通过topic查询路由信息 |
 | GET_BROKER_CLUSTER_INFO | 106 | 获取Broker集群信息 |
 | WIPE_WRITE_PERM_OF_BROKER | 205 | 清理Broker |
 | GET_ALL_TOPIC_LIST_FROM_NAMESERVER | 206 | 获取所有topic列表 |
@@ -205,5 +210,166 @@ public boolean initialize() {
 | UPDATE_NAMESRV_CONFIG | 318 | 更新configuration这个类维护的property, nameServer中，这个类维护的是namesrvConfig，nettyServerConfig这两份配置 |
 | GET_NAMESRV_CONFIG | 319 | 查询configuration这个类维护的property |
 
-
 ### Namesrv的主要交互代码分析
+
+#### Broker注册至Namesrv
+
+broker的如何启动、运行不在本篇描述，可以查看另一篇`Broker源码分析`，总之在Broker启动后，会解析配置文件中的`NamesrvAddr`,发送103(`REGISTER_BROKER`), 104(`UNREGISTER_BROKER`)来注册或注销`Namesrv`.
+
+##### `REGISTER_BROKER`注册Broker
+
+入口为`registerBrokerWithFilterServer`, 其实这个filterServer不用太过关心，很少用到
+
+```java
+public RemotingCommand registerBrokerWithFilterServer(ChannelHandlerContext ctx, RemotingCommand request)
+        throws RemotingCommandException {
+        //包装请求、返回值
+        final RemotingCommand response = RemotingCommand.createResponseCommand(RegisterBrokerResponseHeader.class);
+        final RegisterBrokerResponseHeader responseHeader = (RegisterBrokerResponseHeader) response.readCustomHeader();
+        final RegisterBrokerRequestHeader requestHeader =
+            (RegisterBrokerRequestHeader) request.decodeCommandCustomHeader(RegisterBrokerRequestHeader.class);
+
+        //校验broker传过来的body是否完整
+        if (!checksum(ctx, request, requestHeader)) {
+            response.setCode(ResponseCode.SYSTEM_ERROR);
+            response.setRemark("crc32 not match");
+            return response;
+        }
+
+        //解析body
+        RegisterBrokerBody registerBrokerBody = new RegisterBrokerBody();
+        if (request.getBody() != null) {
+            registerBrokerBody = RegisterBrokerBody.decode(request.getBody(), requestHeader.isCompressed());
+        } else {
+            registerBrokerBody.getTopicConfigSerializeWrapper().getDataVersion().setCounter(new AtomicLong(0));
+            registerBrokerBody.getTopicConfigSerializeWrapper().getDataVersion().setTimestamp(0);
+        }
+
+        //注册Broker节点，详情看后面
+        RegisterBrokerResult result = this.namesrvController.getRouteInfoManager().registerBroker(
+            requestHeader.getClusterName(),
+            requestHeader.getBrokerAddr(),
+            requestHeader.getBrokerName(),
+            requestHeader.getBrokerId(),
+            requestHeader.getHaServerAddr(),
+            registerBrokerBody.getTopicConfigSerializeWrapper(),
+            registerBrokerBody.getFilterServerList(),
+            ctx.channel());
+
+        //返回namesrv节点信息
+        responseHeader.setHaServerAddr(result.getHaServerAddr());
+        responseHeader.setMasterAddr(result.getMasterAddr());
+        byte[] jsonValue = this.namesrvController.getKvConfigManager().getKVListByNamespace(NamesrvUtil.NAMESPACE_ORDER_TOPIC_CONFIG);
+        response.setBody(jsonValue);
+        response.setCode(ResponseCode.SUCCESS);
+        response.setRemark(null);
+        return response;
+    }
+```
+
+详细注册节点实现，主要为更新RouteInfoManager的几个Map
+
+```java
+public RegisterBrokerResult registerBroker(
+            final String clusterName,
+            final String brokerAddr,
+            final String brokerName,
+            final long brokerId,
+            final String haServerAddr,
+            final TopicConfigSerializeWrapper topicConfigWrapper,
+            final List<String> filterServerList,
+            final Channel channel) {
+        RegisterBrokerResult result = new RegisterBrokerResult();
+        try {
+            try {
+                //RouteInfoManager全局使用的读写锁
+                this.lock.writeLock().lockInterruptibly();
+
+                //根据集群名获取对于的broker名集合，并加入到集合
+                Set<String> brokerNames = this.clusterAddrTable.get(clusterName);
+                brokerNames.add(brokerName);
+
+
+                //根据BrokerName获取Broker信息（Broker主节点、Slave节点等）
+                BrokerData brokerData = this.brokerAddrTable.get(brokerName);
+                boolean registerFirst = false;
+                if (null == brokerData) {
+                    registerFirst = true;
+                    brokerData = new BrokerData(clusterName, brokerName, new HashMap<Long, String>());
+                    this.brokerAddrTable.put(brokerName, brokerData);
+                }
+                Map<Long, String> brokerAddrsMap = brokerData.getBrokerAddrs();
+                //主从切换/节点覆盖，broker的地址一样，但是brokerId不一样，相同的IP:PORT只能在brokerAddrTable中有一条记录
+                Iterator<Entry<Long, String>> it = brokerAddrsMap.entrySet().iterator();
+                while (it.hasNext()) {
+                    Entry<Long, String> item = it.next();
+                    if (null != brokerAddr && brokerAddr.equals(item.getValue()) && brokerId != item.getKey()) {
+                        log.debug("remove entry {} from brokerData", item);
+                        it.remove();
+                    }
+                }
+
+                String oldAddr = brokerData.getBrokerAddrs().put(brokerId, brokerAddr);
+                if (MixAll.MASTER_ID == brokerId) {
+                    log.info("cluster [{}] brokerName [{}] master address change from {} to {}",
+                            brokerData.getCluster(), brokerData.getBrokerName(), oldAddr, brokerAddr);
+                }
+
+                registerFirst = registerFirst || (null == oldAddr);
+
+                //如果为主节点，则
+                if (null != topicConfigWrapper
+                        && MixAll.MASTER_ID == brokerId) {
+                    if (this.isBrokerTopicConfigChanged(brokerAddr, topicConfigWrapper.getDataVersion())
+                            || registerFirst) {
+                        ConcurrentMap<String, TopicConfig> tcTable =
+                                topicConfigWrapper.getTopicConfigTable();
+                        if (tcTable != null) {
+                            for (Map.Entry<String, TopicConfig> entry : tcTable.entrySet()) {
+                                this.createAndUpdateQueueData(brokerName, entry.getValue());
+                            }
+                        }
+                    }
+                }
+
+                BrokerLiveInfo prevBrokerLiveInfo = this.brokerLiveTable.put(brokerAddr,
+                        new BrokerLiveInfo(
+                                System.currentTimeMillis(),
+                                topicConfigWrapper.getDataVersion(),
+                                channel,
+                                haServerAddr));
+                if (null == prevBrokerLiveInfo) {
+                    log.info("new broker registered, {} HAServer: {}", brokerAddr, haServerAddr);
+                }
+
+                if (filterServerList != null) {
+                    if (filterServerList.isEmpty()) {
+                        this.filterServerTable.remove(brokerAddr);
+                    } else {
+                        this.filterServerTable.put(brokerAddr, filterServerList);
+                    }
+                }
+
+                if (MixAll.MASTER_ID != brokerId) {
+                    String masterAddr = brokerData.getBrokerAddrs().get(MixAll.MASTER_ID);
+                    if (masterAddr != null) {
+                        BrokerLiveInfo brokerLiveInfo = this.brokerLiveTable.get(masterAddr);
+                        if (brokerLiveInfo != null) {
+                            result.setHaServerAddr(brokerLiveInfo.getHaServerAddr());
+                            result.setMasterAddr(masterAddr);
+                        }
+                    }
+                }
+            } finally {
+                this.lock.writeLock().unlock();
+            }
+        } catch (Exception e) {
+            log.error("registerBroker Exception", e);
+        }
+
+        return result;
+    }
+```
+
+
+
