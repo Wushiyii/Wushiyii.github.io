@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Wushiyi">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Wushiyi">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog,Wushiyi">
+    
+    <meta name="description" content="Recording the learning process">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>SpringBoot启动分析 · Wushiyi</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Blog" type="application/atom+xml">
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Wushiyi.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">SpringBoot启动分析</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Wushiyi.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/404-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            SpringBoot启动分析
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "JAVA">JAVA</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Spring">Spring</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.1k</span>阅读时长: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/06/11</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>Build a ApplicationContext, And run it</p>
+<span id="more"></span>
+
+<h3 id="1-构造SpringBoot实例"><a href="#1-构造SpringBoot实例" class="headerlink" title="1.构造SpringBoot实例"></a>1.构造SpringBoot实例</h3><p>一个<code>SpringBoot</code>的启动入口，往往是通过一个main函数+@SpringBootApplication启动，并且在这之上会有很多特性注解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication(scanBasePackages = &#123;&quot;com.xxx&quot;, &quot;com.xxx&quot;&#125;)</span></span><br><span class="line"><span class="meta">@MapperScan(value = &quot;com.xxx&quot;, sqlSessionTemplateRef = &quot;xxxSqlSessionTemplate&quot;)</span></span><br><span class="line"><span class="meta">@EnableTransactionManagement(proxyTargetClass = true)</span></span><br><span class="line"><span class="meta">@EnableRetry</span></span><br><span class="line"><span class="meta">@EnableAsync</span></span><br><span class="line"><span class="meta">@EnableDubbo(scanBasePackages = &quot;com.xxx&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(TestApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着往下，SpringApplication.run 会去创建一个新的SpringApplication实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ConfigurableApplicationContext <span class="title function_">run</span><span class="params">(Class&lt;?&gt;[] primarySources,</span></span><br><span class="line"><span class="params">      String[] args)</span> &#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SpringApplication</span>(primarySources).run(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring的构造函数，主要做了检验当前的应用环境（REACTIVE、SERVLET、NONE，见deduceFromClasspath方法）、设置应用的初始化器、监听器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">SpringApplication</span><span class="params">(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources)</span> &#123;</span><br><span class="line">   <span class="built_in">this</span>.resourceLoader = resourceLoader;</span><br><span class="line">   Assert.notNull(primarySources, <span class="string">&quot;PrimarySources must not be null&quot;</span>);</span><br><span class="line">   <span class="built_in">this</span>.primarySources = <span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;&gt;(Arrays.asList(primarySources));</span><br><span class="line">  <span class="comment">// 判断当前的应用环境</span></span><br><span class="line">   <span class="built_in">this</span>.webApplicationType = WebApplicationType.deduceFromClasspath();</span><br><span class="line">  <span class="comment">// 设置应用初始化启动器，会扫描所有jar包的 META-INF/spring.factories 中找到ApplicationContextInitializer 并实例化初始化器</span></span><br><span class="line">   setInitializers((Collection) getSpringFactoriesInstances(</span><br><span class="line">         ApplicationContextInitializer.class));</span><br><span class="line">  <span class="comment">// 设置应用初始化监听器，会扫描所有jar包的 META-INF/spring.factories 中找到ApplicationListener 并实例化初始化器</span></span><br><span class="line">   setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));</span><br><span class="line">  <span class="comment">// 根据当前Runtime对应的栈帧列表StackTraceElement，判断并设置启动springboot的main类</span></span><br><span class="line">   <span class="built_in">this</span>.mainApplicationClass = deduceMainApplicationClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，一个Springboot的实例就构造完了，接下来是启动的部分</p>
+<h3 id="2-启动"><a href="#2-启动" class="headerlink" title="2.启动"></a>2.启动</h3><p>先看一下启动源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ConfigurableApplicationContext <span class="title function_">run</span><span class="params">(String... args)</span> &#123;</span><br><span class="line">   <span class="comment">// 初始化一个计时器</span></span><br><span class="line">   <span class="type">StopWatch</span> <span class="variable">stopWatch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopWatch</span>();</span><br><span class="line">   stopWatch.start();</span><br><span class="line">   <span class="type">ConfigurableApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">   Collection&lt;SpringBootExceptionReporter&gt; exceptionReporters = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">   configureHeadlessProperty();</span><br><span class="line">  <span class="comment">// 获取SpringApplicationRunListener（如有配置）</span></span><br><span class="line">   <span class="type">SpringApplicationRunListeners</span> <span class="variable">listeners</span> <span class="operator">=</span> getRunListeners(args);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//Springboot启动时，监听starting步骤</span></span><br><span class="line">   listeners.starting();</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 构造启动Springboot的参数对象</span></span><br><span class="line">      <span class="type">ApplicationArguments</span> <span class="variable">applicationArguments</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultApplicationArguments</span>(</span><br><span class="line">            args);</span><br><span class="line">     </span><br><span class="line">      <span class="type">ConfigurableEnvironment</span> <span class="variable">environment</span> <span class="operator">=</span> prepareEnvironment(listeners,</span><br><span class="line">            applicationArguments);</span><br><span class="line">     <span class="comment">// 配置spring.beaninfo.ignore的值</span></span><br><span class="line">      configureIgnoreBeanInfo(environment);</span><br><span class="line">     <span class="comment">// 打印banner</span></span><br><span class="line">      <span class="type">Banner</span> <span class="variable">printedBanner</span> <span class="operator">=</span> printBanner(environment);</span><br><span class="line">     <span class="comment">// 创建ApplicationContext容器</span></span><br><span class="line">      context = createApplicationContext();</span><br><span class="line">     <span class="comment">// 获取SpringBootExceptionReporter，收集上报exception用</span></span><br><span class="line">      exceptionReporters = getSpringFactoriesInstances(</span><br><span class="line">            SpringBootExceptionReporter.class,</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Class</span>[] &#123; ConfigurableApplicationContext.class &#125;, context);</span><br><span class="line">     <span class="comment">// 执行创建完ApplicationContext的回调方法、执行各个应用的初始化initialize()方法</span></span><br><span class="line">      prepareContext(context, environment, listeners, applicationArguments,</span><br><span class="line">            printedBanner);</span><br><span class="line">     <span class="comment">// 刷新context容器(Beanfatroy刷新、BeanPostProcesser注册、JavaConfig解析等等..)</span></span><br><span class="line">      refreshContext(context);</span><br><span class="line">     <span class="comment">// 执行完refresh的hook</span></span><br><span class="line">      afterRefresh(context, applicationArguments);</span><br><span class="line">      stopWatch.stop();</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.logStartupInfo) &#123;</span><br><span class="line">         <span class="keyword">new</span> <span class="title class_">StartupInfoLogger</span>(<span class="built_in">this</span>.mainApplicationClass)</span><br><span class="line">               .logStarted(getApplicationLog(), stopWatch);</span><br><span class="line">      &#125;</span><br><span class="line">      listeners.started(context);</span><br><span class="line">     <span class="comment">// 执行runner方法</span></span><br><span class="line">      callRunners(context, applicationArguments);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, listeners);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(ex);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      listeners.running(context);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">      handleRunFailure(context, ex, exceptionReporters, <span class="literal">null</span>);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(ex);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>applicationContext的构造、加载与最终完成分为多个阶段</p>
+<ul>
+<li><p>SpringbootRunListener记录当前context执行到了starting阶段，并广播event到所有监听类</p>
+</li>
+<li><p>createApplicationContext（创建applicationContext）</p>
+<ul>
+<li><p>判断当前应用环境，SERVLET(SpringMVC)、REACTIVE（WebFlux）、NONE(默认的非web)，并实例化对应的applicationContext</p>
+</li>
+<li><p>```java<br>protected ConfigurableApplicationContext createApplicationContext() {<br>   Class&lt;?&gt; contextClass = this.applicationContextClass;<br>   if (contextClass == null) {</p>
+<pre><code>  try &#123;
+    // 判断应用环境，创建对应的applicationContext对象
+     switch (this.webApplicationType) &#123;
+     case SERVLET:
+        contextClass = Class.forName(DEFAULT_SERVLET_WEB_CONTEXT_CLASS);
+        break;
+     case REACTIVE:
+        contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);
+        break;
+     default:
+        contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);
+     &#125;
+  &#125;
+  catch (ClassNotFoundException ex) &#123;
+     throw new IllegalStateException(
+           &quot;Unable create a default ApplicationContext, please specify an ApplicationContextClass&quot;,ex);
+  &#125;
+</code></pre>
+<p>   }<br>   return (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- prepaerContext（准备applicationContext）</span><br><span class="line"></span><br><span class="line">  - 执行创建完applicationContext的回调方法</span><br><span class="line"></span><br><span class="line">  - 执行各个应用的初始化器对应的initialize()方法（初始化器为META-INF/spring.factories中配置的ApplicationContextInitializer）</span><br><span class="line"></span><br><span class="line">    - ```java</span><br><span class="line">      protected void applyInitializers(ConfigurableApplicationContext context) &#123;</span><br><span class="line">        // 获取所有初始化器</span><br><span class="line">         for (ApplicationContextInitializer initializer : getInitializers()) &#123;</span><br><span class="line">            Class&lt;?&gt; requiredType = GenericTypeResolver.resolveTypeArgument(</span><br><span class="line">                  initializer.getClass(), ApplicationContextInitializer.class);</span><br><span class="line">            Assert.isInstanceOf(requiredType, context, &quot;Unable to call initializer.&quot;);</span><br><span class="line">           // 执行</span><br><span class="line">            initializer.initialize(context);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>SpringbootRunListener记录当前context执行到了contextPrepared阶段，并广播event到所有监听类</p>
+</li>
+<li><p>打印startUp信息<code>2020/07/20 15:28:57.604  main [INFO] XxxApplication (StartupInfoLogger.java:50) Starting XxxApplication on bogon with PID 31681 (/Users/workspace/java/xxx//target/classes started by xxx in /Users/xxx/workspace/java/xxx)</code></p>
+</li>
+<li><p>加载启动主类（XxxAppcalition）</p>
+<ul>
+<li>创建BeanDefinitionLoader</li>
+<li>加载XxxAppcalition</li>
+</ul>
+</li>
+<li><p>SpringbootRunListener记录当前context执行到了contextLoaded阶段，并广播event到所有监听类</p>
+</li>
+</ul>
+</li>
+<li><p>refreshContext（刷新容器，方法很多）</p>
+<ul>
+<li><p>```java<br>public void refresh() throws BeansException, IllegalStateException {<br>   synchronized (this.startupShutdownMonitor) {</p>
+<pre><code>  prepareRefresh();
+  ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+  prepareBeanFactory(beanFactory);
+  try &#123;
+     postProcessBeanFactory(beanFactory);
+     invokeBeanFactoryPostProcessors(beanFactory);
+     registerBeanPostProcessors(beanFactory);
+     initMessageSource();
+     initApplicationEventMulticaster();
+     onRefresh();
+     registerListeners();
+     finishBeanFactoryInitialization(beanFactory);
+     finishRefresh();
+  &#125;
+  catch (BeansException ex) &#123;
+     destroyBeans();
+     cancelRefresh(ex);
+     throw ex;
+  &#125;
+  finally &#123;
+     resetCommonCaches();
+  &#125;
+</code></pre>
+<p>   }<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- prepareRefresh（准备刷新）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    protected void prepareRefresh() &#123;</span><br><span class="line">       // 恢复到激活状态</span><br><span class="line">       this.startupDate = System.currentTimeMillis();</span><br><span class="line">       this.closed.set(false);</span><br><span class="line">       this.active.set(true);</span><br><span class="line">       // ...</span><br><span class="line">       // 初始化placeholder对应的值</span><br><span class="line">       initPropertySources();</span><br><span class="line">       //验证环境必须属性</span><br><span class="line">       getEnvironment().validateRequiredProperties();</span><br><span class="line">       // ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>obtainFreshBeanFactory（刷新beanFactory，步骤很简单，就是干掉所有单例bean、干掉beanFactory、重新创建beanFacotry、重新加载beanDefinitions）</p>
+<ul>
+<li>```java<br>protected final void refreshBeanFactory() throws BeansException {<br>  // 如果存在beanFactory，则干掉所有bean、关闭beanFactory<br>   if (hasBeanFactory()) {<pre><code>  destroyBeans();
+  closeBeanFactory();
+</code></pre>
+   }<br>   try {<pre><code> // 创建一个listableBeanFactory
+  DefaultListableBeanFactory beanFactory = createBeanFactory();
+  beanFactory.setSerializationId(getId());
+  customizeBeanFactory(beanFactory);
+ // 加载beanDefinitions
+  loadBeanDefinitions(beanFactory);
+  synchronized (this.beanFactoryMonitor) &#123;
+     this.beanFactory = beanFactory;
+  &#125;
+</code></pre>
+   }<br>   catch (IOException ex) {<pre><code>  throw new ApplicationContextException(&quot;I/O error parsing bean definition source for &quot; + getDisplayName(), ex);
+</code></pre>
+   }<br>}<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">- prepareBeanFactory（拿到重新创建的beanFacotry，配置一些默认参数、接口、classlorder）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) &#123;</span><br><span class="line">       // 设置ClassLoarder、设置表达式解析器、添加属性编辑注册器</span><br><span class="line">       beanFactory.setBeanClassLoader(getClassLoader());</span><br><span class="line">       beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));</span><br><span class="line">       beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));</span><br><span class="line">    </span><br><span class="line">       // 设置ApplicationContextAwareProcessor, 以下6个ignoreDependencyInterface的目的是因为ApplicationContextAwareProcessor已经把这6个的工作做了</span><br><span class="line">       beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));</span><br><span class="line">       beanFactory.ignoreDependencyInterface(EnvironmentAware.class);</span><br><span class="line">       beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);</span><br><span class="line">       beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);</span><br><span class="line">       beanFactory.ignoreDependencyInterface(ApplicationEventPublisherAware.class);</span><br><span class="line">       beanFactory.ignoreDependencyInterface(MessageSourceAware.class);</span><br><span class="line">       beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);</span><br><span class="line">    </span><br><span class="line">       // 设置几个特殊dependency类型bean</span><br><span class="line">       beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);</span><br><span class="line">       beanFactory.registerResolvableDependency(ResourceLoader.class, this);</span><br><span class="line">       beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);</span><br><span class="line">       beanFactory.registerResolvableDependency(ApplicationContext.class, this);</span><br><span class="line">    </span><br><span class="line">       // Register early post-processor for detecting inner beans as ApplicationListeners.</span><br><span class="line">       beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));</span><br><span class="line">    </span><br><span class="line">       // ...</span><br><span class="line">       // 设置一些默认变量</span><br><span class="line">       if (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">          beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());</span><br><span class="line">       &#125;</span><br><span class="line">       if (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) &#123;</span><br><span class="line">          beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());</span><br><span class="line">       &#125;</span><br><span class="line">       if (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) &#123;</span><br><span class="line">          beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>postProcessBeanFactory（设置一些需要提前创建的BeanPostProcessors类）</p>
+<ul>
+<li><p>BeanPostProcessor的作用是在bean实例化前后都有对应的调用方法可以执行</p>
+</li>
+<li><p>–&gt;  Spring IOC容器实例化Bean<br> –&gt;  调用BeanPostProcessor的postProcessBeforeInitialization方法<br> –&gt;  调用bean实例的初始化方法<br> –&gt;  调用BeanPostProcessor的postProcessAfterInitialization方法</p>
+</li>
+<li><p>```java<br>@Override<br>protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {<br>  // 将WebApplicationContextServletContextAwareProcessor设置到postProcesser中<br>   beanFactory.addBeanPostProcessor(</p>
+<pre><code>     new WebApplicationContextServletContextAwareProcessor(this));
+</code></pre>
+<p>   beanFactory.ignoreDependencyInterface(ServletContextAware.class);<br>   registerWebApplicationScopes();<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- invokeBeanFactoryPostProcessors（实例化所有BeanPostProcessors类）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) &#123;</span><br><span class="line">      	// 实例化所有BeanPostProcessors类</span><br><span class="line">       PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());</span><br><span class="line">    </span><br><span class="line">       // Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime</span><br><span class="line">       // (e.g. through an @Bean method registered by ConfigurationClassPostProcessor)</span><br><span class="line">       if (beanFactory.getTempClassLoader() == null &amp;&amp; beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) &#123;</span><br><span class="line">          beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));</span><br><span class="line">          beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>registerBeanPostProcessors</p>
+</li>
+<li><p>initMessageSource（初始化messageSource（国际化支持））</p>
+</li>
+<li><p>initApplicationEventMulticaster（初始化ApplicationEventMulticaster（事件广播器，用于通知事件到实现了ApplicationListener的类））</p>
+<ul>
+<li><p>```java<br>protected void initApplicationEventMulticaster() {<br>  // 从ConfigurableListableBeanFactory中判断是否有applicationEventMulticaster，有则赋值、无准创建并注册到BeanFactory<br>   ConfigurableListableBeanFactory beanFactory = getBeanFactory();<br>   if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {</p>
+<pre><code>  this.applicationEventMulticaster =
+        beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
+</code></pre>
+<p>   }<br>   else {</p>
+<pre><code> // 创建
+  this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+ // 注册单例对象
+  beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
+</code></pre>
+<p>   }<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- onRefresh（执行其他特殊beans的模板方法）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    @Override</span><br><span class="line">    protected void onRefresh() &#123;</span><br><span class="line">       super.onRefresh();</span><br><span class="line">       try &#123;</span><br><span class="line">         // ServletWebServerApplicationContext实现的是创建一个webServer</span><br><span class="line">          createWebServer();</span><br><span class="line">       &#125;</span><br><span class="line">       catch (Throwable ex) &#123;</span><br><span class="line">          throw new ApplicationContextException(&quot;Unable to start web server&quot;, ex);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>```java<br>private void createWebServer() {<br>   WebServer webServer = this.webServer;<br>   ServletContext servletContext = getServletContext();<br>   if (webServer == null &amp;&amp; servletContext == null) {</p>
+<pre><code> // getWebServerFactory会从ServletWebServerFactory中取到当前环境的web容器bean（Tomcat、UnderTow、Jetty）
+  ServletWebServerFactory factory = getWebServerFactory();
+  this.webServer = factory.getWebServer(getSelfInitializer());
+</code></pre>
+<p>   }<br>   else if (servletContext != null) {</p>
+<pre><code>  try &#123;
+     getSelfInitializer().onStartup(servletContext);
+  &#125;
+  catch (ServletException ex) &#123;
+     throw new ApplicationContextException(&quot;Cannot initialize servlet context&quot;,
+           ex);
+  &#125;
+</code></pre>
+<p>   }<br>   initPropertySources();<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- registerListeners（初始化Springboot里的ApplicationListeners，并注册到ApplicationEventMulticaster里）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    protected void registerListeners() &#123;</span><br><span class="line">       // 注册所有ApplicationListeners到EventMulticaster中</span><br><span class="line">       for (ApplicationListener&lt;?&gt; listener : getApplicationListeners()) &#123;</span><br><span class="line">          getApplicationEventMulticaster().addApplicationListener(listener);</span><br><span class="line">       &#125;</span><br><span class="line">    	// ...</span><br><span class="line">    </span><br><span class="line">      // 如果存在earlyApplicationEvents，则直接广播出去</span><br><span class="line">       Set&lt;ApplicationEvent&gt; earlyEventsToProcess = this.earlyApplicationEvents;</span><br><span class="line">       this.earlyApplicationEvents = null;</span><br><span class="line">       if (earlyEventsToProcess != null) &#123;</span><br><span class="line">          for (ApplicationEvent earlyEvent : earlyEventsToProcess) &#123;</span><br><span class="line">             getApplicationEventMulticaster().multicastEvent(earlyEvent);</span><br><span class="line">          &#125;</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>finishBeanFactoryInitialization（实例化BeanFactory中已经被注册但是未实例化的所有实例(Lazy init除外)）</p>
+</li>
+<li><p>finishRefresh（完成refresh，执行LifecycleProcessor的onRefresh回调）</p>
+<ul>
+<li>```java<br>protected void finishRefresh() {<br>   // 清除resource缓存<br>   clearResourceCaches();   // 初始化LifecycleProcessor<br>   initLifecycleProcessor();   // 执行onRefresh方法<br>   getLifecycleProcessor().onRefresh();   // 发布容器refresh完成的通知<br>   publishEvent(new ContextRefreshedEvent(this));   // Participate in LiveBeansView MBean, if active.<br>   LiveBeansView.registerApplicationContext(this);<br>}<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- resetCommonCaches（恢复一些Util的缓存）</span><br><span class="line"></span><br><span class="line">  - ```java</span><br><span class="line">    protected void resetCommonCaches() &#123;</span><br><span class="line">       ReflectionUtils.clearCache();</span><br><span class="line">       AnnotationUtils.clearCache();</span><br><span class="line">       ResolvableType.clearCache();</span><br><span class="line">       CachedIntrospectionResults.clearClassLoader(getClassLoader());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>afterRefresh（预留方法，作为refresh后的hook调用）</p>
+</li>
+<li><p>SpringbootRunListener记录当前context执行到了started阶段，并广播event到所有监听类</p>
+</li>
+<li><p>callRunners</p>
+<ul>
+<li><p>获取所有实现ApplicationRunner、CommandLineRunner的类</p>
+</li>
+<li><p>根据@Ordered注解排序调用Runner的run方法</p>
+</li>
+<li><pre><code class="java">private void callRunners(ApplicationContext context, ApplicationArguments args) &#123;
+   List&lt;Object&gt; runners = new ArrayList&lt;&gt;();
+  // 从listableBeanFactory获取所有实现ApplicationRunner、CommandLineRunner的类
+   runners.addAll(context.getBeansOfType(ApplicationRunner.class).values());
+   runners.addAll(context.getBeansOfType(CommandLineRunner.class).values());
+  // 根据Ordered注解排序
+   AnnotationAwareOrderComparator.sort(runners);
+   for (Object runner : new LinkedHashSet&lt;&gt;(runners)) &#123;
+      if (runner instanceof ApplicationRunner) &#123;
+         callRunner((ApplicationRunner) runner, args);
+      &#125;
+      if (runner instanceof CommandLineRunner) &#123;
+         callRunner((CommandLineRunner) runner, args);
+      &#125;
+   &#125;
+&#125;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>SpringbootRunListener记录当前context执行到了running阶段，并广播event到所有监听类</p>
+</li>
+</ul>
+<p>至此就完成了Springboot的启动，不过这只是主体的启动流程，还有一些细枝末节的地方没有分析。</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://www.wushiyi.top">Wushiyi</a>
+            <p>原文链接：<a href="https://www.wushiyi.top/2020/06/11/Java/Spring/SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">https://www.wushiyi.top/2020/06/11/Java/Spring/SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/</a>
+            <p>发表日期：<a href="https://www.wushiyi.top/2020/06/11/Java/Spring/SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">June 11th 2020, 10:12:02 am</a>
+            <p>更新日期：<a href="https://www.wushiyi.top/2020/06/11/Java/Spring/SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">March 26th 2022, 7:38:26 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/06/23/%E5%88%86%E5%B8%83%E5%BC%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%90%86%E8%AE%BA%E3%80%81CAP%E3%80%81BASE/" title= "分布式一致性理论、CAP、BASE">
+                    <div class="nextTitle">分布式一致性理论、CAP、BASE</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/06/02/CDCI/%E6%90%AD%E5%BB%BAJenkins/" title= "Red Hat 搭建Jenkins">
+                    <div class="prevTitle">Red Hat 搭建Jenkins</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:wgq287676521@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/Wushiyii" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%9E%84%E9%80%A0SpringBoot%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.</span> <span class="toc-text">1.构造SpringBoot实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">2.启动</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 51
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/09</span><a class="archive-post-title" href= "/2022/02/09/Framework/mvc/easy-MVC/" >从0开始实现一个简易MVC框架</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2021/05/08/netty/netty(2)%20/" >Netty（二）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/08</span><a class="archive-post-title" href= "/2021/05/08/netty/netty(1)/" >Netty（一）</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/28</span><a class="archive-post-title" href= "/2020/08/28/Framework/dubbo/%E6%9C%8D%E5%8A%A1%E5%AF%BC%E5%87%BA%E5%AF%BC%E5%85%A5/" >Dubbo服务的导出与引入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/2020/08/25/SQL/%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96/" >Mysql执行计划的Extra信息</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2020/08/01/Framework/dubbo/Dubbo%20SPI/" >Dubbo SPI</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/19</span><a class="archive-post-title" href= "/2020/07/19/%E5%88%86%E5%B8%83%E5%BC%8F/Paxos%20distribute%20consensnus/" >Paxos and Raft</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/01</span><a class="archive-post-title" href= "/2020/07/01/%E5%88%86%E5%B8%83%E5%BC%8F/2PC%E3%80%813PC/" >2PC、3PC</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/23</span><a class="archive-post-title" href= "/2020/06/23/%E5%88%86%E5%B8%83%E5%BC%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E7%90%86%E8%AE%BA%E3%80%81CAP%E3%80%81BASE/" >分布式一致性理论、CAP、BASE</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/11</span><a class="archive-post-title" href= "/2020/06/11/Java/Spring/SpringBoot%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" >SpringBoot启动分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/02</span><a class="archive-post-title" href= "/2020/06/02/CDCI/%E6%90%AD%E5%BB%BAJenkins/" >Red Hat 搭建Jenkins</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/28</span><a class="archive-post-title" href= "/2020/02/28/Java/Spring/%E6%8E%A5%E5%85%A5Redis/" >Springboot接入Redis</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2020/02/14/%E7%AE%97%E6%B3%95/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E5%AE%9E%E7%8E%B0/" >几种排序实现</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2019/12/08/Reading/%E8%AF%BB%E3%80%8A%E7%BC%96%E7%A8%8B%E7%8F%A0%E7%8E%91%E3%80%8B/" >READ ---《编程珠玑》</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2019/11/18/SQL/%E8%A1%A8%E3%80%81%E5%AD%97%E6%AE%B5%E3%80%81%E7%B4%A2%E5%BC%95%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" >表、字段、索引设计规范</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/2019/11/17/SQL/Mysql%E4%BD%BF%E7%94%A8%E8%A7%84%E8%8C%83/" >Mysql使用规范</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/10</span><a class="archive-post-title" href= "/2019/11/10/Reading/%E8%AF%BB%E3%80%8A%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E3%80%8B/" >READ --- 《代码整洁之道》</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/11</span><a class="archive-post-title" href= "/2019/10/11/Java/grammer/io/Java%20IO/" >Java IO</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/22</span><a class="archive-post-title" href= "/2019/09/22/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/" >深入理解JVM（五） --- 早期编译</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/22</span><a class="archive-post-title" href= "/2019/09/22/Reading/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%94%EF%BC%89/" >深入理解JVM（五） --- 早期编译</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2019/09/08/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94%E6%A0%88%E5%B8%A7%E7%BB%93%E6%9E%84/" >深入理解JVM（四） --- 栈帧结构</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/08</span><a class="archive-post-title" href= "/2019/09/08/Reading/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94%E6%A0%88%E5%B8%A7%E7%BB%93%E6%9E%84/" >深入理解JVM（四） --- 栈帧结构</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/01</span><a class="archive-post-title" href= "/2019/09/01/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" >深入理解JVM（三） --- 类加载器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/01</span><a class="archive-post-title" href= "/2019/09/01/Reading/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" >深入理解JVM（三） --- 类加载器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/2019/08/03/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%8C%EF%BC%89-----%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/" >深入理解JVM（二） --- 垃圾收集算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/2019/08/03/Reading/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%BA%8C%EF%BC%89-----%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/" >深入理解JVM（二） --- 垃圾收集算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/2019/07/28/JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%80%EF%BC%89/" >深入理解JVM（一） ---- JVM的运行时数据区域</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/2019/07/28/Reading/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JVM%EF%BC%88%E4%B8%80%EF%BC%89/" >深入理解JVM（一） ---- JVM的运行时数据区域</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2019/04/21/Workflow/%E4%BB%80%E4%B9%88%E6%98%AFGit/" >Git-Workflow</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/11</span><a class="archive-post-title" href= "/2019/04/11/Java/Collection/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >HashMap源码分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/07</span><a class="archive-post-title" href= "/2019/04/07/Java/Collection/LinkedList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >LinkedList源码分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/07</span><a class="archive-post-title" href= "/2019/04/07/Java/Collection/ArrayList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" >ArrayList源码分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2019/02/26/Javascript/ES6-%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2/" >ES6-模板字符串</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2019/02/25/Javascript/ES6-Class/" >ES6-Class</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2019/02/25/Javascript/ES6-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0/" >ES6-箭头表达式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/20</span><a class="archive-post-title" href= "/2019/02/20/Javascript/A%20re-introduction%20to%20JavaScript%20(JS%20tutorial)/" >A re-introduction to JavaScript (翻译)</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2018/12/04/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-six/" >Rabbit tutorial-Six</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2018/12/04/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-five/" >Rabbit tutorial-Five</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span><a class="archive-post-title" href= "/2018/12/03/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-four/" >Rabbit tutorial-Four</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href= "/2018/12/01/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-three/" >Rabbit tutorial-three</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/30</span><a class="archive-post-title" href= "/2018/11/30/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-two/" >Rabbit tutorial-two</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/RabbitMQ%20tutorial-one/" >Rabbit tutorial-one</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span><a class="archive-post-title" href= "/2018/11/29/%E7%BF%BB%E8%AF%91/RabbitMQ/%E4%BB%80%E4%B9%88%E6%98%AF%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" >什么是消息队列？</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/22</span><a class="archive-post-title" href= "/2018/11/22/%E7%BF%BB%E8%AF%91/Docker/Docker-get-start(5)--stack/" >Docker Get start(5)--Stack</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/21</span><a class="archive-post-title" href= "/2018/11/21/%E7%BF%BB%E8%AF%91/Docker/Docker-get-start(4)--swarm/" >Docker Get start(4)--Swarm</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/20</span><a class="archive-post-title" href= "/2018/11/20/%E7%BF%BB%E8%AF%91/Docker/Docker-get-start(3)--service/" >Docker Get start(3)--Service</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span><a class="archive-post-title" href= "/2018/11/19/%E7%BF%BB%E8%AF%91/Docker/Docker-get-start(2)--container/" >Docker Get start(2)---Container</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span><a class="archive-post-title" href= "/2018/11/19/%E7%BF%BB%E8%AF%91/Docker/Docker-get-start(1)--%E7%AE%80%E4%BB%8B/" >Docker Get start(1)--简介</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/2018/08/16/Javascript/TypeScript%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/" >TypeScript入门语法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/14</span><a class="archive-post-title" href= "/2018/08/14/Others/MarkDown%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95/" >MarkDown简明语法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/14</span><a class="archive-post-title" href= "/2018/08/14/Others/My-first-post/" >My first post</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Workflow"><span class="iconfont-archer">&#xe606;</span>Workflow</span>
+    
+        <span class="sidebar-tag-name" data-tags="CD/CI"><span class="iconfont-archer">&#xe606;</span>CD/CI</span>
+    
+        <span class="sidebar-tag-name" data-tags="JAVA"><span class="iconfont-archer">&#xe606;</span>JAVA</span>
+    
+        <span class="sidebar-tag-name" data-tags="JVM"><span class="iconfont-archer">&#xe606;</span>JVM</span>
+    
+        <span class="sidebar-tag-name" data-tags="编程"><span class="iconfont-archer">&#xe606;</span>编程</span>
+    
+        <span class="sidebar-tag-name" data-tags="语言"><span class="iconfont-archer">&#xe606;</span>语言</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB"><span class="iconfont-archer">&#xe606;</span>WEB</span>
+    
+        <span class="sidebar-tag-name" data-tags="MarkDown"><span class="iconfont-archer">&#xe606;</span>MarkDown</span>
+    
+        <span class="sidebar-tag-name" data-tags="blog"><span class="iconfont-archer">&#xe606;</span>blog</span>
+    
+        <span class="sidebar-tag-name" data-tags="READ"><span class="iconfont-archer">&#xe606;</span>READ</span>
+    
+        <span class="sidebar-tag-name" data-tags="CODE"><span class="iconfont-archer">&#xe606;</span>CODE</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="workflow"><span class="iconfont-archer">&#xe606;</span>workflow</span>
+    
+        <span class="sidebar-tag-name" data-tags="SQL"><span class="iconfont-archer">&#xe606;</span>SQL</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="NETTY"><span class="iconfont-archer">&#xe606;</span>NETTY</span>
+    
+        <span class="sidebar-tag-name" data-tags="distribute"><span class="iconfont-archer">&#xe606;</span>distribute</span>
+    
+        <span class="sidebar-tag-name" data-tags="distribute、Algorithm"><span class="iconfont-archer">&#xe606;</span>distribute、Algorithm</span>
+    
+        <span class="sidebar-tag-name" data-tags="Algorithm"><span class="iconfont-archer">&#xe606;</span>Algorithm</span>
+    
+        <span class="sidebar-tag-name" data-tags="distribute、framework、dubbo"><span class="iconfont-archer">&#xe606;</span>distribute、framework、dubbo</span>
+    
+        <span class="sidebar-tag-name" data-tags="MVC"><span class="iconfont-archer">&#xe606;</span>MVC</span>
+    
+        <span class="sidebar-tag-name" data-tags="集合"><span class="iconfont-archer">&#xe606;</span>集合</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Springboot"><span class="iconfont-archer">&#xe606;</span>Springboot</span>
+    
+        <span class="sidebar-tag-name" data-tags="容器"><span class="iconfont-archer">&#xe606;</span>容器</span>
+    
+        <span class="sidebar-tag-name" data-tags="CI/CD"><span class="iconfont-archer">&#xe606;</span>CI/CD</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Docker"><span class="iconfont-archer">&#xe606;</span>Docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="分布式"><span class="iconfont-archer">&#xe606;</span>分布式</span>
+    
+        <span class="sidebar-tag-name" data-tags="消息队列"><span class="iconfont-archer">&#xe606;</span>消息队列</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Workflow"><span class="iconfont-archer">&#xe60a;</span>Workflow</span>
+    
+        <span class="sidebar-category-name" data-categories="JAVA"><span class="iconfont-archer">&#xe60a;</span>JAVA</span>
+    
+        <span class="sidebar-category-name" data-categories="JS"><span class="iconfont-archer">&#xe60a;</span>JS</span>
+    
+        <span class="sidebar-category-name" data-categories="WEB"><span class="iconfont-archer">&#xe60a;</span>WEB</span>
+    
+        <span class="sidebar-category-name" data-categories="工具"><span class="iconfont-archer">&#xe60a;</span>工具</span>
+    
+        <span class="sidebar-category-name" data-categories="blog"><span class="iconfont-archer">&#xe60a;</span>blog</span>
+    
+        <span class="sidebar-category-name" data-categories="READ"><span class="iconfont-archer">&#xe60a;</span>READ</span>
+    
+        <span class="sidebar-category-name" data-categories="Mysql"><span class="iconfont-archer">&#xe60a;</span>Mysql</span>
+    
+        <span class="sidebar-category-name" data-categories="SQL"><span class="iconfont-archer">&#xe60a;</span>SQL</span>
+    
+        <span class="sidebar-category-name" data-categories="NETTY"><span class="iconfont-archer">&#xe60a;</span>NETTY</span>
+    
+        <span class="sidebar-category-name" data-categories="distribute"><span class="iconfont-archer">&#xe60a;</span>distribute</span>
+    
+        <span class="sidebar-category-name" data-categories="Algorithm"><span class="iconfont-archer">&#xe60a;</span>Algorithm</span>
+    
+        <span class="sidebar-category-name" data-categories="framework"><span class="iconfont-archer">&#xe60a;</span>framework</span>
+    
+        <span class="sidebar-category-name" data-categories="java"><span class="iconfont-archer">&#xe60a;</span>java</span>
+    
+        <span class="sidebar-category-name" data-categories="Docker"><span class="iconfont-archer">&#xe60a;</span>Docker</span>
+    
+        <span class="sidebar-category-name" data-categories="消息队列"><span class="iconfont-archer">&#xe60a;</span>消息队列</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Wushiyi"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
