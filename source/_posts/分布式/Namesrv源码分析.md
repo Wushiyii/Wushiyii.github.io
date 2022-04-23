@@ -267,7 +267,7 @@ public RemotingCommand registerBrokerWithFilterServer(ChannelHandlerContext ctx,
     }
 ```
 
-详细注册节点实现，主要为更新RouteInfoManager的几个Map
+详细注册节点实现，主要为更新`RouteInfoManager`的几个节点Map、更新节点信息等，有关filterServer都移除了
 
 ```java
 public RegisterBrokerResult registerBroker(
@@ -289,17 +289,18 @@ public RegisterBrokerResult registerBroker(
                 Set<String> brokerNames = this.clusterAddrTable.get(clusterName);
                 brokerNames.add(brokerName);
 
+                //是否首次注册
+                boolean registerFirst = false;
 
                 //根据BrokerName获取Broker信息（Broker主节点、Slave节点等）
                 BrokerData brokerData = this.brokerAddrTable.get(brokerName);
-                boolean registerFirst = false;
                 if (null == brokerData) {
                     registerFirst = true;
                     brokerData = new BrokerData(clusterName, brokerName, new HashMap<Long, String>());
                     this.brokerAddrTable.put(brokerName, brokerData);
                 }
                 Map<Long, String> brokerAddrsMap = brokerData.getBrokerAddrs();
-                //主从切换/节点覆盖，broker的地址一样，但是brokerId不一样，相同的IP:PORT只能在brokerAddrTable中有一条记录
+                //Map<BrokerId, BrokerAddr>， 如果broker的地址一样，但是brokerId不一样，则直接从map中移除这个节点，后续做处理
                 Iterator<Entry<Long, String>> it = brokerAddrsMap.entrySet().iterator();
                 while (it.hasNext()) {
                     Entry<Long, String> item = it.next();
@@ -309,51 +310,37 @@ public RegisterBrokerResult registerBroker(
                     }
                 }
 
+                //直接覆盖brokerId对应的地址
                 String oldAddr = brokerData.getBrokerAddrs().put(brokerId, brokerAddr);
-                if (MixAll.MASTER_ID == brokerId) {
-                    log.info("cluster [{}] brokerName [{}] master address change from {} to {}",
-                            brokerData.getCluster(), brokerData.getBrokerName(), oldAddr, brokerAddr);
-                }
 
                 registerFirst = registerFirst || (null == oldAddr);
 
-                //如果为主节点，则
+                //如果为主节点，且broker携带的Topic的配置有变更过，则更新broker的topic配置信息
                 if (null != topicConfigWrapper
                         && MixAll.MASTER_ID == brokerId) {
                     if (this.isBrokerTopicConfigChanged(brokerAddr, topicConfigWrapper.getDataVersion())
                             || registerFirst) {
-                        ConcurrentMap<String, TopicConfig> tcTable =
-                                topicConfigWrapper.getTopicConfigTable();
-                        if (tcTable != null) {
-                            for (Map.Entry<String, TopicConfig> entry : tcTable.entrySet()) {
+                        if (topicConfigWrapper.getTopicConfigTable() != null) {
+                            for (Map.Entry<String, TopicConfig> entry : topicConfigWrapper.getTopicConfigTable().entrySet()) {
                                 this.createAndUpdateQueueData(brokerName, entry.getValue());
                             }
                         }
                     }
                 }
 
+                //更新节点存活时间戳
                 BrokerLiveInfo prevBrokerLiveInfo = this.brokerLiveTable.put(brokerAddr,
                         new BrokerLiveInfo(
                                 System.currentTimeMillis(),
                                 topicConfigWrapper.getDataVersion(),
                                 channel,
                                 haServerAddr));
-                if (null == prevBrokerLiveInfo) {
-                    log.info("new broker registered, {} HAServer: {}", brokerAddr, haServerAddr);
-                }
-
-                if (filterServerList != null) {
-                    if (filterServerList.isEmpty()) {
-                        this.filterServerTable.remove(brokerAddr);
-                    } else {
-                        this.filterServerTable.put(brokerAddr, filterServerList);
-                    }
-                }
 
                 if (MixAll.MASTER_ID != brokerId) {
                     String masterAddr = brokerData.getBrokerAddrs().get(MixAll.MASTER_ID);
                     if (masterAddr != null) {
                         BrokerLiveInfo brokerLiveInfo = this.brokerLiveTable.get(masterAddr);
+                        //更新本地存的master节点地址
                         if (brokerLiveInfo != null) {
                             result.setHaServerAddr(brokerLiveInfo.getHaServerAddr());
                             result.setMasterAddr(masterAddr);
@@ -366,10 +353,118 @@ public RegisterBrokerResult registerBroker(
         } catch (Exception e) {
             log.error("registerBroker Exception", e);
         }
-
         return result;
     }
 ```
 
+##### `UNREGISTER_BROKER` 注销Broker
+```java
+public void unregisterBroker(
+        final String clusterName,
+        final String brokerAddr,
+        final String brokerName,
+        final long brokerId) {
+        try {
+            try {
+                //全局读写锁
+                this.lock.writeLock().lockInterruptibly();
+                BrokerLiveInfo brokerLiveInfo = this.brokerLiveTable.remove(brokerAddr);
+
+                boolean removeBrokerName = false;
+                BrokerData brokerData = this.brokerAddrTable.get(brokerName);
+                if (null != brokerData) {
+                    //直接从brokerAddrTable中移除broker信息
+                    brokerData.getBrokerAddrs().remove(brokerId);
+
+                    //若移除了当前节点后，所有相同brokerName下的broker都不存在了，则认为从namesrv中移除了该brokerName
+                    if (brokerData.getBrokerAddrs().isEmpty()) {
+                        this.brokerAddrTable.remove(brokerName);
+                        log.info("unregisterBroker, remove name from brokerAddrTable OK, {}", brokerName);
+
+                        removeBrokerName = true;
+                    }
+                }
+                
+                // 从clusterAddrTable中移除brokerName
+                if (removeBrokerName) {
+                    Set<String> nameSet = this.clusterAddrTable.get(clusterName);
+                    if (nameSet != null) {
+                        boolean removed = nameSet.remove(brokerName);
+                        log.info("unregisterBroker, remove name from clusterAddrTable {}, {}", removed ? "OK" : "Failed", brokerName);
+
+                        if (nameSet.isEmpty()) {
+                            this.clusterAddrTable.remove(clusterName);
+                            log.info("unregisterBroker, remove cluster from clusterAddrTable {}", );
+                        }
+                    }
+                    //移除topic对应的相同brokerName的queue信息
+                    this.removeTopicByBrokerName(brokerName);
+                }
+            } finally {
+                this.lock.writeLock().unlock();
+            }
+        } catch (Exception e) {
+            log.error("unregisterBroker Exception", e);
+        }
+    }
+```
 
 
+##### `GET_ROUTEINFO_BY_TOPIC` 通过topic查询分布信息
+
+```java
+public TopicRouteData pickupTopicRouteData(final String topic) {
+        TopicRouteData topicRouteData = new TopicRouteData();
+        boolean foundQueueData = false;
+        boolean foundBrokerData = false;
+        Set<String> brokerNameSet = new HashSet<String>();
+        List<BrokerData> brokerDataList = new LinkedList<BrokerData>();
+        topicRouteData.setBrokerDatas(brokerDataList);
+
+        try {
+            try {
+                this.lock.readLock().lockInterruptibly();
+
+                // 查找topic对应的queue信息
+                //            |  brokerName  |  readQueueNums  |  writeQueueNums  |  perm  |  topicSynFlag |
+                // topic =>   |  broker-a    |  8              |  8               |  6     |  0            |
+                //            |  broker-b    |  8              |  8               |  6     |  0            |
+                //            |  broker-c    |  8              |  8               |  6     |  0            |
+                List<QueueData> queueDataList = this.topicQueueTable.get(topic);
+                if (queueDataList != null) {
+                    topicRouteData.setQueueDatas(queueDataList);
+                    foundQueueData = true;
+
+                    Iterator<QueueData> it = queueDataList.iterator();
+                    while (it.hasNext()) {
+                        QueueData qd = it.next();
+                        brokerNameSet.add(qd.getBrokerName());
+                    }
+
+                    //每个BrokerName对应一个BrokerData，BrokerData中包含该BrokerName对应的所有brokerId和brokerAddr
+                    for (String brokerName : brokerNameSet) {
+                        BrokerData brokerData = this.brokerAddrTable.get(brokerName);
+                        if (null != brokerData) {
+                            BrokerData brokerDataClone = new BrokerData(brokerData.getCluster(), brokerData.getBrokerName(), (HashMap<Long, String>) brokerData.getBrokerAddrs().clone());
+                            brokerDataList.add(brokerDataClone);
+                            foundBrokerData = true;
+                        }
+                    }
+                }
+            } finally {
+                this.lock.readLock().unlock();
+            }
+        } catch (Exception e) {
+            log.error("pickupTopicRouteData Exception", e);
+        }
+
+        if (foundBrokerData && foundQueueData) {
+            return topicRouteData;
+        }
+        return null;
+    }
+```
+> 为什么要用clone? 看目的为了避免莫名其妙的引用修改，不过直接new一个是不是也没有什么性能损耗呢？
+
+
+其他的接口大同小异，无非都是根据cluster/topic/broker之类的信息查询，没有很多写操作
